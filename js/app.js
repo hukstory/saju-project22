@@ -606,9 +606,9 @@ function renderToday(r, birth){
     openShareCard({
       kicker:'TODAY · ' + r.date, title:r.headline,
       quote:r.advice,
-      kv:[['행운의 색', r.luckColor.name], ['행운의 숫자', r.nums.join(' · ')], ['좋은 시간', r.timeBest], ['오늘의 관계', r.rel.short]],
+      kv:[['행운의 색', r.luckColor.name], ['좋은 시간', r.timeBest], ['오늘의 관계', r.rel.short], ['오늘의 기운', r.T.k]],
       nums:r.nums, numsLabel:'행운의 숫자',
-      swatch:r.luckColor,
+      glyph:r.todayPillar.hanja, glyphLabel:'오늘의 간지',
       shareUrl:`${SITE}#/today`
     });
   });
@@ -1229,6 +1229,7 @@ function renderPastlife(res){
       kicker:'PAST LIFE · ' + res.era, title:`${t.role}`,
       quote:t.oneLine + '. ' + t.link,
       kv:[['전생 직업', t.job], ['남은 습관', t.habit], ['숙제', t.lesson]],
+      glyph:t.emblem, glyphLabel:'전생의 표식',
       shareUrl:`${SITE}#/pastlife`
     });
   });

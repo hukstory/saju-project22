@@ -511,8 +511,33 @@ function drawShareCard(opt){
     y += 70;
   }
 
+  // 남는 공간 — 큰 상징 한 글자
+  const footerY = CARD_H - 104;
+  const space = footerY - y - 60;
+  if (space > 170){
+    const cx = pad + maxW/2;
+    const cy = y + Math.min(space * 0.62, 320);
+    const glyph = opt.glyph || '正運';
+    const size = glyph.length > 1 ? 72 : 104;
+    // 기둥을 잇는 실
+    ctx.strokeStyle = 'rgba(169,135,63,.32)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx, y + 26); ctx.lineTo(cx, cy - size * 0.98); ctx.stroke();
+    ctx.fillStyle = 'rgba(169,135,63,.75)';
+    ctx.save(); ctx.translate(cx, y + 26); ctx.rotate(Math.PI/4); ctx.fillRect(-3.5,-3.5,7,7); ctx.restore();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.beginPath(); ctx.arc(cx, cy, size * 0.92, 0, Math.PI*2);
+    ctx.strokeStyle = '#DCD1BE'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, size * 0.84, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(169,135,63,.4)'; ctx.stroke();
+    ctx.fillStyle = '#14110F'; ctx.font = cardFont(size, 700);
+    ctx.fillText(glyph, cx, cy - size * 0.1);
+    ctx.fillStyle = '#A9873F'; ctx.font = cardFont(11, 600, false);
+    ctx.fillText((opt.glyphLabel || '정운타임즈').toUpperCase(), cx, cy + size * 0.62);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  }
+
   // 하단
-  const by = CARD_H - 104;
+  const by = footerY;
   ctx.strokeStyle = '#DCD1BE'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(pad, by-34); ctx.lineTo(CARD_W-pad, by-34); ctx.stroke();
   ctx.fillStyle = '#7B1E2B'; ctx.font = cardFont(19, 700);
