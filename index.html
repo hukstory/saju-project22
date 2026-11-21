@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>정운타임즈 | 사주신문 · 운명을 읽는 사람들의 신문</title>
+<meta name="description" content="정운타임즈는 사주 명리로 세상을 읽는 디지털 사주신문입니다. 오늘의 무료 운세, 2027 정미년 총운, 띠별·일주별 속보, 재물·인연·직장·건강 지면과 30P·60P·100P 정밀 리포트를 한 곳에서.">
+<meta name="theme-color" content="#0b1020">
+<meta property="og:title" content="정운타임즈 | 사주신문 · 운명을 읽는 사람들의 신문">
+<meta property="og:description" content="2027 정미년, 대운이 바뀌는 띠는 따로 있다. 사주 명리로 읽는 주간 지면과 무료 운세 맛보기.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b1020'/%3E%3Crect x='3.5' y='3.5' width='25' height='25' rx='3' fill='none' stroke='%23d4af37' stroke-width='1.2'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23f3e5ab' font-family='serif'%3E%E6%AD%A3%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Nanum+Myeongjo:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<!-- ===================== 상단 유틸리티 바 ===================== -->
+<div class="topbar">
+  <div class="wrap topbar__inner">
+    <div class="topbar__left">
+      <span class="topbar__date" id="topDate">2026년 11월 21일 토요일</span>
+      <span class="topbar__sep" aria-hidden="true"></span>
+      <span class="topbar__ganji" id="topGanji">丙午年 · 己亥月 · 癸酉日</span>
+    </div>
+    <div class="topbar__right">
+      <span class="topbar__issue" id="topIssue">통권 제2호</span>
+      <a class="topbar__link" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카톡 상담</a>
+      <a class="topbar__link" href="#subscribe">주간 구독</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 마스트헤드 ===================== -->
+<header class="masthead">
+  <div class="wrap masthead__inner">
+    <div class="masthead__side">
+      <p>창간 2026.11.11</p>
+      <p>발행인 · 정운(正運)</p>
+    </div>
+    <div class="masthead__center">
+      <p class="masthead__kicker">JUNGWOON TIMES · 사주 명리 미디어</p>
+      <h1 class="masthead__title">
+        <span class="masthead__seal" aria-hidden="true">正運</span>
+        정운타임즈
+      </h1>
+      <p class="masthead__tag">운명을 읽는 사람들의 신문 — 여덟 글자로 오늘을 해석합니다</p>
+    </div>
+    <div class="masthead__side masthead__side--right">
+      <p id="mastDate">2026.11.21 (토)</p>
+      <p id="mastIssue">통권 제2호 · 주간</p>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== 속보 티커 ===================== -->
+<div class="ticker" role="region" aria-label="실시간 운세 속보">
+  <div class="ticker__label"><span class="dot" aria-hidden="true"></span>속보</div>
+  <div class="ticker__viewport">
+    <div class="ticker__track" id="tickerTrack">
+      <span class="ticker__item">2027 정미년, 대운 넘어가는 띠는 따로 있다 — 1면</span>
+      <span class="ticker__item">12월은 계수(癸水)의 달, 계약서를 다시 펼쳐 볼 때</span>
+      <span class="ticker__item" data-today-ganji>오늘의 간지 — 오늘의 기운은 내 생년월일로</span>
+      <span class="ticker__item">무료 운세 맛보기 — 생년월일만 넣으면 오늘 1면이 나옵니다</span>
+      <span class="ticker__item">사주분석 프로그램, 자미두수 103케이스 교차검증 통과</span>
+      <span class="ticker__item">정운타임즈 창간호, 카카오채널에서 먼저 받아보세요</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 내비게이션 ===================== -->
+<nav class="nav" id="nav" aria-label="지면 이동">
+  <div class="wrap nav__inner">
+    <a class="nav__home" href="#hero" aria-label="1면으로">1면</a>
+    <div class="nav__scroll" id="navScroll">
+      <button class="nav__cat is-active" type="button" data-cat="all">전체</button>
+      <button class="nav__cat" type="button" data-cat="chongun">총운·신년</button>
+      <button class="nav__cat" type="button" data-cat="zodiac">띠별 속보</button>
+      <button class="nav__cat" type="button" data-cat="ilju">일주별</button>
+      <button class="nav__cat" type="button" data-cat="money">재물·사업</button>
+      <button class="nav__cat" type="button" data-cat="love">인연·궁합</button>
+      <button class="nav__cat" type="button" data-cat="work">직장·이직</button>
+      <button class="nav__cat" type="button" data-cat="health">건강·개운</button>
+      <button class="nav__cat" type="button" data-cat="timing">시기별</button>
+    </div>
+    <a class="nav__cta" href="#fortune">오늘의 무료 운세</a>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ===================== 1면 히어로 ===================== -->
+  <section class="hero" id="hero">
+    <canvas class="hero__canvas" id="skyCanvas" aria-hidden="true"></canvas>
+    <div class="hero__vignette" aria-hidden="true"></div>
+    <div class="hero__inner wrap">
+      <div class="hero__copy">
+        <p class="kicker" data-reveal>
+          <span class="kicker__badge">창간 특집</span>
+          <span>2027 정미년 총운</span>
+        </p>
+        <h2 class="hero__headline" data-reveal data-delay="1">
+          대운이 바뀌는<br>
+          띠는 <em>따로 있다</em>
+        </h2>
+        <p class="hero__deck" data-reveal data-delay="2">
+          정화(丁火)가 미토(未土) 위에 앉은 해. 같은 정미년이라도 누구에게는 문이 열리고
+          누구에게는 문이 닫힌다. 기준은 띠가 아니라 <strong>내 사주의 온도</strong>다.
+        </p>
+        <div class="hero__actions" data-reveal data-delay="3">
+          <a class="btn btn--gold" href="#fortune">내 운세 30초 맛보기</a>
+          <button class="btn btn--ghost" type="button" data-article="a-2027-daeun">특집 기사 읽기</button>
+        </div>
+        <ul class="hero__meta" data-reveal data-delay="4">
+          <li><b>정운</b> 발행인·명리 해설</li>
+          <li>제1면 · <span id="heroDate">2026.11.21</span></li>
+          <li>읽는 시간 6분</li>
+        </ul>
+      </div>
+
+      <aside class="frontpage" data-reveal data-delay="2">
+        <div class="frontpage__tilt" data-tilt>
+          <div class="frontpage__paper">
+            <div class="frontpage__head">
+              <span>正運TIMES</span>
+              <span id="fpDate">2026.11.21</span>
+            </div>
+            <div class="frontpage__rule" aria-hidden="true"></div>
+            <p class="frontpage__label">오늘의 1면</p>
+            <h3 class="frontpage__title">정미년,<br>불은 데우는 것이다</h3>
+            <div class="frontpage__cols" aria-hidden="true">
+              <p>정화는 태양이 아니라 등불이다. 밝히는 범위가 좁은 대신 오래 간다. 미토는 마른 흙 — 불이 흙을 만나면 열은 오래 머물고, 쉽게 타오르지 않는다.</p>
+              <p>대운이 넘어가는 해에는 큰 결정이 3~6개월 안에 몰린다. 이사도 이직도 결혼도, 결과가 아니라 전환으로 읽어야 한다.</p>
+              <p>올해의 온도는 띠가 아니라 여덟 글자가 정한다. 오늘의 간지는 <b id="fpGanji">癸酉</b>.</p>
+            </div>
+            <div class="frontpage__foot">
+              <span>사주신문 · 제2호</span>
+              <span class="frontpage__stamp" aria-hidden="true">正運</span>
+            </div>
+          </div>
+          <div class="frontpage__glow" aria-hidden="true"></div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="wrap">
+      <ul class="statband" id="statband">
+        <li>
+          <b class="statband__num" data-count="5900" data-suffix="+">0</b>
+          <span>누적 명리 자료·해설 데이터</span>
+        </li>
+        <li>
+          <b class="statband__num" data-count="103" data-suffix="/103">0</b>
+          <span>자미두수 교차검증 케이스</span>
+        </li>
+        <li>
+          <b class="statband__num" data-count="63" data-suffix="P">0</b>
+          <span>해설 전자책 분량</span>
+        </li>
+        <li>
+          <b class="statband__num" data-count="3" data-suffix="단">0</b>
+          <span>30P·60P·100P 정밀 리포트</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== 2면 무료 운세 ===================== -->
+  <section class="sec sec--hanji fortune" id="fortune">
+    <div class="wrap">
+      <div class="sechead">
+        <p class="sechead__no">제2면</p>
+        <div class="sechead__main">
+          <h2 class="sechead__title">오늘의 무료 운세 맛보기</h2>
+          <p class="sechead__desc">생년월일 또는 띠를 넣으면, 오늘 자 간지와 내 기운을 맞춰 <b>한 줄 사주신문 헤드라인</b>을 뽑아 드립니다.</p>
+        </div>
+        <p class="sechead__en" aria-hidden="true">FREE FORTUNE</p>
+      </div>
+
+      <div class="fortune__grid">
+        <form class="fcard" id="fortuneForm" novalidate>
+          <div class="fcard__head">
+            <span class="fcard__stamp" aria-hidden="true">正運</span>
+            <div>
+              <p class="fcard__eyebrow">오늘의 지면 발행</p>
+              <h3 class="fcard__title">내 생년월일로 1면 만들기</h3>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="fBirth">생년월일 <span class="field__hint">(양력)</span></label>
+            <input class="input" type="date" id="fBirth" name="birth" min="1920-01-01" max="2026-11-21" autocomplete="bday">
+          </div>
+
+          <div class="field">
+            <label for="fZodiac">또는 띠로 보기</label>
+            <div class="selectwrap">
+              <select class="input" id="fZodiac" name="zodiac">
+                <option value="">띠를 선택하세요</option>
+                <option value="0">쥐띠 (子)</option>
+                <option value="1">소띠 (丑)</option>
+                <option value="2">호랑이띠 (寅)</option>
+                <option value="3">토끼띠 (卯)</option>
+                <option value="4">용띠 (辰)</option>
+                <option value="5">뱀띠 (巳)</option>
+                <option value="6">말띠 (午)</option>
+                <option value="7">양띠 (未)</option>
+                <option value="8">원숭이띠 (申)</option>
+                <option value="9">닭띠 (酉)</option>
+                <option value="10">개띠 (戌)</option>
+                <option value="11">돼지띠 (亥)</option>
+              </select>
+              <svg class="selectwrap__arrow" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <p class="field__note">생년월일을 넣으면 일간(日干)까지 반영해 더 정확합니다. 띠만 넣으면 띠 기준 간이 풀이입니다.</p>
+          </div>
+
+          <button class="btn btn--gold btn--block" type="submit">오늘의 1면 뽑기</button>
+          <p class="fcard__privacy">입력한 정보는 브라우저 밖으로 전송되지 않습니다. 재미로 보는 참고용 콘텐츠입니다.</p>
+        </form>
+
+        <div class="fresult" id="fresult" aria-live="polite">
+          <div class="fresult__empty" id="fEmpty">
+            <div class="fresult__seal" aria-hidden="true">未</div>
+            <p class="fresult__emptyTitle">아직 오늘의 지면이 비어 있습니다</p>
+            <p class="fresult__emptyText">왼쪽에 생년월일을 넣고 <b>오늘의 1면 뽑기</b>를 눌러 보세요.<br>오늘 자 간지와 내 기운이 만나는 지점을 한 줄로 써 드립니다.</p>
+            <ul class="fresult__preview" aria-hidden="true">
+              <li><span>헤드라인</span><i></i></li>
+              <li><span>행운의 색</span><i></i></li>
+              <li><span>행운의 숫자</span><i></i></li>
+              <li><span>오늘의 주의</span><i></i></li>
+            </ul>
+          </div>
+          <div class="fresult__body" id="fBody" hidden></div>
+        </div>
+      </div>
+
+      <p class="fortune__foot">더 깊은 풀이는 <a href="#pricing">정밀 리포트(30P·60P·100P)</a>에서 이어집니다. 오늘의 운세는 하루 단위, 리포트는 대운·세운까지 10년 단위로 봅니다.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3면 지면 ===================== -->
+  <section class="sec sec--dark news" id="news">
+    <div class="wrap">
+      <div class="sechead sechead--light">
+        <p class="sechead__no">제3면</p>
+        <div class="sechead__main">
+          <h2 class="sechead__title">오늘의 지면</h2>
+          <p class="sechead__desc">총운·띠별·일주별·재물·인연·직장·건강·시기별 — 여덟 개 지면으로 읽는 사주 명리. 제목을 누르면 기사 전문이 펼쳐집니다.</p>
+        </div>
+        <p class="sechead__en" aria-hidden="true">TODAY'S PAGES</p>
+      </div>
+
+      <div class="tabs" aria-label="지면 카테고리" id="tabs"></div>
+      <p class="news__count" id="newsCount" aria-live="polite"></p>
+
+      <div class="news__grid" id="newsGrid"></div>
+
+      <div class="news__more">
+        <button class="btn btn--outline" type="button" id="loadMore">지면 더 보기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4면 사주분석 프로그램 ===================== -->
+  <section class="sec sec--program program" id="program">
+    <div class="wrap program__grid">
+      <div class="program__copy">
+        <p class="kicker kicker--light"><span class="kicker__badge">제4면 · 정운의 분석실</span><span>만세력 · 자미두수</span></p>
+        <h2 class="program__title">기사에서 멈추지 않고,<br>내 명식을 직접 펼쳐 봅니다</h2>
+        <p class="program__deck">
+          정운타임즈가 쓰는 계산 엔진을 그대로 담은 <b>사주분석 웹 프로그램</b>입니다.
+          생년월일 하나로 사주 여덟 글자와 자미두수 12궁을 그리고, 대운·세운의 흐름까지 한 화면에서 봅니다.
+        </p>
+        <ul class="program__list">
+          <li><b>만세력 계산</b> KASI 절기·음양력 기반, 1900~2050 지원</li>
+          <li><b>자미두수 12궁</b> 명궁·오행국·14주성·사화 해설</li>
+          <li><b>교차 결론</b> 사주와 자미두수를 겹쳐 읽는 핵심 카드</li>
+          <li><b>인쇄·저장</b> A4 인쇄와 명식 최대 5개 보관</li>
+        </ul>
+        <div class="program__actions">
+          <a class="btn btn--gold" href="saju-program-preview.html" target="_blank" rel="noopener">무료 체험판 열기</a>
+          <a class="btn btn--ghost" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">프로그램 문의</a>
+        </div>
+        <p class="program__note">체험판은 잠금 없는 무료판입니다. 정식 판은 63P 해설 전자책과 이용권 코드가 함께 제공됩니다.</p>
+      </div>
+      <figure class="program__shot" data-reveal>
+        <div class="program__frame">
+          <div class="program__bar" aria-hidden="true"><i></i><i></i><i></i><span>jungwoon-times · saju analyzer</span></div>
+          <img src="assets/img/program-ui.jpg" alt="정운타임즈 사주분석 프로그램 화면 — 생년월일 입력과 사주 명식 결과" width="1280" height="560" loading="lazy" decoding="async">
+        </div>
+        <figcaption>사주 명식 · 자미두수 12궁 · 교차 해설을 한 화면에서</figcaption>
+        <div class="program__proof" aria-label="계산 검증">
+          <span>사주 계산 15/15 일치</span>
+          <span>자미두수 103/103 일치</span>
+          <span>KASI 절기·음양력 기반</span>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== 5면 요금제 ===================== -->
+  <section class="sec sec--dark pricing" id="pricing">
+    <div class="wrap">
+      <div class="sechead sechead--light">
+        <p class="sechead__no">제5면</p>
+        <div class="sechead__main">
+          <h2 class="sechead__title">정밀 리포트 — 어디까지 알고 싶은지 고르세요</h2>
+          <p class="sechead__desc">신문이 하루를 읽는다면, 리포트는 10년을 읽습니다. 신청 후 입력하신 이메일로 PDF가 도착합니다.</p>
+        </div>
+        <p class="sechead__en" aria-hidden="true">REPORT</p>
+      </div>
+
+      <div class="plans">
+        <article class="plan">
+          <p class="plan__tag">라이트 · 30P</p>
+          <p class="plan__price"><strong>19,900</strong><span>원</span></p>
+          <p class="plan__for">2026~2027 흐름을 가볍게 짚는 입문 리포트</p>
+          <ul class="plan__list">
+            <li>사주 원국·십성 기본 해설</li>
+            <li>2027 세운 총평과 월별 흐름</li>
+            <li>올해의 재물·관계 포인트</li>
+          </ul>
+          <a class="btn btn--outline btn--block" href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">30P 신청</a>
+        </article>
+
+        <article class="plan plan--reco">
+          <p class="plan__badge">정운 추천</p>
+          <p class="plan__tag">스탠다드 · 60P</p>
+          <p class="plan__price"><strong>29,900</strong><span>원</span></p>
+          <p class="plan__for">대운·세운을 함께 보는 종합 리포트</p>
+          <ul class="plan__list">
+            <li>30P 구성 전체</li>
+            <li>대운 10년 흐름과 전환점</li>
+            <li>재물·직업·인연 심층 챕터</li>
+            <li>2027~2028 월별 체크리스트</li>
+          </ul>
+          <a class="btn btn--gold btn--block" href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">60P 신청</a>
+        </article>
+
+        <article class="plan">
+          <p class="plan__tag">프리미엄 · 100P</p>
+          <p class="plan__price"><strong>49,900</strong><span>원</span></p>
+          <p class="plan__for">평생 쓸 한 권, 100P 통합 리포트</p>
+          <ul class="plan__list">
+            <li>60P 구성 전체</li>
+            <li>대운·세운·월운 전 구간 해설</li>
+            <li>자미두수 12궁 교차 해설</li>
+            <li>인생 구간별 조언과 개운 가이드</li>
+          </ul>
+          <a class="btn btn--outline btn--block" href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">100P 신청</a>
+        </article>
+      </div>
+
+      <p class="pricing__note">
+        결제와 신청은 <b>운명사주 아우라</b> 결제 페이지에서 이루어집니다. 결제가 어려우면
+        <a href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카카오 1:1 상담</a>으로 안내해 드립니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== 6면 구독 ===================== -->
+  <section class="sec sec--hanji subscribe" id="subscribe">
+    <div class="wrap subscribe__grid">
+      <div class="subscribe__copy">
+        <p class="sechead__no">제6면</p>
+        <h2 class="subscribe__title">매주 목요일 아침,<br>정운타임즈가 도착합니다</h2>
+        <p class="subscribe__deck">
+          한 주의 간지와 띠별 속보, 그 주에 조심할 시기와 개운 포인트를 한 장으로 정리한
+          <b>주간 사주신문</b>입니다. 광고 없이, 지면 내용만 보냅니다.
+        </p>
+        <ul class="subscribe__meta">
+          <li><b>무료</b> 주 1회 발행</li>
+          <li><b>카톡</b> 채널 소식으로 받기</li>
+          <li><b>해지</b> 언제든 한 번에</li>
+        </ul>
+      </div>
+
+      <form class="subform" id="subForm" novalidate>
+        <label class="subform__label" for="subEmail">받으실 이메일</label>
+        <input class="input" type="email" id="subEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+        <label class="check">
+          <input type="checkbox" id="subAgree" required>
+          <span>주간 사주신문 수신과 이메일 수집·이용에 동의합니다. (수집 항목: 이메일 / 목적: 뉴스레터 발송 / 보유: 해지 시 즉시 파기)</span>
+        </label>
+        <button class="btn btn--gold btn--block" type="submit">주간 사주신문 신청</button>
+        <a class="subform__kakao" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">
+          <span class="subform__kakaoIcon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3.2c-4.97 0-9 3.05-9 6.82 0 2.4 1.6 4.5 4 5.72-.18.66-.65 2.4-.74 2.77-.11.46.17.45.36.33.15-.1 2.38-1.6 2.79-1.88.5.07 1.02.11 1.59.11 4.97 0 9-3.05 9-6.82S16.97 3.2 12 3.2z" fill="currentColor"/></svg>
+          </span>
+          카카오채널로 받기 (@jungwoon)
+        </a>
+        <p class="subform__note">신청하면 메일 앱이 열립니다. 전송 버튼을 누르면 접수됩니다.</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== 푸터 ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <p class="foot__logo"><span class="foot__seal" aria-hidden="true">正運</span> 정운타임즈</p>
+        <p class="foot__tag">운명을 읽는 사람들의 신문</p>
+      </div>
+      <nav class="foot__links" aria-label="푸터 링크">
+        <a href="#news">오늘의 지면</a>
+        <a href="#fortune">무료 운세</a>
+        <a href="#pricing">정밀 리포트</a>
+        <a href="#subscribe">구독</a>
+        <a href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카톡 상담</a>
+      </nav>
+    </div>
+
+    <div class="foot__info">
+      <dl>
+        <div><dt>상호</dt><dd>제이투포커스</dd></div>
+        <div><dt>대표</dt><dd>이혁</dd></div>
+        <div><dt>사업자등록번호</dt><dd>159-47-00699</dd></div>
+        <div><dt>통신판매업</dt><dd>2022-고양일산서-1589</dd></div>
+        <div><dt>고객센터</dt><dd><a href="mailto:22jutimes@gmail.com">22jutimes@gmail.com</a> · 평일 10:00~19:00</dd></div>
+        <div><dt>소재지</dt><dd>경기도 고양시 일산서구 가좌동 1088</dd></div>
+      </dl>
+    </div>
+
+    <p class="foot__legal">
+      정운타임즈의 모든 지면과 해설은 명리학에 기반한 <b>참고용 콘텐츠</b>이며, 의료·법률·투자 등 전문적 판단을 대체하지 않습니다.
+      결과를 보장하지 않으며, 정치인의 미래 예측과 사행성 정보는 다루지 않습니다.
+    </p>
+    <p class="foot__legal">
+      이 지면의 분석 문장은 AI 명리 엔진과 편집 과정을 거쳐 작성됩니다. 생년월일 등 입력 정보는 운세 확인 목적으로만 사용되며 브라우저 밖으로 전송되지 않습니다.
+    </p>
+    <p class="foot__copy">© 2026 정운타임즈 · JUNGWOON TIMES. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ===================== 카카오 플로팅 버튼 ===================== -->
+<a id="jw-kakao-float" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener" aria-label="카카오톡으로 정운에게 1:1 상담하기">
+  <span class="jw-kf-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3.2c-4.97 0-9 3.05-9 6.82 0 2.4 1.6 4.5 4 5.72-.18.66-.65 2.4-.74 2.77-.11.46.17.45.36.33.15-.1 2.38-1.6 2.79-1.88.5.07 1.02.11 1.59.11 4.97 0 9-3.05 9-6.82S16.97 3.2 12 3.2z" fill="#3C1E1E"/>
+    </svg>
+  </span>
+  <span class="jw-kf-text">
+    <b>카톡 1:1 상담</b>
+    <span>평일 10:00~19:00</span>
+  </span>
+</a>
+
+<!-- ===================== 기사 모달 ===================== -->
+<div class="modal" id="articleModal" role="dialog" aria-modal="true" aria-labelledby="amTitle" hidden>
+  <div class="modal__backdrop" data-close></div>
+  <div class="modal__panel" role="document">
+    <button class="modal__close" type="button" data-close aria-label="기사 닫기">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <div class="modal__scroll" id="amScroll">
+      <article class="article" id="amArticle"></article>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
