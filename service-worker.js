@@ -3,7 +3,7 @@
    - 앱 셸(app shell)은 미리 캐시, 문서는 네트워크 우선 + 캐시 폴백
    - 이미지·4P 등 정적 자원은 캐시 우선(백그라운드 갱신)
    ========================================================================== */
-const VERSION = 'jw-times-v10';
+const VERSION = 'jw-times-v12';
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 
@@ -61,6 +61,28 @@ self.addEventListener('fetch', (event) => {
       } catch (e) {
         const cache = await caches.open(SHELL);
         return (await cache.match('./index.html')) || (await cache.match('./')) || Response.error();
+      }
+    })());
+    return;
+  }
+
+  // 매일 갱신되는 파일은 네트워크 우선(오프라인일 때만 캐시)
+  const VOLATILE = ['/assets/js/articles-daily.js', '/assets/js/fourp.js', '/assets/js/app.js', '/assets/js/data.js'];
+  if (VOLATILE.some(p => url.pathname.endsWith(p))){
+    event.respondWith((async () => {
+      try {
+        const fresh = await fetch(req, { cache: 'no-store' });
+        if (fresh && fresh.ok){
+          const cache = await caches.open(RUNTIME);
+          cache.put(req, fresh.clone());
+        }
+        return fresh;
+      } catch (e) {
+        const cache = await caches.open(RUNTIME);
+        const hit = await cache.match(req);
+        if (hit) return hit;
+        const shell = await caches.open(SHELL);
+        return (await shell.match(req)) || new Response('', { status: 504, statusText: 'offline' });
       }
     })());
     return;
