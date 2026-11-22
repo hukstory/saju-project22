@@ -894,7 +894,7 @@ function viewArchive(){
       <div class="arch-day__head">
         <b>${esc(g.date.replace(/-/g,'.'))}</b>
         <span>${esc(ganjiLabel(g.date))}</span>
-        <i>${g.items.length}편</i>
+        <i data-cnt>${g.items.length}편</i>
       </div>
       <ul class="arch-list">
         ${g.items.map(a=>`<li data-cat="${esc(a.cat)}"><a href="#/article/${a.id}">
@@ -936,6 +936,8 @@ function bindArchive(root){
           li.style.display = on ? '' : 'none';
           if (on) shown++;
         });
+        const cnt = day.querySelector('[data-cnt]');
+        if (cnt) cnt.textContent = shown + '편';
         day.style.display = shown ? '' : 'none';
       });
     });
