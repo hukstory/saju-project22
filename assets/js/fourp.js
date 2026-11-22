@@ -644,7 +644,9 @@
       '<div class="fp-kicker">PAGE 03 · 애정 — 배우자 자리</div>' +
       '<h2 class="fp-h2">인연은 <b>' + (m.spouseN >= 3 ? '여러 번 스쳐' : m.spouseN >= 1 ? '한 번 깊게' : '늦게, 그러나 오래') + '</b> 오는 사주입니다.</h2>' +
       '<p class="fp-p">' + (m.input.gender === '여' ? '여성' : '남성') + ' 사주에서 배우자를 보는 별은 <b>' + spouseStars + '</b>입니다. 원국에 <b>' + m.spouseN + '자리</b>가 있습니다. ' +
-      (m.spouseN === 0 ? '드러난 별이 없다고 인연이 없다는 뜻은 아닙니다. 대운·세운에서 그 별이 들어오는 해에 관계가 시작되는 경우가 많습니다.' : '별이 여러 개면 선택의 순간이 여러 번 오고, 그때마다 기준이 흔들리지 않는 것이 중요합니다.') + '</p>' +
+      (m.spouseN === 0 ? '드러난 별이 없다고 인연이 없다는 뜻은 아닙니다. 대운·세운에서 그 별이 들어오는 해에 관계가 시작되는 경우가 많습니다.'
+        : m.spouseN >= 3 ? '별이 여러 개면 선택의 순간이 여러 번 오고, 그때마다 기준이 흔들리지 않는 것이 중요합니다.'
+        : '별이 하나로 모여 있어, 한 사람에게 마음이 깊게 가는 구조입니다.') + '</p>' +
       '<div class="fp-score"><div class="fp-ring"><svg width="74" height="74" viewBox="0 0 74 74"><circle class="bg" cx="37" cy="37" r="30"></circle>' +
       '<circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="188.5" stroke-dashoffset="' + (188.5 - m.love / 100 * 188.5).toFixed(1) + '"></circle></svg><b>' + m.love + '</b></div>' +
       '<div class="t"><strong>애정 지수 ' + m.love + ' / 100</strong>' +
