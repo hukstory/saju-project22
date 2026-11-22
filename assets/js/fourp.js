@@ -571,7 +571,7 @@
     var gd = GYEOK_DESC[m.gyeok.name] || '자기 자리에서 끝까지 해내는 힘';
 
     return '<section class="fp-sec">' +
-      '<div class="fp-kicker">PAGE 01 · 본질 — 여덟 글자의 첫 문장</div>' +
+      '<div class="fp-kicker">PAGE 01 · 본질 — ' + (m.r.charTotal === 8 ? '여덟' : '여섯') + ' 글자의 첫 문장</div>' +
       '<h2 class="fp-h2">' + title + '</h2>' +
       '<p class="fp-p">일간(日干)은 <b>' + m.dayHanja + '(' + m.dayHangul + ')</b> — ' + OH_IMG[OHK[oh]].img + '입니다. ' +
       '태어난 달의 기운과 만나 <b>' + m.gyeok.name + '</b>으로 잡혔습니다 — ' + gd + '의 구조입니다.</p>' +
