@@ -659,7 +659,10 @@ def main():
     store = load_json(ART_PATH, {"schema": 1, "articles": []})
     prev = store.get("articles", [])
 
-    person = pick_person(pool, prev, args.person, today)
+    # 같은 날짜를 다시 만들 때는 그날 이미 쓴 인물을 그대로 쓴다(재실행해도 인물이 바뀌지 않게)
+    same_day = next((a for a in prev if a.get("date") == today.isoformat() and a.get("person")), None)
+    forced = args.person or (same_day.get("person") if same_day else None)
+    person = pick_person(pool, prev, forced, today)
     if not person:
         print("인물 풀에서 대상을 찾지 못했습니다:", args.person)
         return 2
