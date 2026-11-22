@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "note": "화제의 인물 후보 풀 — 생년월일은 공개 프로필(위키백과 등)로 확인한 값만 넣는다. topic/topic_date/topic_source 는 확인된 사실만 적고, 지면에는 이 날짜를 함께 표기한다.",
+  "people": [
+    {
+      "name": "전지윤",
+      "group": "포미닛 출신",
+      "gender": "여",
+      "birth": "1990-10-15",
+      "hour": null,
+      "field": "가수·뮤지컬 배우",
+      "topic": "2026년 11월 22일, 4살 연상의 일반인 예비 신랑과 결혼식을 올렸다",
+      "topic_date": "2026-11-22",
+      "topic_source": "https://www.starnewskorea.com/star/2026/11/07/2026110523382433668",
+      "wiki": "https://ko.wikipedia.org/wiki/전지윤"
+    },
+    {
+      "name": "유지애",
+      "group": "러블리즈",
+      "gender": "여",
+      "birth": "1993-05-21",
+      "hour": null,
+      "field": "가수·배우",
+      "topic": "2026년 11월 28일, 배우 곽시양과 비공개 결혼식을 올릴 예정이다",
+      "topic_date": "2026-11-28",
+      "topic_source": "https://www.yna.co.kr/view/AKR20260903131800005",
+      "wiki": "https://ko.wikipedia.org/wiki/유지애"
+    },
+    {
+      "name": "임영웅",
+      "group": "가수",
+      "gender": "남",
+      "birth": "1991-06-16",
+      "hour": null,
+      "field": "가수",
+      "topic": "트로트와 발라드를 오가는 무대로 대중에게 이름을 알린 가수다",
+      "topic_date": "2026-11",
+      "topic_source": "https://www.mulgogimusic.com/",
+      "wiki": "https://ko.wikipedia.org/wiki/임영웅"
+    },
+    {
+      "name": "아이유",
+      "group": "가수·배우",
+      "gender": "여",
+      "birth": "1993-05-16",
+      "hour": null,
+      "field": "가수·배우",
+      "topic": "가수와 배우로 활동을 이어오고 있다",
+      "topic_date": "2026-11",
+      "topic_source": "https://ko.wikipedia.org/wiki/아이유",
+      "wiki": "https://ko.wikipedia.org/wiki/아이유"
+    },
+    {
+      "name": "유재석",
+      "group": "방송인",
+      "gender": "남",
+      "birth": "1972-08-14",
+      "hour": null,
+      "field": "방송인",
+      "topic": "예능 진행자로 오래 활동해 온 인물이다",
+      "topic_date": "2026-11",
+      "topic_source": "https://ko.wikipedia.org/wiki/유재석",
+      "wiki": "https://ko.wikipedia.org/wiki/유재석"
+    },
+    {
+      "name": "김연아",
+      "group": "전 피겨스케이팅 선수",
+      "gender": "여",
+      "birth": "1990-09-05",
+      "hour": null,
+      "field": "전 피겨스케이팅 선수",
+      "topic": "선수 은퇴 후에도 공식 석상에 모습을 드러내는 인물이다",
+      "topic_date": "2026-11",
+      "topic_source": "https://ko.wikipedia.org/wiki/김연아",
+      "wiki": "https://ko.wikipedia.org/wiki/김연아"
+    },
+    {
+      "name": "손흥민",
+      "group": "축구 선수",
+      "gender": "남",
+      "birth": "1992-07-08",
+      "hour": null,
+      "field": "축구 선수",
+      "topic": "해외 리그에서 뛰어온 축구 선수다",
+      "topic_date": "2026-11",
+      "topic_source": "https://ko.wikipedia.org/wiki/손흥민",
+      "wiki": "https://ko.wikipedia.org/wiki/손흥민"
+    },
+    {
+      "name": "차은우",
+      "group": "배우·가수",
+      "gender": "남",
+      "birth": "1997-03-30",
+      "hour": null,
+      "field": "배우·가수",
+      "topic": "배우와 가수 활동을 함께 이어가는 인물이다",
+      "topic_date": "2026-11",
+      "topic_source": "https://ko.wikipedia.org/wiki/차은우",
+      "wiki": "https://ko.wikipedia.org/wiki/차은우"
+    },
+    {
+      "name": "옥주현",
+      "group": "핑클 출신",
+      "gender": "여",
+      "birth": "1980-03-20",
+      "hour": null,
+      "field": "뮤지컬 배우",
+      "topic": "2026년 11월, 한남동 펜트하우스 압류가 해제되며 다시 화제가 됐다",
+      "topic_date": "2026-11-11",
+      "topic_source": "https://www.segye.com/newsView/20261114503326",
+      "wiki": "https://ko.wikipedia.org/wiki/옥주현"
+    },
+    {
+      "name": "한소희",
+      "group": "배우",
+      "gender": "여",
+      "birth": "1993-11-18",
+      "hour": null,
+      "field": "배우",
+      "topic": "드라마와 영화로 활동을 이어가는 배우다",
+      "topic_date": "2026-11",
+      "topic_source": "https://ko.wikipedia.org/wiki/한소희",
+      "wiki": "https://ko.wikipedia.org/wiki/한소희"
+    },
+    {
+      "name": "뷔",
+      "group": "방탄소년단",
+      "gender": "남",
+      "birth": "1995-12-30",
+      "hour": null,
+      "field": "가수",
+      "topic": "그룹 방탄소년단의 멤버로 활동하는 가수다",
+      "topic_date": "2026-11",
+      "topic_source": "https://ko.wikipedia.org/wiki/뷔",
+      "wiki": "https://ko.wikipedia.org/wiki/뷔"
+    }
+  ]
+}

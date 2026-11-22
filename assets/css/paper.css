@@ -812,3 +812,34 @@ footer{border-top:2px solid #141210;background:#fbfaf7;margin-top:50px}
 .preview-gal figcaption{font-size:12px;color:#4f4a3f;line-height:1.6;padding:10px 12px;background:#fbf9f4}
 .preview-gal figcaption b{display:block;font-family:var(--serif);font-size:14px;color:#1b1710;margin-bottom:2px}
 .preview-note{font-size:12px;color:#6d6353;line-height:1.7;margin-top:12px}
+
+/* ---------- 4P · 내 사주로 채우기 ---------- */
+.fourp-me{border:1px solid var(--line);border-radius:6px;background:#fbf9f4;padding:18px 20px;margin:0 0 20px}
+.fourp-me__t{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:12px}
+.fourp-me__t b{font-family:var(--serif);font-size:16px;color:#1b1710;letter-spacing:-.03em}
+.fourp-me__t span{font-size:12px;color:#6d6353}
+.fourp-me__row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;align-items:flex-end}
+.fourp-me__row label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:#8b7f68;font-weight:700;letter-spacing:.02em;flex:1 1 130px}
+.fourp-me__row input,.fourp-me__row select{width:100%;padding:9px 10px;border:1px solid #d8cfbd;border-radius:4px;background:#fff;font-size:13px;font-family:inherit;color:#1b1710;outline:none}
+.fourp-me__row input:focus,.fourp-me__row select:focus{border-color:var(--gold)}
+.fourp-me__row .btn{flex:0 0 auto;white-space:nowrap}
+.fourp-me__note{font-size:11.5px;color:#7d7362;line-height:1.6}
+@media (max-width:600px){.fourp-me__row label{flex:1 1 100%}.fourp-me__row .btn{width:100%}}
+
+/* ---------- 지난 기사 아카이브 ---------- */
+.arch-filter{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}
+.arch-filter button{border:1px solid var(--line);background:#fff;color:#5a5245;font-size:12px;font-weight:700;padding:7px 12px;border-radius:20px;cursor:pointer;font-family:inherit}
+.arch-filter button.is-on{background:#1b1710;border-color:#1b1710;color:#f0e6d2}
+.arch-day{border-top:2px solid #1b1710;padding-top:12px;margin-bottom:26px}
+.arch-day__head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.arch-day__head b{font-family:var(--serif);font-size:17px;color:#1b1710;letter-spacing:-.03em}
+.arch-day__head span{font-size:11px;color:#8b7f68;letter-spacing:.04em}
+.arch-day__head i{font-style:normal;font-size:11px;color:#fff;background:var(--gold);padding:2px 7px;border-radius:10px;margin-left:auto}
+.arch-list{list-style:none;padding:0;margin:0}
+.arch-list li{border-bottom:1px solid var(--line)}
+.arch-list a{display:grid;grid-template-columns:82px 1fr auto;gap:10px;align-items:baseline;padding:11px 2px;color:inherit;text-decoration:none}
+.arch-list a:hover .arch-ttl{color:var(--gold)}
+.arch-cat{font-size:11px;font-weight:800;color:var(--gold);letter-spacing:.02em}
+.arch-ttl{font-family:var(--serif);font-size:15px;color:#1b1710;letter-spacing:-.035em;line-height:1.45}
+.arch-meta{font-size:11px;color:#958c7b;white-space:nowrap}
+@media (max-width:600px){.arch-list a{grid-template-columns:1fr;gap:2px}.arch-meta{display:none}}

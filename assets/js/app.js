@@ -3,7 +3,10 @@
    ========================================================================== */
 'use strict';
 
-const ARTICLES = [].concat(ARTICLES_1, ARTICLES_2, ARTICLES_3);
+const ARTICLES = [].concat(
+  (typeof ARTICLES_DAILY !== 'undefined' ? ARTICLES_DAILY : []),
+  ARTICLES_1, ARTICLES_2, ARTICLES_3
+);
 
 /* 심층 보강 블록 병합 — 원문 마지막 문단 앞에 삽입 (중복 문단은 제거) */
 if (typeof ARTICLES_EXTRA !== 'undefined'){
@@ -28,6 +31,15 @@ const catOf = (id)=> CATS.find(c=>c.id===id) || CATS[0];
 const inCat = (id)=> ARTICLES.filter(a=>a.cat===id);
 const byCat = (id)=> inCat(id).slice().sort((a,b)=> (b.top?1:0)-(a.top?1:0) || num(b.views)-num(a.views));
 const dateStr = (a)=>{ const d=(a.date||'2026-11-22').split('-'); return `${d[0]}.${d[1]}.${d[2]}. ${a.time||'06:00'}`; };
+/* 매일 갱신 기사(ARTICLES_DAILY)가 있으면 그 지면의 최신 호를, 없으면 기본 기사를 쓴다 */
+const dayKey = (a)=> String(a.date||'2026-11-22');
+function newestOf(cat){
+  const list = inCat(cat).slice().sort((a,b)=> dayKey(b).localeCompare(dayKey(a))
+    || (Number(String(b.views||'').replace(/[^0-9]/g,''))||0) - (Number(String(a.views||'').replace(/[^0-9]/g,''))||0));
+  return list[0] || null;
+}
+function todayLead(){ return newestOf('today') || BY_ID['today-1122'] || ARTICLES[0]; }
+const DAILY = () => (typeof ARTICLES_DAILY !== 'undefined' ? ARTICLES_DAILY : []);
 
 /* ---------- 상단 ---------- */
 function renderTicker(){
@@ -278,8 +290,8 @@ function mbtiSpecial(){
 
 /* ---------- 메인 ---------- */
 function viewHome(){
-  const mid = [BY_ID['today-1122'], BY_ID['money-timing'], BY_ID['dream-moon'], BY_ID['past-musician'],
-               BY_ID['people-stage'], BY_ID['shop-turtle'], BY_ID['lab-49'], BY_ID['money-people']].filter(Boolean);
+  const mid = [todayLead(), BY_ID['money-timing'], BY_ID['dream-moon'], BY_ID['past-musician'],
+               newestOf('people') || BY_ID['people-stage'], BY_ID['shop-turtle'], BY_ID['lab-49'], BY_ID['money-people']].filter(Boolean);
 
   const sections = ['money','today','dream','past','people','shop','lab'].map(cid=>{
     const list = byCat(cid); const first = list[0]; const rest = list.slice(1,5);
@@ -311,7 +323,7 @@ function viewHome(){
     <div>
       <div class="sec-head">
         <div class="sec-head__l"><h2>주요 뉴스</h2><span class="en">LATEST</span></div>
-        <a class="sec-head__more" href="#/today">전체 기사 →</a>
+        <a class="sec-head__more" href="#/archive">지난 기사 →</a>
       </div>
       <div class="newslist">${mid.map(listItem).join('')}</div>
     </div>
@@ -478,7 +490,10 @@ function viewSection(cid){
       <h1>${esc(cat.ko)}</h1>
       <p>${esc(cat.desc)} · 기사 ${list.length}건</p>
     </div>
-    <a class="btn btn--ink" href="#/free">무료로 내 운세 보기</a>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${cid==='people' ? '<a class="btn btn--ghost" href="#/archive">지난 기사 모아보기</a>' : ''}
+      <a class="btn btn--ink" href="#/free">무료로 내 운세 보기</a>
+    </div>
   </div>
   <div class="listgrid">
     <div>
@@ -592,7 +607,7 @@ function viewArticle(id){
 
 /* ---------- 오늘의 운세 지면 ---------- */
 function viewToday(){
-  const main = BY_ID['today-1122'];
+  const main = todayLead();
   return `
   <div class="today-hero">
     <div>
@@ -622,7 +637,7 @@ function viewToday(){
 
 /* ---------- 무료 분석 지면 ---------- */
 function viewFree(){
-  const today = BY_ID['today-1122'];
+  const today = todayLead();
   return `
   <div class="listhead">
     <div><div class="kicker">FREE · 1분</div><h1>무료 사주·운세 바로 분석</h1>
@@ -720,6 +735,22 @@ function view4P(active){
     <h1>딱 4페이지, <em>내 사주의 첫 장</em></h1>
     <p>990원 특별분석 4P 샘플 4종입니다. 아래 탭으로 버전을 바꿔 볼 수 있고, 마지막 페이지에서 정밀 전문분석지(30P·60P·100P)로 이어집니다.</p>
   </div>
+  <div class="fourp-me">
+    <div class="fourp-me__t"><b>내 사주로 4P 채우기</b><span>이름·생년월일시(양/음력·성별)를 넣으면 실제 만세력 엔진이 내 여덟 글자로 지면을 다시 씁니다.</span></div>
+    <form id="fourpMe" autocomplete="off">
+      <div class="fourp-me__row">
+        <label>이름<input type="text" id="fmName" maxlength="20" placeholder="김하늘"></label>
+        <label>성별<select id="fmGender"><option value="여">여성</option><option value="남">남성</option></select></label>
+        <label>달력<select id="fmCal"><option value="solar">양력</option><option value="lunar">음력</option></select></label>
+      </div>
+      <div class="fourp-me__row">
+        <label>생년월일<input type="date" id="fmBirth" min="1900-01-01" max="2026-12-31"></label>
+        <label>시각 (모르면 비움)<input type="time" id="fmTime"></label>
+        <button class="btn btn--red" type="submit">4P 다시 계산 →</button>
+      </div>
+      <p class="fourp-me__note" id="fmNote">입력한 정보는 서버로 보내지 않고 브라우저 안에서만 계산합니다. 4가지 버전 모두 같은 명식으로 다시 그립니다.</p>
+    </form>
+  </div>
   <div class="fourp-tabs">
     ${FOURP.map((f,i)=>`<button type="button" data-4p="${i}" class="${i===idx?'is-on':''}">${f.title}</button>`).join('')}
   </div>
@@ -729,11 +760,11 @@ function view4P(active){
   <div class="fourp-stage">
     <div>
       <div class="phone">
-        <iframe id="fourpFrame" src="${cur.file}" title="990원 4P 분석지 ${esc(cur.title)}" loading="lazy"></iframe>
+        <iframe id="fourpFrame" src="${cur.file}${window.__fourpQuery ? '?' + window.__fourpQuery : ''}" title="990원 4P 분석지 ${esc(cur.title)}" loading="lazy"></iframe>
       </div>
       <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
-        <a class="btn btn--ghost" href="${cur.file}" target="_blank" rel="noopener" id="fourpOpen">새 창에서 크게 보기</a>
-        <a class="btn btn--ghost" href="${cur.file}" target="_blank" rel="noopener">인쇄용으로 열기</a>
+        <a class="btn btn--ghost" href="${cur.file}${window.__fourpQuery ? '?' + window.__fourpQuery : ''}" target="_blank" rel="noopener" id="fourpOpen">새 창에서 크게 보기</a>
+        <a class="btn btn--ghost" href="${cur.file}${window.__fourpQuery ? '?' + window.__fourpQuery : ''}" target="_blank" rel="noopener" id="fourpPrint">인쇄용으로 열기</a>
       </div>
     </div>
     <aside class="fourp-side">
@@ -768,6 +799,125 @@ function bind4P(root){
       location.hash = `#/4p${i==='0'?'':'/v'+i}`;
     });
   });
+  const form = $('#fourpMe', root);
+  if (form) form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const name = ($('#fmName', root)||{}).value || '';
+    const gender = ($('#fmGender', root)||{}).value || '여';
+    const cal = ($('#fmCal', root)||{}).value || 'solar';
+    const birth = ($('#fmBirth', root)||{}).value || '';
+    const time = ($('#fmTime', root)||{}).value || '';
+    const note = $('#fmNote', root);
+    if (!birth){ if (note) note.textContent = '생년월일을 먼저 넣어 주세요.'; return; }
+    const p = birth.split('-').map(Number);
+    const q = new URLSearchParams();
+    q.set('n', name); q.set('g', gender); q.set('c', cal);
+    q.set('y', p[0]); q.set('m', p[1]); q.set('d', p[2]);
+    if (time){ const t = time.split(':'); q.set('t', t[0] + t[1]); } else q.set('u', '1');
+    lastFourpQuery = q.toString();
+    window.__fourpQuery = lastFourpQuery;
+    const frame = $('#fourpFrame', root);
+    if (frame) frame.src = frame.getAttribute('src').split('?')[0] + '?' + lastFourpQuery;
+    const open = $('#fourpOpen', root), pr = $('#fourpPrint', root);
+    if (open) open.href = open.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
+    if (pr) pr.href = pr.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
+    if (note) note.innerHTML = '<b>내 명식으로 다시 계산했습니다.</b> 지면 아래로 내려가 1장부터 읽어 보세요. 다른 버전 탭을 눌러도 같은 명식으로 계산됩니다.';
+  });
+  if (window.__fourpQuery) restoreFourpForm();
+}
+let lastFourpQuery = '';
+function restoreFourpForm(){
+  const q = new URLSearchParams(window.__fourpQuery || '');
+  const set = (id,v)=>{ const el = document.getElementById(id); if (el && v!=null) el.value = v; };
+  set('fmName', q.get('n') || '');
+  set('fmGender', q.get('g') || '여');
+  set('fmCal', q.get('c') || 'solar');
+  if (q.get('y')) set('fmBirth', `${q.get('y')}-${String(q.get('m')).padStart(2,'0')}-${String(q.get('d')).padStart(2,'0')}`);
+  const t = q.get('t');
+  if (t && t.length >= 3) set('fmTime', `${t.slice(0, t.length-2)}:${t.slice(-2)}`);
+}
+
+/* ---------- 지난 기사 아카이브 ---------- */
+function archiveGroups(){
+  const daily = DAILY().filter(a=>a.date);
+  const map = {};
+  daily.forEach(a=>{ (map[a.date] = map[a.date] || []).push(a); });
+  return Object.keys(map).sort((a,b)=>b.localeCompare(a)).map(d=>({ date:d, items: map[d].slice().sort((x,y)=> (y.top?1:0)-(x.top?1:0) || num(y.views)-num(x.views)) }));
+}
+function viewArchive(){
+  const groups = archiveGroups();
+  const total = groups.reduce((n,g)=>n+g.items.length, 0);
+  const cats = Array.from(new Set(groups.reduce((l,g)=>l.concat(g.items.map(a=>a.cat)), [])));
+  if (!groups.length){
+    return `<div class="listhead"><div><div class="kicker">ARCHIVE</div><h1>지난 기사</h1>
+      <p>아직 누적된 지면이 없습니다. 매일 05:30에 새 호가 발행되면 이곳에 쌓입니다.</p></div></div>`;
+  }
+  const first = groups[0];
+  return `
+  <div class="listhead">
+    <div>
+      <div class="kicker">ARCHIVE · 지난 기사 모아보기</div>
+      <h1>정운타임즈 지난 호</h1>
+      <p>매일 05:30 새 호가 발행되고, 지난 호는 <b>최근 60일 · 최대 120편</b>까지 이곳에 쌓입니다. 오늘 ${groups.length}일치 ${total}편이 남아 있습니다.</p>
+    </div>
+    <a class="btn btn--ink" href="#/4p">990원 4P 보기</a>
+  </div>
+  <div class="arch-filter" id="archFilter">
+    <button type="button" class="is-on" data-af="">전체 ${total}</button>
+    ${cats.map(c=>`<button type="button" data-af="${esc(c)}">${esc(catOf(c).ko)} ${groups.reduce((n,g)=>n+g.items.filter(a=>a.cat===c).length,0)}</button>`).join('')}
+  </div>
+  <div id="archBody">
+  ${groups.map(g=>`
+    <div class="arch-day" data-day="${esc(g.date)}">
+      <div class="arch-day__head">
+        <b>${esc(g.date.replace(/-/g,'.'))}</b>
+        <span>${esc(ganjiLabel(g.date))}</span>
+        <i>${g.items.length}편</i>
+      </div>
+      <ul class="arch-list">
+        ${g.items.map(a=>`<li data-cat="${esc(a.cat)}"><a href="#/article/${a.id}">
+          <span class="arch-cat">${esc(catOf(a.cat).ko)}</span>
+          <span class="arch-ttl">${esc(a.title)}</span>
+          <span class="arch-meta">${esc(a.writer||'정운타임즈')} · ${esc(a.time||'05:30')}</span>
+        </a></li>`).join('')}
+      </ul>
+    </div>`).join('')}
+  </div>
+  <div class="funnel" style="margin-top:26px">
+    <div class="funnel__ttl">지난 호를 읽다 보면, 내 사주가 궁금해집니다.</div>
+    <p class="funnel__sub">생년월일시를 넣으면 지금 이 지면의 기준으로 내 여덟 글자를 계산합니다.</p>
+    <div class="funnel__btns">
+      <a class="btn btn--red" href="#/4p">🔥 990원 4P 바로 보기</a>
+      <a class="btn btn--ink" href="#/free">무료 1분 분석</a>
+    </div>
+  </div>`;
+}
+function ganjiLabel(d){
+  const t = String(d).split('-').map(Number);
+  if (t.length!==3 || typeof dayIndex !== 'function') return '';
+  try {
+    const y = yearPillar(t[0], t[1], t[2]).g, m = monthPillar(t[0], t[1], t[2]), dd = ganjiOf(dayIndex(t[0], t[1], t[2]));
+    return `${y.hanja}年 · ${m.hanja}月 · ${dd.hanja}日`;
+  } catch(e){ return ''; }
+}
+function bindArchive(root){
+  const box = $('#archBody', root);
+  $$('#archFilter button', root).forEach(b=>{
+    b.addEventListener('click', ()=>{
+      $$('#archFilter button', root).forEach(x=>x.classList.remove('is-on'));
+      b.classList.add('is-on');
+      const f = b.getAttribute('data-af');
+      $$('.arch-day', box).forEach(day=>{
+        let shown = 0;
+        $$('li', day).forEach(li=>{
+          const on = !f || li.getAttribute('data-cat')===f;
+          li.style.display = on ? '' : 'none';
+          if (on) shown++;
+        });
+        day.style.display = shown ? '' : 'none';
+      });
+    });
+  });
 }
 
 /* ---------- 라우터 ---------- */
@@ -776,6 +926,7 @@ function parseHash(){
   const parts = h.split('/').filter(Boolean);
   if (!parts.length) return { view:'home' };
   if (parts[0]==='article' && parts[1]) return { view:'article', id:parts[1] };
+  if (parts[0]==='archive') return { view:'archive' };
   if (parts[0]==='4p'){
     const v = parts[1] && parts[1].startsWith('v') ? Number(parts[1].slice(1)) : 0;
     return { view:'4p', v: v||0 };
@@ -807,17 +958,20 @@ function render(){
   else if (r.view==='free') html = viewFree();
   else if (r.view==='program') html = viewProgram();
   else if (r.view==='4p') html = view4P(r.v);
+  else if (r.view==='archive') html = viewArchive();
   app.innerHTML = html;
   app.classList.remove('fade'); void app.offsetWidth; app.classList.add('fade');
   bindWidget(app);
   bind4P(app);
   if (r.view==='free') bindFree(app);
+  if (r.view==='archive') bindArchive(app);
   if (r.view==='article') bindShare(app, r.id);
   const a = (r.view==='article') ? BY_ID[r.id] : null;
   const cat = (r.view==='section') ? catOf(r.cat) : null;
   document.title = a ? `${a.title} | ${BRAND.name}`
     : cat ? `${cat.ko} | ${BRAND.name}`
-    : (r.view==='program' ? `사주분석 프로그램 · 1년 이용권 | ${BRAND.name}` : '정운타임즈 | 운명사주, 정운이 풀다');
+    : (r.view==='archive' ? `지난 기사 모아보기 | ${BRAND.name}`
+    : (r.view==='program' ? `사주분석 프로그램 · 1년 이용권 | ${BRAND.name}` : '정운타임즈 | 운명사주, 정운이 풀다'));
   window.scrollTo({ top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto' });
   const menu = $('#mobileMenu'); if (menu) menu.classList.remove('is-on');
 }
