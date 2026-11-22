@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>정운타임즈 | 운명사주, 정운이 풀다</title>
-<meta name="description" content="정운타임즈 · 운명사주22 — MBTI 궁합, 오늘의 운세, 사주·재물, 어젯밤 그 꿈, 전생, 화제의 인물, 운 부르는 것들. 신문처럼 읽는 사주 포털. 990원 4P 맛보기와 30P·60P·100P 정밀분석.">
+<meta name="description" content="정운타임즈 · 운명사주22 — TOP7 인기뉴스, 오늘의 무료운세, MBTI 궁합, 사주·재물, 어젯밤 그 꿈, 전생, 화제의 인물. 신문처럼 읽는 사주 포털. 990원 4P 맛보기, 30P·60P·100P 정밀분석, 만세력·자미두수 사주분석 프로그램 1년 이용권.">
 <meta name="keywords" content="정운타임즈, 운명사주22, 사주, 운세, 만세력, MBTI 궁합, 꿈해몽, 전생, 개운, 오행, 정운">
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="index,follow">
@@ -44,7 +44,7 @@
 <header class="masthead">
   <div class="masthead__in">
     <div class="masthead__left">
-      <button class="installbtn" type="button" data-install><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱 설치 / 바로가기</button>
+      <button class="installbtn" type="button" data-install><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>바탕화면에 설치</button>
       <a href="#/free">무료 운세</a>
       <a href="#/4p">990원 4P</a>
     </div>
@@ -96,6 +96,7 @@
     <a href="#/people">화제의인물</a>
     <a href="#/shop">운부르는것들</a>
     <a href="#/lab">운명연구소</a>
+    <a href="#/program" class="pt">사주프로그램 · 1년 이용권</a>
     <a href="#/4p" class="pt">990원 4P</a>
     <a href="#/free">무료 1분 분석</a>
     <button class="installbtn mmenu__install" type="button" data-install><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱 설치 / 홈 화면에 추가</button>
@@ -106,13 +107,35 @@
 <div class="modalwrap" id="installModal" role="dialog" aria-modal="true" aria-label="앱 설치 안내">
   <div class="modal" style="max-width:460px">
     <div class="modal__head">
-      <h3>정운타임즈 앱으로 설치</h3>
+      <h3>바탕화면에 설치하기</h3>
       <button class="x" type="button" id="installClose" aria-label="닫기">✕</button>
     </div>
     <div class="modal__body" id="installBody"></div>
     <div class="modal__body" style="padding-top:0">
       <p style="font-size:11.5px;color:#8b8378;line-height:1.6">설치하면 주소창 없이 앱처럼 열리고, 최근 읽은 지면이 저장되어 데이터가 적게 듭니다.</p>
     </div>
+  </div>
+</div>
+
+<!-- 사주프로그램 · 1년 이용권 신청 안내 -->
+<div class="modalwrap" id="programModal" role="dialog" aria-modal="true" aria-label="사주프로그램 1년 이용권 신청 안내">
+  <div class="modal" style="max-width:560px">
+    <div class="modal__head">
+      <h3>사주프로그램 · 1년 이용권</h3>
+      <button class="x" type="button" id="programClose" aria-label="닫기">✕</button>
+    </div>
+    <div class="modal__body" id="programBody"></div>
+  </div>
+</div>
+
+<!-- 사주프로그램 화면 미리보기 -->
+<div class="modalwrap" id="previewModal" role="dialog" aria-modal="true" aria-label="사주프로그램 화면 미리보기">
+  <div class="modal" style="max-width:760px">
+    <div class="modal__head">
+      <h3>사주분석 프로그램 화면 미리보기</h3>
+      <button class="x" type="button" id="previewClose" aria-label="닫기">✕</button>
+    </div>
+    <div class="modal__body" id="previewBody"></div>
   </div>
 </div>
 
@@ -138,7 +161,7 @@
     <div class="footer__links">
       <a href="#/">1면</a><a href="#/mbti">MBTI궁합</a><a href="#/today">오늘의운세</a><a href="#/money">사주·재물</a>
       <a href="#/dream">어젯밤그꿈</a><a href="#/past">전생</a><a href="#/people">화제의인물</a><a href="#/shop">운부르는것들</a>
-      <a href="#/lab">운명연구소</a><a href="#/4p">990원 4P</a><a href="#/free">무료분석</a>
+      <a href="#/lab">운명연구소</a><a href="#/program">사주프로그램</a><a href="#/4p">990원 4P</a><a href="#/free">무료분석</a>
       <a href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카톡상담</a>
       <a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">정밀분석 30~100P</a>
     </div>

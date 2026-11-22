@@ -26,6 +26,7 @@ const CATS = [
   { id:'people',  ko:'화제의인물',  route:'#/people',      en:'PEOPLE',   desc:'지금 뜨는 사람의 여덟 글자' },
   { id:'shop',    ko:'운부르는것들',route:'#/shop',        en:'OBJECTS',  desc:'개운 소품과 동양의 부적' },
   { id:'lab',     ko:'운명연구소',  route:'#/lab',         en:'LAB',      desc:'운명전쟁49 · 관찰 기록' },
+  { id:'program', ko:'사주프로그램',route:'#/program',     en:'PROGRAM',  desc:'만세력·자미두수 분석 프로그램 · 1년 이용권', point:true },
   { id:'fourp',   ko:'990원 4P',    route:'#/4p',          en:'4P',       desc:'990원 특별분석 맛보기', point:true }
 ];
 

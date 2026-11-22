@@ -22,6 +22,7 @@
   "shortcuts": [
     { "name": "오늘의 운세", "short_name": "오늘의운세", "url": "./#/today", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "990원 4P", "short_name": "4P", "url": "./#/4p", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "MBTI 궁합", "short_name": "MBTI", "url": "./#/mbti", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "MBTI 궁합", "short_name": "MBTI", "url": "./#/mbti", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "사주프로그램 1년 이용권", "short_name": "사주프로그램", "url": "./#/program", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }

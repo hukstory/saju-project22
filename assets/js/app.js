@@ -39,9 +39,14 @@ function renderTabs(active){
   const nav = $('#tabsIn'); if (!nav) return;
   nav.innerHTML = CATS.map(c=>{
     const on = (c.id===active) ? ' is-active' : '';
-    const hot = (c.id==='mbti'||c.id==='today') ? '<span class="hot">NEW</span>' : '';
-    return `<a class="tab${on}${c.point?' tab--point':''}" href="${c.route}">${c.ko}${c.point?'':hot}</a>`;
+    const hot = (c.id==='mbti'||c.id==='today'||c.id==='program') ? '<span class="hot">NEW</span>' : '';
+    return `<a class="tab${on}${c.point?' tab--point':''}" href="${c.route}">${c.ko}${hot}</a>`;
   }).join('');
+  /* 모바일에서 활성 지면 탭이 가려져 있으면 보이게 옆으로 밀어 준다 */
+  const act = nav.querySelector('.tab.is-active');
+  if (act && nav.scrollWidth > nav.clientWidth + 4){
+    nav.scrollLeft = Math.max(0, act.offsetLeft - 18);
+  }
 }
 function renderMastDate(){
   const t = (typeof TODAY_LABEL!=='undefined') ? TODAY_LABEL : '2026년 11월 22일 일요일';
@@ -154,15 +159,129 @@ function bindWidget(root){
   });
 }
 
+/* ---------- 1면 · TOP 7 ---------- */
+function top7Pick(n){
+  /* 인기뉴스 = 지금 조회수가 가장 높은 기사 순 (num()은 '12,840' 형태 문자열을 돌려주므로 숫자로 따로 센다) */
+  const v = (a)=> Number(String(a.views||'').replace(/[^0-9]/g,'')) || 0;
+  return ARTICLES.slice().sort((a,b)=> v(b)-v(a)).slice(0, n||7);
+}
+function rankBlock(){
+  const list = top7Pick(7);
+  const hero = list[0], rest = list.slice(1);
+  return `<section class="rank" aria-labelledby="rankTitle">
+    <div class="rank__head">
+      <span class="rank__badge">TOP 7</span>
+      <h2 id="rankTitle">인기뉴스</h2>
+      <span class="rank__en">MOST READ</span>
+      <span class="rank__note">지금 가장 많이 읽히는 기사 · 조회순</span>
+    </div>
+    <div class="rank__grid">
+      <a class="rank__hero" href="#/article/${hero.id}">
+        <span class="rank__shot">
+          <img src="${IMG(hero.img)}" alt="${esc(hero.title)}">
+          <b class="rank__heroNo">1</b>
+        </span>
+        <span class="rank__cat">${esc(catOf(hero.cat).ko)}</span>
+        <h3 class="rank__heroTtl">${esc(hero.title)}</h3>
+        <span class="rank__meta">조회 ${num(hero.views)} · ${dateStr(hero)}</span>
+      </a>
+      <ol class="rank__list">
+        ${rest.map((a,i)=>`<li><a href="#/article/${a.id}">
+          <span class="rank__no">${i+2}</span>
+          <img class="rank__thumb" src="${IMG(a.img)}" alt="${esc(a.title)}" loading="lazy">
+          <span class="rank__txt">
+            <span class="rank__cat">${esc(catOf(a.cat).ko)}</span>
+            <span class="rank__ttl">${esc(a.title)}</span>
+            <span class="rank__meta">조회 ${num(a.views)}</span>
+          </span>
+        </a></li>`).join('')}
+      </ol>
+    </div>
+  </section>`;
+}
+
+/* ---------- 1면 · 오늘의 무료운세 + 설치 ---------- */
+function fortuneBlock(){
+  return `<section class="fortune" id="fortune" aria-labelledby="fortuneTitle">
+    <div class="fortune__in">
+      <div class="fortune__copy">
+        <span class="kicker">TODAY'S FREE FORTUNE · 無料</span>
+        <h2 id="fortuneTitle">오늘, 내 기운은<br><em>어디로 흐르는가</em></h2>
+        <p class="fortune__lead">생년월일만 넣으면 오늘의 기운 지수, 행운의 색과 숫자, 좋은 시간, 한 줄 조언이 <b>바로</b> 나옵니다. 회원가입도 결제도 없습니다.</p>
+        <ul class="fortune__pts">
+          <li><span class="fortune__ptno">1</span><span><b>1분이면 끝</b>생년월일 또는 띠 하나만 고르면 됩니다.</span></li>
+          <li><span class="fortune__ptno">2</span><span><b>실제 만세력</b>오늘의 간지(庚子日)로 기운을 계산합니다.</span></li>
+          <li><span class="fortune__ptno">3</span><span><b>무료</b>결과는 화면에서 바로, 저장 없이 확인합니다.</span></li>
+        </ul>
+        <p class="fortune__sub">더 깊이 보려면 <a href="#/4p">990원 4P 맛보기</a> → <a href="${AURA}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a></p>
+      </div>
+      <div class="fortune__card">
+        <div class="widget widget--big">${widgetMarkup('hero')}</div>
+      </div>
+    </div>
+    <div class="fortune__install">
+      <span class="fortune__instico" aria-hidden="true">📲</span>
+      <div class="fortune__insttxt">
+        <b>이 사이트, 바탕화면에 바로 설치하세요</b>
+        <span>주소창 없이 앱처럼 열립니다 · 안드로이드는 ‘앱 설치’, 아이폰은 ‘홈 화면에 추가’</span>
+      </div>
+      <button class="btn btn--ink fortune__instbtn" type="button" data-install>바탕화면에 설치하기</button>
+    </div>
+  </section>`;
+}
+
+/* ---------- 1면 · 사주프로그램 배너 ---------- */
+function programBanner(){
+  return `<a class="progbanner" href="#/program">
+    <span class="progbanner__tag">NEW · 1년 이용권</span>
+    <span class="progbanner__mid">
+      <b>💻 정운 사주분석 웹 프로그램</b>
+      <span>만세력 · 자미두수 12궁 · 30~100P 정밀 분석 — 내 사주를 직접 돌려보는 프로그램</span>
+    </span>
+    <span class="progbanner__go">미리보기 &amp; 다운로드 →</span>
+  </a>`;
+}
+
+/* ---------- 1면 · MBTI 궁합 특집 ---------- */
+function mbtiSpecial(){
+  const lead = BY_ID['mbti-main'];
+  const minis = ['mbti-infp-enfj','mbti-tf'].map(id=>BY_ID[id]).filter(Boolean);
+  return `<section class="special" aria-labelledby="specialTitle">
+    <div class="special__head">
+      <span class="special__kicker">SPECIAL · 커버스토리</span>
+      <h2 id="specialTitle">MBTI 궁합 특집</h2>
+      <p>네 글자로 읽는 인연 — 잘 맞는 조합보다, 번역이 되는 조합</p>
+    </div>
+    <div class="special__grid">
+      <a class="special__lead" href="#/article/${lead.id}">
+        <img src="${IMG(lead.img)}" alt="${esc(lead.title)}">
+        <span class="special__cat">${esc(catOf(lead.cat).ko)}</span>
+        <h3>${esc(lead.title)}</h3>
+        <p>${esc(lead.dek)}</p>
+      </a>
+      <div class="special__side">
+        ${minis.map(a=>`<a class="special__mini" href="#/article/${a.id}">
+          <img src="${IMG(a.img)}" alt="${esc(a.title)}" loading="lazy">
+          <span>
+            <span class="special__cat">${esc(catOf(a.cat).ko)}</span>
+            <span class="special__ttl">${esc(a.title)}</span>
+          </span>
+        </a>`).join('')}
+        <a class="special__quiz" href="#/free">
+          <b>내 궁합 점수, 1분 무료로 보기</b>
+          <span>두 사람의 MBTI만 고르면 점수와 어긋나는 축을 알려드립니다 →</span>
+        </a>
+      </div>
+    </div>
+  </section>`;
+}
+
 /* ---------- 메인 ---------- */
 function viewHome(){
-  const lead = BY_ID['mbti-main'];
-  const trio = [BY_ID['today-1122'], BY_ID['money-timing'], BY_ID['dream-moon']];
-  const mid = [BY_ID['past-musician'], BY_ID['people-stage'], BY_ID['shop-turtle'], BY_ID['lab-49'],
-               BY_ID['mbti-tf'], BY_ID['money-people'], BY_ID['dream-animal'], BY_ID['today-week']];
-  const top7 = ARTICLES.slice().sort((a,b)=> (b.top?1:0)-(a.top?1:0) || num(b.views)-num(a.views)).slice(0,7);
+  const mid = [BY_ID['today-1122'], BY_ID['money-timing'], BY_ID['dream-moon'], BY_ID['past-musician'],
+               BY_ID['people-stage'], BY_ID['shop-turtle'], BY_ID['lab-49'], BY_ID['money-people']].filter(Boolean);
 
-  const sections = ['mbti','today','money','dream','past','people','shop','lab'].map(cid=>{
+  const sections = ['money','today','dream','past','people','shop','lab'].map(cid=>{
     const list = byCat(cid); const first = list[0]; const rest = list.slice(1,5);
     return `<section class="section">
       <div class="section__rule">
@@ -183,28 +302,10 @@ function viewHome(){
   }).join('');
 
   return `
-  <div class="home-top">
-    <article class="lead">
-      <a class="lead__media" href="#/article/${lead.id}">
-        <span class="kicker">1면 톱 · ${esc(catOf(lead.cat).ko)}</span>
-        <img src="${IMG(lead.img)}" alt="${esc(lead.title)}">
-      </a>
-      <div class="lead__body">
-        <a href="#/article/${lead.id}"><h1 class="lead__title">${esc(lead.title)}</h1></a>
-        <p class="lead__dek">${esc(lead.dek)}</p>
-        <div class="meta"><b>${esc(lead.writer)}</b><span class="dot"></span><span>입력 ${dateStr(lead)}</span><span class="dot"></span><span>조회 ${num(lead.views)}</span></div>
-      </div>
-    </article>
-    <aside class="home-top__rail">
-      <div class="widget">${widgetMarkup('home')}</div>
-      <a class="talk" href="${KAKAO}" target="_blank" rel="noopener">
-        <span class="talk__ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3C6.5 3 2 6.5 2 10.8c0 2.9 1.9 5.4 4.6 6.8-.4.8-1 2.8-1.6 3.9-.4.7.1 1 .8.7 2-.8 4.2-2 5.5-2.8.5.1 1 .1 1.6.1 5.5 0 10-3.5 10-7.8C22 6.5 17.5 3 12 3Z" fill="#231f20"/></svg></span>
-        <span><b>카톡 1:1 상담</b><span>정운이 직접 답합니다 · 평일 10~19시</span></span>
-      </a>
-    </aside>
-  </div>
-
-  <div class="trio">${trio.map(a=>thumbCard(a)).join('')}</div>
+  ${rankBlock()}
+  ${fortuneBlock()}
+  ${programBanner()}
+  ${mbtiSpecial()}
 
   <div class="home-mid">
     <div>
@@ -215,15 +316,6 @@ function viewHome(){
       <div class="newslist">${mid.map(listItem).join('')}</div>
     </div>
     <aside class="rail">
-      <div class="panel">
-        <div class="panel__head"><h3>Top 7 인기뉴스</h3><span>RANKING</span></div>
-        <ol class="top7">
-          ${top7.map((a,i)=>`<li><a href="#/article/${a.id}">
-            <span class="num">${i+1}</span>
-            <span><span class="cat">${esc(catOf(a.cat).ko)}</span><span class="tt">${esc(a.title)}</span></span>
-          </a></li>`).join('')}
-        </ol>
-      </div>
       <div class="promo">
         <span class="promo__tag">990원 SPECIAL</span>
         <h4>4페이지로 먼저 확인하는<br>내 운명의 맛보기</h4>
@@ -231,9 +323,20 @@ function viewHome(){
         <div class="promo__price"><b>990</b><span>원 · 4P 분석지</span></div>
         <a class="btn btn--gold btn--block" href="#/4p">4P 바로 보기 →</a>
       </div>
+      <a class="promo promo--prog" href="#/program">
+        <span class="promo__tag">PROGRAM · 1년 이용권</span>
+        <h4>내 사주를 직접 돌려보는<br>사주분석 웹 프로그램</h4>
+        <p>만세력·자미두수 12궁·교차 결론. 체험해 보고 1년 이용권으로 받으세요.</p>
+        <div class="promo__price"><b>체험</b><span>무료 · 다운로드 안내</span></div>
+        <span class="btn btn--gold btn--block">프로그램 보러 가기 →</span>
+      </a>
       <a class="talk" href="${AURA}" target="_blank" rel="noopener">
         <span class="talk__ico" style="background:#171513"><span style="font-family:var(--serif);color:#c9a86a;font-size:13px">正</span></span>
         <span><b>30P · 60P · 100P 정밀분석</b><span>19,900원부터 · 만족도 최상위</span></span>
+      </a>
+      <a class="talk" href="${KAKAO}" target="_blank" rel="noopener">
+        <span class="talk__ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3C6.5 3 2 6.5 2 10.8c0 2.9 1.9 5.4 4.6 6.8-.4.8-1 2.8-1.6 3.9-.4.7.1 1 .8.7 2-.8 4.2-2 5.5-2.8.5.1 1 .1 1.6.1 5.5 0 10-3.5 10-7.8C22 6.5 17.5 3 12 3Z" fill="#231f20"/></svg></span>
+        <span><b>카톡 1:1 상담</b><span>정운이 직접 답합니다 · 평일 10~19시</span></span>
       </a>
     </aside>
   </div>
@@ -248,6 +351,7 @@ function viewHome(){
         <div class="strip4p__btns">
           <a class="btn btn--red" href="#/4p">🔥 990원 4P 바로 보기</a>
           <a class="btn btn--ghost" href="#/free">무료 1분 분석</a>
+          <a class="btn btn--ghost" href="#/program">사주프로그램 1년 이용권</a>
         </div>
       </div>
       <div class="strip4p__pages" aria-hidden="true">
@@ -256,6 +360,109 @@ function viewHome(){
         <div class="pagecard"><b>P.03</b><i></i><i></i><i></i><i></i><span>인연</span></div>
       </div>
     </div>
+  </div>`;
+}
+
+/* ---------- 사주프로그램 지면 ---------- */
+const PROG_FEATS = [
+  { no:'01', t:'진짜 만세력 계산', d:'KASI 절기와 진태양시 보정까지 적용했습니다. 파이썬 만세력 엔진(korean-saju 0.3.0)과 15개 케이스 전 항목이 일치합니다.' },
+  { no:'02', t:'자미두수 12궁', d:'명궁·재백궁·관록궁 등 12궁과 14주성, 사화(四化)를 전통 안성법으로 배치합니다. 독립 엔진과 103개 케이스 교차검증에서 불일치 0건.' },
+  { no:'03', t:'사주 × 자미두수 교차 결론', d:'두 체계가 같은 지점을 가리키는 곳만 추려 핵심 결론 카드로 보여 줍니다. 해석이 겹칠수록 결론은 선명해집니다.' },
+  { no:'04', t:'명식 5인 저장', d:'내 명식은 물론 가족·연인·단골 손님의 명식을 최대 5개까지 저장하고 이름으로 다시 불러옵니다.' },
+  { no:'05', t:'30·60·100P 리포트 연결', d:'프로그램에서 확인한 명식을 그대로 가지고 정밀 분석지(30P·60P·100P)로 이어집니다.' },
+  { no:'06', t:'이용권(라이선스) 잠금', d:'판매용 프로그램은 이용권 코드로 열립니다. 코드 하나로 1년간 사용하고, 파일은 설치 없이 실행됩니다.' }
+];
+function viewProgram(){
+  return `
+  <div class="prog">
+    <div class="prog-hero">
+      <div class="prog-hero__copy">
+        <span class="kicker">PROGRAM · 만세력 · 자미두수</span>
+        <h1 class="prog-hero__ttl">내 사주를<br><em>내 손으로 돌려보는</em><br>정운 사주분석 프로그램</h1>
+        <p class="prog-hero__lead">생년월일 하나를 넣으면 실제 만세력으로 사주팔자와 자미두수 12궁을 계산해 한 화면에 펼칩니다. 오행·십성·대운·세운, 그리고 사주와 자미두수를 겹친 교차 결론까지 — 상담 전에 내 명식을 직접 확인하고 싶은 분을 위한 프로그램입니다.</p>
+        <div class="prog-hero__btns">
+          <button class="btn btn--ink" type="button" data-program-preview>프로그램 화면 미리보기 →</button>
+          <button class="btn btn--gold" type="button" data-program-buy="year">다운로드 &amp; 1년 이용권</button>
+        </div>
+        <p class="prog-hero__note">프로그램 파일 1개로 실행 · 설치 없음 · 인터넷 없이 계산</p>
+      </div>
+      <figure class="prog-hero__shot">
+        <img src="assets/img/program-shot.webp" alt="정운 사주분석 프로그램 — 사주 명식과 오행·십성·대운 화면">
+        <figcaption>실제 화면 — 사주 명식 · 오행·십성 차트 · 10년 대운</figcaption>
+      </figure>
+    </div>
+
+    <section class="prog-block">
+      <div class="sec-head"><div class="sec-head__l"><h2>이런 프로그램입니다</h2><span class="en">FEATURES</span></div></div>
+      <div class="prog-feats">
+        ${PROG_FEATS.map(f=>`<div class="prog-feat">
+          <span class="prog-feat__no">${f.no}</span>
+          <b>${esc(f.t)}</b>
+          <p>${esc(f.d)}</p>
+        </div>`).join('')}
+      </div>
+    </section>
+
+    <section class="prog-block">
+      <div class="sec-head"><div class="sec-head__l"><h2>어디서부터 볼까요</h2><span class="en">PRICE</span></div><span class="prog-hint">맛보기 → 정밀분석 → 프로그램 순서로 이어집니다</span></div>
+      <div class="prog-plans">
+        <div class="plan">
+          <span class="plan__tag">미리보기</span>
+          <b class="plan__name">프로그램 화면 보기</b>
+          <div class="plan__price"><b>무료</b><span>미리보기</span></div>
+          <p>명식 · 자미두수 12궁 · 교차 결론 화면을 먼저 봅니다.</p>
+          <button class="btn btn--ghost btn--block" type="button" data-program-preview>화면 미리보기</button>
+        </div>
+        <div class="plan">
+          <span class="plan__tag">맛보기</span>
+          <b class="plan__name">990원 4P 분석지</b>
+          <div class="plan__price"><b>990</b><span>원</span></div>
+          <p>재물·애정·커리어의 첫 문장. 4가지 버전 수록.</p>
+          <a class="btn btn--ghost btn--block" href="#/4p">4P 바로 보기</a>
+        </div>
+        <div class="plan">
+          <span class="plan__tag">정밀 분석지</span>
+          <b class="plan__name">30P · 60P · 100P</b>
+          <div class="plan__price"><b>19,900</b><span>원부터</span></div>
+          <p>운명의 나침반 30P · 지도 60P · 마스터 플랜 100P.</p>
+          <a class="btn btn--ghost btn--block" href="${AURA}" target="_blank" rel="noopener">정밀분석 보기</a>
+        </div>
+        <div class="plan plan--year">
+          <span class="plan__tag">PROGRAM</span>
+          <b class="plan__name">사주프로그램 1년 이용권</b>
+          <div class="plan__price"><b>상담</b><span>안내 · 카톡 신청</span></div>
+          <p>프로그램 + 이용권 코드 + 63p 해설 전자책.</p>
+          <button class="btn btn--gold btn--block" type="button" data-program-buy="year">다운로드 &amp; 신청하기</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="prog-block prog-flow">
+      <h2>1년 이용권, 이렇게 받습니다</h2>
+      <ol class="prog-flow__steps">
+        <li><span>1</span><b>카톡 1:1 상담</b><i>이용 기간과 결제 방법을 안내받고 신청합니다.</i></li>
+        <li><span>2</span><b>결제 확인</b><i>입금이 확인되면 이용권 코드를 발급합니다.</i></li>
+        <li><span>3</span><b>파일 · 코드 수령</b><i>프로그램 파일과 코드를 카톡·메일로 보내드립니다.</i></li>
+        <li><span>4</span><b>코드 입력 후 사용</b><i>프로그램 첫 화면에 코드를 넣으면 1년간 열립니다.</i></li>
+      </ol>
+      <p class="prog-flow__note"><b>결제 안내</b> — 현재 카드결제(PG) 연동 전입니다. 그래서 1년 이용권 신청과 결제는 카카오채널 1:1 상담으로 안내드리고, 결제 확인 후 프로그램 파일과 이용권 코드를 보내드립니다. 990원 4P는 이 사이트에서 바로 넘겨 볼 수 있고, 30P·60P·100P 정밀분석지는 정밀분석 페이지에서 진행됩니다. 환불·이용 조건은 결제 전 상담에서 안내드립니다.</p>
+      <div class="prog-flow__btns">
+        <a class="btn btn--gold" href="${KAKAO}" target="_blank" rel="noopener">카톡으로 1년 이용권 상담 →</a>
+        <button class="btn btn--ghost" type="button" data-program-preview>프로그램 화면 먼저 보기</button>
+      </div>
+    </section>
+
+    <section class="prog-block">
+      <div class="sec-head"><div class="sec-head__l"><h2>자주 묻는 질문</h2><span class="en">FAQ</span></div></div>
+      <div class="prog-faq">
+        <details><summary>프로그램을 따로 설치해야 하나요?</summary><p>아니요. 파일 하나(HTML)로 실행됩니다. PC나 휴대폰 브라우저에서 파일을 열면 되고, 계산은 인터넷 없이도 됩니다.</p></details>
+        <details><summary>1년 이용권은 어떻게 쓰나요?</summary><p>결제 후 받은 이용권 코드를 프로그램 첫 화면에 넣으면 1년간 열립니다. 코드 하나로 한 대의 기기에서 사용하는 것을 기준으로 안내드립니다.</p></details>
+        <details><summary>아이폰에서도 되나요?</summary><p>네. 사파리나 파일 앱에서 받은 파일을 열면 됩니다. 화면이 좁으면 가로로 돌려 보세요.</p></details>
+        <details><summary>미리보기에서 직접 입력해 볼 수는 없나요?</summary><p>미리보기는 실제 화면 3장만 보여 드립니다. 명식을 직접 입력해 보는 것은 1년 이용권을 받은 뒤 가능합니다. 내 사주를 글로 먼저 읽고 싶다면 990원 4P부터 보세요.</p></details>
+        <details><summary>결제는 어떻게 하나요?</summary><p>지금은 카드결제 연동 전이라 카톡 1:1 상담으로 신청과 결제를 안내합니다. 990원 4P는 사이트에서 바로, 정밀분석지는 정밀분석 페이지에서 진행됩니다.</p></details>
+        <details><summary>분석 결과를 믿어도 되나요?</summary><p>모든 결과는 전통 명리학의 계산 규칙과 상징 해석을 바탕으로 한 참고·오락 정보입니다. 미래를 보장하지 않으며, 의료·투자·법률 같은 중요한 결정의 근거로 삼을 수 없습니다.</p></details>
+      </div>
+    </section>
   </div>`;
 }
 
@@ -369,7 +576,7 @@ function viewArticle(id){
       <div class="pricechips">
         ${PRICING.map(p=>`<span>${esc(p.pages)} ${esc(p.price)}</span>`).join('')}
       </div>
-      <p class="funnel__note">4P 마지막 페이지에서 정밀 전문분석지(30P·60P·100P)로 바로 이어집니다. 모든 분석은 참고·오락 정보입니다.</p>
+      <p class="funnel__note">4P 마지막 페이지에서 정밀 전문분석지(30P·60P·100P)로 바로 이어집니다. 내 명식을 직접 돌려보고 싶다면 <a href="#/program" style="text-decoration:underline">사주분석 프로그램 · 1년 이용권</a>도 있습니다. 모든 분석은 참고·오락 정보입니다.</p>
     </div>
 
     <div class="related">
@@ -574,6 +781,7 @@ function parseHash(){
     return { view:'4p', v: v||0 };
   }
   if (parts[0]==='fourp_talk') return { view:'4p', v:0 };
+  if (parts[0]==='program') return { view:'program' };
   if (parts[0]==='free') return { view:'free' };
   if (parts[0]==='today') return { view:'today' };
   const cat = CATS.find(c=>c.id===parts[0]);
@@ -583,13 +791,21 @@ function parseHash(){
 function render(){
   const r = parseHash();
   const app = $('#app');
-  renderTabs(r.view==='home' ? 'main' : (r.view==='section' ? r.cat : (r.view==='4p' ? 'fourp' : (r.view==='today' ? 'today' : (r.view==='free' ? 'free' : (r.view==='article' ? BY_ID[r.id]?.cat : 'main'))))));
+  let activeTab = 'main';
+  if (r.view==='section') activeTab = r.cat;
+  else if (r.view==='4p') activeTab = 'fourp';
+  else if (r.view==='program') activeTab = 'program';
+  else if (r.view==='today') activeTab = 'today';
+  else if (r.view==='free') activeTab = 'free';
+  else if (r.view==='article') activeTab = (BY_ID[r.id] && BY_ID[r.id].cat) || 'main';
+  renderTabs(activeTab);
   let html='';
   if (r.view==='home') html = viewHome();
   else if (r.view==='section') html = viewSection(r.cat);
   else if (r.view==='article') html = viewArticle(r.id);
   else if (r.view==='today') html = viewToday();
   else if (r.view==='free') html = viewFree();
+  else if (r.view==='program') html = viewProgram();
   else if (r.view==='4p') html = view4P(r.v);
   app.innerHTML = html;
   app.classList.remove('fade'); void app.offsetWidth; app.classList.add('fade');
@@ -599,7 +815,9 @@ function render(){
   if (r.view==='article') bindShare(app, r.id);
   const a = (r.view==='article') ? BY_ID[r.id] : null;
   const cat = (r.view==='section') ? catOf(r.cat) : null;
-  document.title = a ? `${a.title} | ${BRAND.name}` : cat ? `${cat.ko} | ${BRAND.name}` : '정운타임즈 | 운명사주, 정운이 풀다';
+  document.title = a ? `${a.title} | ${BRAND.name}`
+    : cat ? `${cat.ko} | ${BRAND.name}`
+    : (r.view==='program' ? `사주분석 프로그램 · 1년 이용권 | ${BRAND.name}` : '정운타임즈 | 운명사주, 정운이 풀다');
   window.scrollTo({ top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto' });
   const menu = $('#mobileMenu'); if (menu) menu.classList.remove('is-on');
 }
@@ -686,6 +904,68 @@ function bindShare(root, id){
   });
 }
 
+/* ---------- 사주프로그램 · 1년 이용권 신청 모달 ---------- */
+function openProgramModal(){
+  const w = $('#programModal'); if (!w) return;
+  const body = $('#programBody');
+  body.innerHTML = `
+    <div class="paybox">
+      <div class="paybox__row"><span>상품</span><b>정운 사주분석 웹 프로그램 · 1년 이용권</b></div>
+      <div class="paybox__row"><span>구성</span><b>프로그램 파일 + 이용권 코드 + 63p 해설 전자책</b></div>
+      <div class="paybox__row"><span>사용 기간</span><b>코드 인증일로부터 1년</b></div>
+      <div class="paybox__row"><span>결제</span><b>카톡 1:1 상담 후 안내</b></div>
+    </div>
+    <p class="paybox__note">현재 카드결제(PG) 연동 전이라, 신청과 결제는 카카오채널 1:1 상담으로 진행합니다. 상담에서 이용 기간과 결제 방법을 안내받고, 입금이 확인되면 <b>이용권 코드</b>와 <b>프로그램 파일</b>을 보내드립니다.</p>
+    <ol class="paybox__steps">
+      <li>카톡 상담으로 신청 — 이름·생년월일은 미리 보내지 않으셔도 됩니다.</li>
+      <li>결제 확인 후 1년 이용권 코드 발급.</li>
+      <li>프로그램 파일과 코드를 받아 첫 화면에 코드 입력 → 바로 사용.</li>
+    </ol>
+    <div class="paybox__btns">
+      <a class="btn btn--gold" href="${KAKAO}" target="_blank" rel="noopener">카톡으로 1년 이용권 신청 →</a>
+      <a class="btn btn--ghost" href="#/4p" data-close-program>990원 4P 먼저 보기</a>
+    </div>
+    <p class="paybox__small">프로그램은 설치 없이 파일 하나로 실행되고 인터넷 없이도 계산됩니다. 결과는 참고·오락 정보입니다.</p>`;
+  w.classList.add('is-on');
+}
+function closeProgramModal(){ const w = $('#programModal'); if (w) w.classList.remove('is-on'); }
+
+/* 화면 미리보기 — 정식 프로그램의 실제 화면 3장 (프로그램 파일 자체는 배포하지 않는다) */
+function openPreviewModal(){
+  const w = $('#previewModal'); if (!w) return;
+  const body = $('#previewBody');
+  body.innerHTML = `
+    <div class="preview-gal">
+      <figure><img src="assets/img/program-shot.webp" alt="사주 명식과 오행·십성 화면"><figcaption><b>① 사주 명식</b>생년월일을 넣으면 사주팔자·지장간·십성·12운성과 오행 분포를 한 화면에 계산합니다.</figcaption></figure>
+      <figure><img src="assets/img/program-ziwei.webp" alt="자미두수 12궁 명반"><figcaption><b>② 자미두수 12궁</b>명궁·재백궁·관록궁까지 12궁 명반과 궁별 해설, 종합 해석을 함께 봅니다.</figcaption></figure>
+      <figure><img src="assets/img/program-cross.webp" alt="사주와 자미두수 교차 결론"><figcaption><b>③ 교차 결론</b>사주와 자미두수가 같은 지점을 가리키는 곳만 추려 결론 카드로 정리합니다.</figcaption></figure>
+    </div>
+    <p class="preview-note">화면은 정식 프로그램의 실제 화면입니다. 명식을 직접 입력해 보는 것은 1년 이용권을 받은 뒤 가능합니다. 내 사주를 글로 먼저 읽고 싶다면 990원 4P부터 보세요.</p>
+    <div class="paybox__btns">
+      <button class="btn btn--gold" type="button" data-program-buy="year">1년 이용권 문의 →</button>
+      <a class="btn btn--ghost" href="#/4p" data-close-preview>990원 4P 먼저 보기</a>
+    </div>`;
+  w.classList.add('is-on');
+}
+function closePreviewModal(){ const w = $('#previewModal'); if (w) w.classList.remove('is-on'); }
+
+function setupProgram(){
+  document.addEventListener('click', (e)=>{
+    const buy = e.target.closest ? e.target.closest('[data-program-buy]') : null;
+    if (buy){ e.preventDefault(); closePreviewModal(); openProgramModal(); return; }
+    if (e.target.closest && e.target.closest('[data-program-preview]')){ e.preventDefault(); openPreviewModal(); return; }
+    if (e.target.closest && e.target.closest('[data-close-program]')) closeProgramModal();
+    if (e.target.closest && e.target.closest('[data-close-preview]')) closePreviewModal();
+  });
+  ['programModal','previewModal'].forEach(id=>{
+    const w = $('#'+id);
+    if (w) w.addEventListener('click', (ev)=>{ if (ev.target===w) w.classList.remove('is-on'); });
+  });
+  const x = $('#programClose'); if (x) x.addEventListener('click', closeProgramModal);
+  const px = $('#previewClose'); if (px) px.addEventListener('click', closePreviewModal);
+  document.addEventListener('keydown', (e)=>{ if (e.key==='Escape'){ closeProgramModal(); closePreviewModal(); } });
+}
+
 /* ---------- 모바일 메뉴 · PWA 설치 ---------- */
 function setupNav(){
   const burger = $('#burger'); const menu = $('#mobileMenu');
@@ -741,17 +1021,19 @@ function setupPWA(){
     $$('[data-install]').forEach(b=> b.style.display='none');
     const t = $('#toast'); if (t){ t.textContent='정운타임즈가 설치되었습니다. 홈 화면에서 열어 보세요.'; t.classList.add('is-on'); setTimeout(()=>t.classList.remove('is-on'), 3200); }
   });
-  $$('[data-install]').forEach(b=>{
-    b.addEventListener('click', async ()=>{
-      if (deferredPrompt){
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome !== 'accepted') showInstallGuide();
-        deferredPrompt = null;
-      } else {
-        showInstallGuide();
-      }
-    });
+  /* 설치 버튼은 1면·지면이 다시 그려질 때마다 생기므로 문서 단위로 받는다 */
+  document.addEventListener('click', async (e)=>{
+    const b = e.target.closest ? e.target.closest('[data-install]') : null;
+    if (!b) return;
+    e.preventDefault();
+    if (deferredPrompt){
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome !== 'accepted') showInstallGuide();
+      deferredPrompt = null;
+    } else {
+      showInstallGuide();
+    }
   });
   const x = $('#installClose'); if (x) x.addEventListener('click', ()=> $('#installModal').classList.remove('is-on'));
   const w = $('#installModal'); if (w) w.addEventListener('click', (e)=>{ if (e.target===w) w.classList.remove('is-on'); });
@@ -764,7 +1046,7 @@ function setupPWA(){
 
 /* ---------- 시작 ---------- */
 document.addEventListener('DOMContentLoaded', ()=>{
-  renderTicker(); renderMastDate(); setupNav(); setupPWA();
+  renderTicker(); renderMastDate(); setupNav(); setupPWA(); setupProgram();
   render();
 });
 window.addEventListener('hashchange', render);
