@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정운(正運) · 프리미엄 사주 리포트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@300;400;600;700;900&display=swap">
+<style>
+/* ================= 기본 세팅 ================= */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { 
+    font-family: 'Pretendard', sans-serif; 
+    background: #eef1f5; /* 은은한 라이트 그레이 배경 */
+    color: #2c3e50; 
+    line-height: 1.75; 
+    letter-spacing: -0.03em;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    word-break: keep-all; /* 단어 단위 줄바꿈 */
+    overflow-wrap: break-word;
+}
+.serif { font-family: 'Noto Serif KR', serif; }
+.batang { font-family: 'Gowun Batang', serif; }
+
+/* 모바일 화면 프레임 */
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,0.08);
+}
+
+/* ================= 사각 테두리 프레임 (있어보이는 효과) ================= */
+.frame-border {
+    position: absolute;
+    top: 15px; left: 15px; right: 15px; bottom: 15px;
+    border: 1px solid rgba(200, 170, 120, 0.4);
+    pointer-events: none;
+    z-index: 10;
+}
+.frame-border::before {
+    content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 1px solid rgba(200, 170, 120, 0.2);
+}
+
+/* ================= 페이지 전환 ================= */
+.step { display: none; animation: fadeIn 0.6s ease; }
+.step.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ================= STEP 1: 카톡 채널 추가 유도 ================= */
+#step-hooking { 
+    padding: 80px 35px 60px; 
+    position: relative;
+    text-align: center;
+    background: linear-gradient(180deg, #f8f9fc 0%, #ffffff 100%);
+}
+
+.brand-top {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px; color: #b8955f; /* 부드러운 골드 */
+    letter-spacing: 0.3em; font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.hero-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 30px; font-weight: 700; color: #1a2533; /* 진한 네이비 */
+    line-height: 1.4; margin-bottom: 20px;
+}
+.hero-title span { 
+    color: #b8955f; 
+    display: inline-block;
+}
+
+.hero-sub {
+    font-size: 15px; color: #5a6a7a; margin-bottom: 50px; font-weight: 400;
+}
+
+/* 동양적 이미지 (SVG) */
+.hero-illust {
+    width: 100%; height: 160px; margin-bottom: 40px;
+    display: flex; justify-content: center; align-items: center;
+}
+.hero-illust svg { width: 100%; height: 100%; }
+
+/* 무료 카드 */
+.free-card {
+    background: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 35px 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    position: relative;
+}
+.free-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: #1a2533; color: #b8955f; font-size: 11px; font-weight: 800;
+    padding: 4px 20px; letter-spacing: 0.15em; border-radius: 20px;
+    border: 1px solid #b8955f;
+}
+.free-title {
+    font-family: 'Gowun Batang', serif;
+    font-size: 22px; font-weight: 700; color: #1a2533; margin-bottom: 12px;
+}
+.free-desc {
+    font-size: 14px; color: #5a6a7a; margin-bottom: 30px;
+}
+
+/* 카톡 버튼 */
+.kakao-btn {
+    display: flex; justify-content: center; align-items: center; gap: 10px;
+    width: 100%; background: #fee500; color: #1a2533; border: none;
+    padding: 18px; border-radius: 6px; font-size: 16px; font-weight: 800;
+    cursor: pointer; transition: transform 0.2s;
+    box-shadow: 0 4px 15px rgba(254, 229, 0, 0.3);
+}
+.kakao-btn:active { transform: scale(0.98); }
+.kakao-btn svg { width: 20px; height: 20px; }
+.notice-text { font-size: 12px; color: #8892a0; margin-top: 15px; }
+
+
+/* ================= STEP 2: 무료 풀이 (궁금증 유발) ================= */
+#step-detail {
+    background: #ffffff;
+    padding-bottom: 60px;
+}
+
+.detail-header {
+    padding: 60px 35px 40px;
+    background: #1a2533; /* 딥 네이비 배경 */
+    color: #fff;
+    border-bottom: 2px solid #b8955f;
+    position: relative;
+}
+.detail-header .brand { 
+    font-size: 11px; color: #b8955f; letter-spacing: 0.2em; font-weight: 700; margin-bottom: 12px; 
+}
+.detail-header h1 { 
+    font-family: 'Noto Serif KR', serif;
+    font-size: 26px; font-weight: 700; line-height: 1.3; margin-bottom: 12px; 
+}
+.detail-header h1 span { color: #b8955f; }
+.detail-header p { font-size: 14px; color: #a0b0c0; }
+
+.detail-content { padding: 40px 35px; }
+
+/* 챕터 */
+.chapter { margin-bottom: 45px; }
+.chapter-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px; font-weight: 700; color: #1a2533;
+    line-height: 1.4; margin-bottom: 20px;
+    padding-bottom: 10px; border-bottom: 1px solid #e0e6ed;
+}
+.chapter-title span { color: #d9534f; } /* 강조 레드 */
+
+.section-text {
+    font-size: 15px; color: #3a4a5a; margin-bottom: 20px; line-height: 1.8;
+}
+.section-text strong { color: #1a2533; font-weight: 700; }
+
+/* 고급 카드 */
+.glass-card {
+    background: #f8f9fc;
+    border-left: 4px solid #b8955f;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+.glass-card .card-title {
+    font-family: 'Gowun Batang', serif;
+    font-size: 16px; font-weight: 700; color: #b8955f; margin-bottom: 10px;
+}
+.glass-card .card-desc {
+    font-size: 14.5px; color: #3a4a5a; line-height: 1.7;
+}
+.highlight-gold { color: #b8955f; font-weight: 700; }
+.highlight-red { color: #d9534f; font-weight: 700; }
+
+/* 챕터 이미지 영역 */
+.chapter-img {
+    width: 100%; height: 120px; margin-bottom: 20px;
+    display: flex; justify-content: center; align-items: center;
+}
+.chapter-img svg { width: 100%; height: 100%; }
+
+/* ================= STEP 3: 3가지 요금제 (업셀링) ================= */
+#step-pricing {
+    background: #f8f9fc;
+    padding: 60px 35px 80px;
+    text-align: center;
+}
+
+.pricing-header {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px; font-weight: 700; color: #1a2533;
+    line-height: 1.4; margin-bottom: 15px;
+}
+.pricing-header span { color: #d9534f; }
+.pricing-sub { font-size: 15px; color: #5a6a7a; margin-bottom: 40px; }
+
+.pricing-card {
+    background: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 30px 25px;
+    margin-bottom: 25px;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+.pricing-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+.pricing-card.recommend { border: 2px solid #1a2533; }
+
+.recommend-badge {
+    position: absolute; top: -12px; right: 20px;
+    background: #1a2533; color: #fff; font-size: 10px; font-weight: 700;
+    padding: 4px 12px; border-radius: 12px; letter-spacing: 0.05em;
+}
+
+.pkg-title {
+    font-family: 'Gowun Batang', serif;
+    font-size: 20px; font-weight: 700; color: #1a2533; margin-bottom: 5px;
+}
+.pkg-pages {
+    font-size: 13px; color: #b8955f; font-weight: 700; margin-bottom: 15px;
+}
+.pkg-desc {
+    font-size: 14px; color: #5a6a7a; line-height: 1.6; margin-bottom: 20px;
+    padding-bottom: 20px; border-bottom: 1px dashed #e0e6ed;
+}
+.pkg-price {
+    font-size: 24px; font-weight: 900; color: #1a2533; text-align: right;
+}
+.pkg-price span { font-size: 16px; font-weight: 500; color: #5a6a7a; margin-left: 5px; }
+
+.pkg-btn {
+    display: block; width: 100%; margin-top: 20px;
+    padding: 15px; background: #1a2533; color: #fff;
+    border: none; border-radius: 4px; font-size: 15px; font-weight: 700;
+    text-align: center; text-decoration: none;
+}
+.pkg-btn.gold { background: #b8955f; }
+
+
+/* ===== 정운타임즈 4P 뷰어용 보정 ===== */
+body{flex-direction:column;align-items:center;justify-content:flex-start}
+.zw-top{width:100%;box-sizing:border-box}
+.app-container{width:100%;max-width:480px;align-self:center}
+.zw-cta{background:linear-gradient(160deg,#1b1610,#2b2114);border:1px solid #c9a063;border-radius:10px;padding:26px 22px;margin:8px 0 30px;text-align:center}
+.zw-cta__k{font-family:'Noto Serif KR',serif;font-size:13px;letter-spacing:.12em;color:#c9a063;font-weight:700;margin-bottom:8px}
+.zw-cta__t{font-family:'Noto Serif KR',serif;font-size:22px;line-height:1.45;color:#fff;font-weight:700}
+.zw-cta__t b{color:#e8c987}
+.zw-cta p{font-size:13.5px;color:#b9b0a1;line-height:1.75;margin:10px 0 16px}
+.zw-cta__btn{display:block;background:linear-gradient(90deg,#d8b979,#c9a063);color:#171209;font-weight:900;font-size:15.5px;padding:16px;border-radius:6px;text-decoration:none;box-shadow:0 6px 20px rgba(201,160,99,.28)}
+.zw-cta__p{font-size:11.5px;color:#a99f8d;margin-top:10px;letter-spacing:.01em}
+.zw-top{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-bottom:1px solid rgba(201,160,99,.25);font-size:11px;color:#c9a063;letter-spacing:.14em;font-weight:700;background:#0b0d0f}
+.zw-top a{color:#9aa1ab;text-decoration:none;letter-spacing:0;font-weight:600}
+@media print{
+  body{background:#fff!important;color:#111!important}
+  .app-container{max-width:none!important;box-shadow:none!important;background:#fff!important}
+  .step{display:block!important}
+  #step-hooking,.zw-top{display:none!important}
+  .detail-header{background:#fff!important;color:#111!important;border-color:#ccc!important}
+  .detail-header h1,.chapter-title,.pricing-header,.pkg-title{color:#111!important}
+  .detail-header p,.section-text,.score-desc,.timeline-text,.bar-label,.info-box .box-desc{color:#333!important}
+  .teaser-box,.cliffhanger-box,.info-box,.chart-container,.love-score-box{background:#faf8f2!important;border-color:#d8c9a8!important}
+  .blur-text{filter:none!important;color:#333!important}
+  .corner-decor,.goto-pricing-btn,.pkg-btn,.discount-badge,.recommend-badge{display:none!important}
+  .zw-cta{background:#fdf7e9!important;color:#111!important;border-color:#c9a063!important;page-break-inside:avoid}
+  .zw-cta__t,.zw-cta__t b{color:#111!important}
+  .zw-cta p,.zw-cta__p{color:#444!important}
+  .chapter,.pricing-card{page-break-inside:avoid}
+}
+
+</style>
+</head>
+<body>
+<div class="zw-top"><span>정운타임즈 · 990원 4P 특별분석</span><a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">정밀분석 30~100P →</a></div>
+
+<div class="app-container">
+    
+    <!-- =========================================
+         STEP 1: 카톡 채널 추가 유도 (무료 풀이)
+         ========================================= -->
+    <div id="step-hooking" class="step active">
+        <div class="frame-border"></div>
+        
+        <div class="brand-top">FOCUS AURA · 정운</div>
+        
+        <h1 class="hero-title">
+            당신의 운명은<br>
+            <span>이미 설계되어 있습니다.</span>
+        </h1>
+        <p class="hero-sub">
+            단 한 번의 선택으로, 인생을 바꿀<br>
+            결정적인 운명의 실타래를 확인하세요.
+        </p>
+
+        <!-- 동양적 산수화 이미지 -->
+        <div class="hero-illust">
+            <svg viewBox="0 0 300 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="80" r="70" stroke="rgba(184,149,95,0.15)" stroke-width="1"/>
+                <circle cx="150" cy="80" r="50" stroke="rgba(184,149,95,0.25)" stroke-width="0.5" stroke-dasharray="2 4"/>
+                <path d="M30 140 L80 70 L130 110 L200 60 L270 140 Z" fill="url(#mountainGrad)" stroke="#b8955f" stroke-width="1" opacity="0.8"/>
+                <path d="M60 140 L110 90 L160 120 L220 80 L250 140 Z" fill="rgba(248,249,252,0.9)" stroke="#b8955f" stroke-width="0.5"/>
+                <circle cx="230" cy="50" r="10" fill="#b8955f" opacity="0.4"/>
+                <circle cx="70" cy="35" r="1.5" fill="#b8955f"/>
+                <circle cx="100" cy="20" r="1" fill="#b8955f" opacity="0.6"/>
+                <circle cx="260" cy="30" r="1.5" fill="#b8955f"/>
+                <defs>
+                    <linearGradient id="mountainGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#eef1f5"/>
+                        <stop offset="100%" stop-color="#ffffff"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="free-card">
+            <div class="free-badge">FREE</div>
+            <div class="free-title">무료 운명 리포트 열람</div>
+            <div class="free-desc">
+                카카오톡 채널을 추가하시면<br>
+                명리학 전문가가 분석한 당신의<br>
+                숨겨진 운명을 무료로 확인하실 수 있습니다.
+            </div>
+            <button class="kakao-btn" onclick="openKakaoAndUnlock()">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3C6.477 3 2 6.477 2 10.75C2 13.635 3.85 16.106 6.577 17.558C6.389 18.353 5.815 20.363 5.194 21.487C4.82 22.174 5.114 22.5 5.81 22.196C7.863 21.32 10.062 20.058 11.333 19.236C11.552 19.253 11.774 19.263 12 19.263C17.523 19.263 22 15.785 22 11.513C22 7.24 17.523 3 12 3Z" fill="#1a2533"/></svg>
+                카톡 추가하고 무료 풀이 받기
+            </button>
+            <div class="notice-text">* 채널 추가 후 즉시 열람 가능합니다.</div>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         STEP 2: 무료 풀이 (궁금증 유발)
+         ========================================= -->
+    <div id="step-detail" class="step">
+        
+        <div class="detail-header">
+            <div class="brand">PREMIUM REPORT</div>
+            <h1><span>엄정은</span> 님의<br>운명 심층 분석</h1>
+            <p>이것은 당신 인생의 극히 일부입니다.</p>
+        </div>
+
+        <div class="detail-content">
+            
+            <!-- Chapter 01 -->
+            <div class="chapter">
+                <h2 class="chapter-title">
+                    당신은 조용한 호수 위에<br>
+                    <span>숨겨진 화산</span>을 품고 있습니다.
+                </h2>
+                <!-- 챕터 이미지 (산과 호수) -->
+                <div class="chapter-img">
+                    <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 80 Q50 60 100 80 T200 70 L200 100 L0 100 Z" fill="rgba(184,149,95,0.1)"/>
+                        <path d="M20 80 L70 30 L120 70 L170 20 L190 80" stroke="#b8955f" stroke-width="1.5" fill="none"/>
+                        <circle cx="170" cy="25" r="5" fill="#b8955f" opacity="0.6"/>
+                    </svg>
+                </div>
+                <p class="section-text">
+                    엄정은 님은 겉으로 보기에는 차분해 보이지만, 내면에는 누구도 꺾을 수 없는 강한 열정을 품고 있는 사주입니다. 한번 마음먹은 일은 끝까지 해내는 <strong>뚝심</strong>이 있습니다.
+                </p>
+                <div class="glass-card">
+                    <div class="card-title">당신의 숨겨진 성향</div>
+                    <div class="card-desc">
+                        남들에게 쉽게 속마음을 보이지 않지만, 한번 신뢰를 주면 끝까지 의리를 지킵니다. 다만, 스스로에게 너무 높은 기준을 적용하여 <span class="highlight-red">가끔은 완벽하지 못한 자신을 자책</span>하곤 합니다.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 02 -->
+            <div class="chapter">
+                <h2 class="chapter-title">
+                    돈이 당신을 찾아오는<br>
+                    <span>황금기</span>가 시작됩니다.
+                </h2>
+                <!-- 챕터 이미지 (금괴와 동전) -->
+                <div class="chapter-img">
+                    <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="60" y="50" width="80" height="30" fill="rgba(184,149,95,0.2)" stroke="#b8955f" stroke-width="1"/>
+                        <ellipse cx="100" cy="80" rx="40" ry="10" fill="none" stroke="#b8955f" stroke-width="1"/>
+                        <circle cx="50" cy="70" r="10" fill="none" stroke="#b8955f" stroke-width="1"/>
+                        <circle cx="150" cy="65" r="12" fill="none" stroke="#b8955f" stroke-width="1"/>
+                        <path d="M40 80 Q100 40 160 80" stroke="#b8955f" stroke-width="0.5" stroke-dasharray="2 2" fill="none"/>
+                    </svg>
+                </div>
+                <p class="section-text">
+                    원국에 <strong>재성(財星)</strong>이 강하게 자리하고 있어 돈과 인연이 깊습니다. 2027년을 기점으로 <strong>당신의 그릇이 부(富)를 감당할 수 있게 확장</strong>됩니다.
+                </p>
+                <div class="glass-card">
+                    <div class="card-title">2027년 재물운 골든타임</div>
+                    <div class="card-desc">
+                        특히 <span class="highlight-gold">2027년 3월과 9월</span>에는 예상치 못한 큰 재물이 들어오거나, 커리어의 거대한 도약이 이루어집니다. 이 기회를 절대 놓치지 마십시오.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 03 -->
+            <div class="chapter">
+                <h2 class="chapter-title">
+                    빛이 강할수록<br>
+                    <span>그림자도 짙어집니다.</span>
+                </h2>
+                <!-- 챕터 이미지 (달과 구름) -->
+                <div class="chapter-img">
+                    <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="50" r="30" fill="rgba(184,149,95,0.1)" stroke="#b8955f" stroke-width="1"/>
+                        <path d="M40 60 Q60 40 80 60 T120 50 T160 60" stroke="#b8955f" stroke-width="1.5" fill="none" opacity="0.5"/>
+                        <circle cx="120" cy="40" r="2" fill="#d9534f"/>
+                    </svg>
+                </div>
+                <p class="section-text">
+                    당신의 운은 분명 좋은 방향으로 흐르고 있습니다. 하지만 무리하게 확장하다 보면 예상치 못한 암초를 만날 수 있습니다.
+                </p>
+                <div class="glass-card">
+                    <div class="card-title">반드시 피해야 할 시기</div>
+                    <div class="card-desc">
+                        <span class="highlight-red">2025년 겨울철</span>에는 충동적인 투자나 보증을 절대 삼가해야 합니다. 주변 사람들과의 금전 거래는 관계를 단절시키는 원인이 될 수 있습니다.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3로 넘어가는 버튼 -->
+            <div style="text-align: center; margin-top: 50px;">
+                <button onclick="showPricing()" style="background: none; border: 1px solid #b8955f; color: #b8955f; padding: 15px 30px; border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%;">
+                    더 깊은 내 운명 확인하기 →
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         STEP 3: 3가지 요금제 선택 (업셀링)
+         ========================================= -->
+    <div id="step-pricing" class="step">
+        
+        <h2 class="pricing-header">
+            당신의 운명을<br>
+            어디까지 <span>확인하시겠습니까?</span>
+        </h2>
+        <p class="pricing-sub">
+            무료 풀이는 맛보기에 불과합니다.<br>
+            지금 바로 더 깊은 미래를 확인하세요.
+        </p>
+
+        <!-- 요금제 1: 19,900원 (30p) -->
+        <div class="pricing-card" onclick="goAura()">
+            <div class="pkg-title">운명의 나침반</div>
+            <div class="pkg-pages">30 Pages</div>
+            <div class="pkg-desc">
+                <strong>[핵심 요약]</strong><br>
+                당신의 인생 방향을 결정짓는 가장 중요한 3가지 운(재물, 애정, 직업)을 심층 분석합니다.
+            </div>
+            <div class="pkg-price">19,900<span>원</span></div>
+            <div class="pkg-btn">선택하기</div>
+        </div>
+
+        <!-- 요금제 2: 29,900원 (60p) - 추천 -->
+        <div class="pricing-card recommend" onclick="goAura()">
+            <div class="recommend-badge">가장 많이 선택</div>
+            <div class="pkg-title">운명의 지도</div>
+            <div class="pkg-pages">60 Pages</div>
+            <div class="pkg-desc">
+                <strong>[정밀 분석]</strong><br>
+                월별 길흉화복, 인생을 바꿀 귀인의 얼굴, 다가올 위기를 피하는 법까지 60페이지에 걸쳐 디테일하게 담았습니다.
+            </div>
+            <div class="pkg-price">29,900<span>원</span></div>
+            <div class="pkg-btn gold">선택하기</div>
+        </div>
+
+        <!-- 요금제 3: 39,900원 (100p) -->
+        <div class="pricing-card" onclick="goAura()">
+            <div class="pkg-title">마스터 플랜</div>
+            <div class="pkg-pages">100 Pages</div>
+            <div class="pkg-desc">
+                <strong>[인생 총정리]</strong><br>
+                평생 재물의 그릇 크기, 조상의 음덕, 지인 네트워크 활용법까지. 당신의 운명을 완벽히 통제하는 최고급 VIP 리포트입니다.
+            </div>
+            <div class="pkg-price">39,900<span>원</span></div>
+            <div class="pkg-btn">선택하기</div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function goAura(){ window.open("https://adorable-gaufre-c07661.netlify.app/","_blank","noopener"); }
+
+    // 카톡 추가 후 무료 풀이 열람
+    function openKakaoAndUnlock() {
+        
+        document.getElementById('step-hooking').classList.remove('active');
+        document.getElementById('step-detail').classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // 요금제 페이지로 이동
+    function showPricing() {
+        document.getElementById('step-detail').classList.remove('active');
+        document.getElementById('step-pricing').classList.add('active');
+        window.scrollTo(0, 0);
+    }
+</script>
+
+</body>
+</html>

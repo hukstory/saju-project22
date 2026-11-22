@@ -4,135 +4,161 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>정운타임즈 | 운명사주, 정운이 풀다</title>
-<meta name="description" content="정운타임즈(正運)는 사주 명리로 오늘과 사람과 꿈을 읽는 라이프스타일 매거진입니다. 오늘 내 운명, 화제의 사주, MBTI 궁합, 어젯밤 그 꿈, 전생, 운 부르는 것들 — 여섯 개의 문에서 무료로 시작하고 정밀 리포트로 이어집니다.">
-<meta name="keywords" content="정운타임즈, 사주, 운세, 만세력, MBTI 궁합, 꿈해몽, 전생, 개운, 오행">
-<meta name="theme-color" content="#F6F1E8">
+<meta name="description" content="정운타임즈 · 운명사주22 — MBTI 궁합, 오늘의 운세, 사주·재물, 어젯밤 그 꿈, 전생, 화제의 인물, 운 부르는 것들. 신문처럼 읽는 사주 포털. 990원 4P 맛보기와 30P·60P·100P 정밀분석.">
+<meta name="keywords" content="정운타임즈, 운명사주22, 사주, 운세, 만세력, MBTI 궁합, 꿈해몽, 전생, 개운, 오행, 정운">
+<meta name="theme-color" content="#ffffff">
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="정운타임즈">
-<meta property="og:title" content="정운타임즈 | 운명사주, 정운이 풀다">
-<meta property="og:description" content="여섯 개의 문, 하나의 운명. 오늘 내 운명부터 전생까지 — 정운타임즈 12월호.">
-<meta property="og:image" content="assets/img/og-cover.jpg">
+<meta property="og:title" content="정운타임즈 · 운명사주22 | 운명사주, 정운이 풀다">
+<meta property="og:description" content="신문처럼 읽는 사주 포털. 오늘의 운세부터 990원 4P까지.">
+<meta property="og:image" content="assets/img/og-cover.webp">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2314110F'/%3E%3Crect x='6' y='6' width='52' height='52' rx='3' fill='none' stroke='%23C9A96A' stroke-width='1.5'/%3E%3Ctext x='32' y='44' font-size='30' text-anchor='middle' fill='%23F6F1E8' font-family='serif'%3E%E6%AD%A3%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="정운타임즈">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="icon" type="image/png" href="assets/icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/css/paper.css">
 </head>
 <body>
 <a class="skip" href="#app">본문으로 건너뛰기</a>
 
-<div class="issuebar">
-  <div class="shell issuebar__in">
-    <p class="issuebar__l"><span class="issuebar__no" id="barIssue">VOL. 03</span><span class="issuebar__date" id="barDate">2026.11.22 (일)</span><span class="issuebar__ganji" id="barGanji">丙午年 · 己亥月 · 庚子日</span></p>
-    <p class="issuebar__r">
-      <a href="#/today">오늘의 운세</a>
-      <span aria-hidden="true">·</span>
-      <a href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카톡 상담</a>
-    </p>
+<!-- 속보 티커 -->
+<div class="ticker">
+  <div class="ticker__in">
+    <span class="ticker__badge">속보</span>
+    <div class="ticker__viewport"><div class="ticker__track" id="tickerTrack"></div></div>
+    <span class="ticker__time" id="barTime">丙午年 · 己亥月 · 庚子日</span>
   </div>
 </div>
 
+<!-- 마스트헤드 -->
 <header class="masthead">
-  <div class="shell masthead__in">
-    <button class="burger" id="burger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="menu">
-      <span></span><span></span>
-    </button>
-    <a class="brand" href="#/" aria-label="정운타임즈 표지로">
+  <div class="masthead__in">
+    <div class="masthead__left">
+      <button class="installbtn" type="button" data-install><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱 설치 / 바로가기</button>
+      <a href="#/free">무료 운세</a>
+      <a href="#/4p">990원 4P</a>
+    </div>
+    <a class="brand" href="#/" aria-label="정운타임즈 1면">
       <span class="brand__seal" aria-hidden="true">正運</span>
       <span class="brand__word">
         <b>정운타임즈</b>
-        <i>JUNGWOON TIMES</i>
+        <i>운명사주22 · 정운이 풀다</i>
       </span>
     </a>
-    <p class="masthead__slogan">운명사주, 정운이 풀다</p>
-    <a class="masthead__cta" href="#/today">무료로 내 운세</a>
+    <div class="masthead__right">
+      <div class="masthead__date" id="mastDate"><b>2026년 11월 22일 일요일</b><span>丙午年 · 己亥月 · 庚子日</span></div>
+      <button class="iconbtn only-mobile" type="button" data-install aria-label="앱 설치" title="앱 설치"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <a class="iconbtn" href="#/free" aria-label="무료 운세 보기" title="무료 운세">正</a>
+    </div>
+    <button class="burger" id="burger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileMenu">
+      <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
   </div>
 </header>
 
-<nav class="mainnav" id="mainnav" aria-label="매거진 코너">
-  <div class="shell mainnav__in" id="mainnavIn"></div>
+<!-- 카테고리 탭 -->
+<nav class="tabs" aria-label="지면 목록">
+  <div class="tabs__in" id="tabsIn"></div>
 </nav>
 
-<main id="app" tabindex="-1"><!-- views --></main>
 
-<footer class="footer">
-  <div class="shell">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <p class="footer__logo"><span class="footer__seal" aria-hidden="true">正運</span> 정운타임즈</p>
-        <p class="footer__slogan">운명사주, 정운이 풀다</p>
-        <p class="footer__desc">사주 명리로 오늘과 사람과 꿈을 읽는 라이프스타일 매거진. 무료 콘텐츠로 시작해 정밀 리포트로 이어집니다.</p>
-      </div>
-      <nav class="footer__links" aria-label="코너">
-        <p>CORNER</p>
-        <a href="#/today">오늘 내 운명</a>
-        <a href="#/people">화제의 사주</a>
-        <a href="#/mbti">MBTI 궁합</a>
-        <a href="#/dream">어젯밤 그 꿈</a>
-        <a href="#/pastlife">전생</a>
-        <a href="#/shop">운 부르는 것들</a>
-      </nav>
-      <nav class="footer__links" aria-label="안내">
-        <p>MORE</p>
-        <a href="#/#lab">운명연구소</a>
-        <a href="#/#report">정밀 리포트</a>
-        <a href="saju-program-preview.html" target="_blank" rel="noopener">만세력 프로그램</a>
-        <a href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카카오 1:1 상담</a>
-      </nav>
+<div class="installbar" id="installBar">
+  <span class="grow"><b>정운타임즈 앱</b> · 홈 화면에 바로 열기</span>
+  <button class="go" type="button" data-install>설치</button>
+  <button class="x" type="button" id="installBarClose" aria-label="배너 닫기">✕</button>
+</div>
+
+<main id="app" class="shell" tabindex="-1"></main>
+
+<!-- 모바일 메뉴 -->
+<div class="mmenu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="지면 메뉴">
+  <div class="mmenu__panel">
+    <div class="mmenu__head">
+      <b>정운타임즈 지면</b>
+      <button type="button" class="mmenu__x" aria-label="닫기" onclick="document.getElementById('mobileMenu').classList.remove('is-on')">✕</button>
     </div>
+    <a href="#/">1면 · 메인</a>
+    <a href="#/mbti">MBTI궁합</a>
+    <a href="#/today">오늘의운세</a>
+    <a href="#/money">사주·재물</a>
+    <a href="#/dream">어젯밤그꿈</a>
+    <a href="#/past">전생</a>
+    <a href="#/people">화제의인물</a>
+    <a href="#/shop">운부르는것들</a>
+    <a href="#/lab">운명연구소</a>
+    <a href="#/4p" class="pt">990원 4P</a>
+    <a href="#/free">무료 1분 분석</a>
+    <button class="installbtn mmenu__install" type="button" data-install><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱 설치 / 홈 화면에 추가</button>
+  </div>
+</div>
 
+<!-- 앱 설치 안내 -->
+<div class="modalwrap" id="installModal" role="dialog" aria-modal="true" aria-label="앱 설치 안내">
+  <div class="modal" style="max-width:460px">
+    <div class="modal__head">
+      <h3>정운타임즈 앱으로 설치</h3>
+      <button class="x" type="button" id="installClose" aria-label="닫기">✕</button>
+    </div>
+    <div class="modal__body" id="installBody"></div>
+    <div class="modal__body" style="padding-top:0">
+      <p style="font-size:11.5px;color:#8b8378;line-height:1.6">설치하면 주소창 없이 앱처럼 열리고, 최근 읽은 지면이 저장되어 데이터가 적게 듭니다.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 플로팅 카톡 -->
+<div class="float">
+  <a class="float__btn" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener" aria-label="카톡 1:1 상담">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3C6.5 3 2 6.5 2 10.8c0 2.9 1.9 5.4 4.6 6.8-.4.8-1 2.8-1.6 3.9-.4.7.1 1 .8.7 2-.8 4.2-2 5.5-2.8.5.1 1 .1 1.6.1 5.5 0 10-3.5 10-7.8C22 6.5 17.5 3 12 3Z" fill="#231f20"/></svg>
+    <span>카톡 1:1 상담</span>
+  </a>
+  <a class="float__ico" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener" aria-label="카톡 상담">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3C6.5 3 2 6.5 2 10.8c0 2.9 1.9 5.4 4.6 6.8-.4.8-1 2.8-1.6 3.9-.4.7.1 1 .8.7 2-.8 4.2-2 5.5-2.8.5.1 1 .1 1.6.1 5.5 0 10-3.5 10-7.8C22 6.5 17.5 3 12 3Z" fill="#231f20"/></svg>
+  </a>
+</div>
+
+<footer>
+  <div class="footer__in">
+    <div class="footer__brand">
+      <span class="brand__seal" aria-hidden="true" style="width:38px;height:38px;font-size:13px">正運</span>
+      <div><b>정운타임즈</b> <span>운명사주22 · JUNGWOON TIMES</span></div>
+    </div>
+    <div class="footer__links">
+      <a href="#/">1면</a><a href="#/mbti">MBTI궁합</a><a href="#/today">오늘의운세</a><a href="#/money">사주·재물</a>
+      <a href="#/dream">어젯밤그꿈</a><a href="#/past">전생</a><a href="#/people">화제의인물</a><a href="#/shop">운부르는것들</a>
+      <a href="#/lab">운명연구소</a><a href="#/4p">990원 4P</a><a href="#/free">무료분석</a>
+      <a href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카톡상담</a>
+      <a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">정밀분석 30~100P</a>
+    </div>
     <div class="footer__info">
-      <span>상호 제이투포커스</span><span>대표 이혁</span><span>사업자등록번호 159-47-00699</span>
-      <span>통신판매업 2022-고양일산서-1589</span><span>경기도 고양시 일산서구 가좌동 1088</span>
-      <a href="mailto:22jutimes@gmail.com">22jutimes@gmail.com</a>
+      <b>제이투포커스</b> · 대표 <b>이혁</b> · 사업자등록번호 <b>159-47-00699</b> · 통신판매업신고 <b>2022-고양일산서-1589</b><br>
+      주소 경기도 고양시 일산서구 가좌동 1088 · 이메일 <b>22jutimes@gmail.com</b> · 카카오채널 <b>@jungwoon</b>
     </div>
-
-    <div class="footer__legal">
-      <p>정운타임즈의 모든 콘텐츠는 명리학과 상징 해석에 기반한 <b>참고용 정보</b>이며, 의료·법률·투자 등 전문적 판단을 대체하지 않습니다. 결과를 보장하지 않으며 특정인의 미래를 단정하지 않습니다.</p>
-      <p>분석 문장은 정운의 명리 엔진과 편집 과정을 거쳐 작성됩니다. 생년월일 등 입력값은 운세 확인 목적으로만 사용되며 서버로 전송·저장되지 않습니다(브라우저 안에서만 계산).</p>
-      <p>행운 번호는 재미와 참고를 위한 상징 숫자이며, 어떤 형태의 금전적 구매·베팅도 권하지 않습니다.</p>
+    <div class="footer__disc">
+      <b>AI·참고 정보 고지</b> — 정운타임즈의 모든 기사·분석·운세는 동양 명리학 전통과 상징 해석을 바탕으로 한 참고·오락 정보입니다. 미래의 결과를 보장하지 않으며, 의료·투자·법률 등 중요한 결정의 근거로 삼을 수 없습니다. 기사 속 사례는 이해를 돕기 위한 재구성으로 실제 인물과 무관할 수 있습니다. 결제·환불·개인정보 처리는 제이투포커스의 정책을 따릅니다.
+      <div class="copy">© 2026 정운타임즈 · 운명사주22. All rights reserved.</div>
     </div>
-    <p class="footer__copy">© 2026 정운타임즈 · JUNGWOON TIMES. All rights reserved.</p>
   </div>
 </footer>
 
-<a class="kakao" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener" aria-label="카카오톡으로 정운에게 1:1 상담하기">
-  <span class="kakao__ic" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 3.2c-4.97 0-9 3.05-9 6.82 0 2.4 1.6 4.5 4 5.72-.18.66-.65 2.4-.74 2.77-.11.46.17.45.36.33.15-.1 2.38-1.6 2.79-1.88.5.07 1.02.11 1.59.11 4.97 0 9-3.05 9-6.82S16.97 3.2 12 3.2z" fill="currentColor"/></svg>
-  </span>
-  <span class="kakao__t"><b>카톡 1:1 상담</b><i>평일 10:00–19:00</i></span>
-</a>
-
-<!-- 공용 모달 루트 -->
-<div class="sheet" id="sheet" hidden>
-  <div class="sheet__bg" data-sheet-close></div>
-  <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-    <button class="sheet__x" type="button" data-sheet-close aria-label="닫기">
-      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-    <div class="sheet__scroll" id="sheetBody"></div>
-  </div>
-</div>
-
-<div class="drawer" id="drawer" hidden>
-  <div class="drawer__bg" data-drawer-close></div>
-  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="메뉴">
-    <p class="drawer__head">정운타임즈 <span>MENU</span></p>
-    <div id="drawerLinks"></div>
-    <a class="drawer__kakao" href="https://pf.kakao.com/_TguvX/chat" target="_blank" rel="noopener">카카오 1:1 상담</a>
-  </div>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="js/engine.js"></script>
-<script src="js/data.js"></script>
-<script src="js/data2.js"></script>
-<script src="js/data3.js"></script>
-<script src="js/app.js"></script>
+<script src="assets/js/engine.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/articles-1.js"></script>
+<script src="assets/js/articles-2.js"></script>
+<script src="assets/js/articles-3.js"></script>
+<script src="assets/js/articles-extra.js"></script>
+<script src="assets/js/app.js"></script>
 </body>
 </html>
