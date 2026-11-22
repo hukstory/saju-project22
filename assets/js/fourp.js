@@ -462,6 +462,7 @@
       + '.fp-check input{width:auto}'
       + '.fp-formnote{font-size:11px;color:#7c8492;margin-top:10px;line-height:1.6}'
       + '.fp-flash{display:none;margin-top:12px;font-size:12.5px;color:#f0b4a8;text-align:center}'
+      + '.fp-cta__more{display:block;width:100%;margin-top:10px;background:none;border:1px solid rgba(201,160,99,.5);color:#e8c987;font-weight:700;font-size:13.5px;padding:12px;border-radius:6px;cursor:pointer;font-family:inherit}'
       + '.fp-back{display:flex;gap:8px;justify-content:center;margin:18px 0 4px;flex-wrap:wrap}'
       + '.fp-back a,.fp-back button{font-size:12px;padding:9px 14px;border-radius:20px;border:1px solid rgba(201,160,99,.45);background:none;color:var(--fp-acc);cursor:pointer;text-decoration:none}'
       + '#step-detail .detail-content{padding-bottom:0}'
@@ -728,6 +729,7 @@
       '<div class="t">찐 정밀 전문분석지<br><b>30P · 60P · 100P</b></div>' +
       '<p>여기까지는 여덟 글자의 첫 장입니다. 월별 길흉, 귀인의 얼굴, 위기를 피하는 달, 평생 재물의 그릇까지 — 정밀 분석지가 이어집니다.</p>' +
       '<a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">✨ 30P · 60P · 100P 정밀분석 보러가기</a>' +
+      '<button type="button" class="fp-cta__more" data-fp-pricing>요금제 3종 나란히 보기 →</button>' +
       '<div class="p">30P 19,900원 · 60P 29,900원 · 100P 49,900원</div></div>';
   }
 
@@ -760,6 +762,13 @@
       '<div class="fp-back"><a href="../index.html#/4p">정운타임즈 4P 목록</a>' +
       '<button type="button" data-fp-restart>다른 생년월일로 다시 보기</button>' +
       '<a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">정밀분석 30~100P</a></div>';
+
+    var pb = host.querySelector('[data-fp-pricing]');
+    if (pb) pb.addEventListener('click', function () {
+      var sd = $('#step-detail'), sp = $('#step-pricing');
+      if (sp) { sd && sd.classList.remove('active'); sp.classList.add('active'); if (window.scrollTo) window.scrollTo(0, 0); }
+      else if (window.showPricing) window.showPricing();
+    });
 
     var rb = host.querySelector('[data-fp-restart]');
     if (rb) rb.addEventListener('click', function () {
