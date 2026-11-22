@@ -64,7 +64,7 @@ OH = {
            "color": "먹빛", "direct": "북쪽", "num": "1과 6", "taste": "짠맛", "virtue": "지(智)"},
 }
 SIP_MEAN = {
-    "비견": "나와 같은 편 — 동료와 경쟁", "겁재": "빼앗고 겨루는 힘",
+    "비견": "동료와 경쟁, 나와 같은 편", "겁재": "빼앗고 겨루는 힘",
     "식신": "꾸준히 만들어 내는 손", "상관": "틀을 뒤집는 표현",
     "편재": "크게 돌아오는 돈", "정재": "새지 않게 모으는 돈",
     "편관": "압박 속의 추진력", "정관": "규칙과 신뢰로 쌓는 자리",
@@ -189,55 +189,64 @@ def next_terms(d, n=3):
 
 
 # ------------------------------------------------------------------ ① 오늘의 운세
+REL_META = {
+    "same": ("비화(比和)", "같은 기운끼리 겹칩니다. 힘도 두 배, 고집도 두 배입니다."),
+    "give": ("식상(食傷)", "내 기운이 밖으로 나갑니다. 말과 손이 잘 풀립니다."),
+    "take": ("인성(印星)", "바깥 기운이 나를 채웁니다. 배움과 도움이 들어옵니다."),
+    "beat": ("재성(財星)", "내가 상대를 쥡니다. 계산과 거래가 맞습니다."),
+    "beaten": ("관성(官星)", "바깥 기운이 나를 누릅니다. 속도를 줄여야 이깁니다."),
+}
+REL_SHORT = {
+    "same": "겹치는 날 — 힘도 두 배, 고집도 두 배",
+    "give": "내보내는 날 — 말과 손이 잘 풀린다",
+    "take": "받는 날 — 배움과 도움이 들어온다",
+    "beat": "쥐는 날 — 계산과 거래가 맞는다",
+    "beaten": "눌리는 날 — 속도를 줄인다",
+}
+
+
 def article_today(d, g):
-    day, month, year = g["day"], g["month"], g["year"]
+    day, month = g["day"], g["month"]
     dstem, dbranch = day["stem"], day["branch"]
     ds, db = S.STEMS[dstem], S.BRANCHES[dbranch]
     doh, boh = S.OHK[ds[2]], S.OHK[db[2]]
     r = rel(ds[2], db[2])
-    mstem = month["stem"]
+    term, term_line = REL_META[r]
     terms = next_terms(d, 2)
     term_txt = ", ".join(f"{TERM_KO[n]}({t.month}월 {t.day}일)" for n, t in terms)
 
-    # 띠별 한 줄
     zodiac = []
     for i, animal in enumerate(ANIMALS):
-        boh2 = S.BRANCHES[i][2]
-        rr = rel(ds[2], boh2)
-        chung = abs(i - dbranch) == 6
-        line = REL_LINE[rr].split("—")[1].strip() if "—" in REL_LINE[rr] else REL_LINE[rr]
-        if chung:
-            line = "충(沖)이 걸리는 날 — 큰 계약과 말다툼은 하루 미루면 부드러워진다"
+        rr = rel(ds[2], S.BRANCHES[i][2])
+        line = REL_SHORT[rr]
+        if abs(i - dbranch) == 6:
+            line = "충(沖) — 큰 계약과 말다툼은 하루 미루면 부드러워진다"
         zodiac.append(f"{animal}띠 — {line}")
 
-    # 좋은 시간대 / 피할 시간대
     good, bad = [], []
     for br, hb in HOUR_RANGE.items():
-        oh = S.BRANCHES[br][2]
-        rr = rel(ds[2], oh)
-        if rr in ("give", "same", "take"):
-            good.append((br, hb))
+        if rel(ds[2], S.BRANCHES[br][2]) in ("give", "same", "take"):
+            good.append(hb)
         if abs(br - dbranch) == 6:
-            bad.append((br, hb))
-    good_txt = ", ".join(hb for _, hb in good[:3]) if good else "오전 09:00~10:59"
-    bad_txt = ", ".join(hb for _, hb in bad[:2]) if bad else "없음"
+            bad.append(hb)
+    good_txt = ", ".join(good[:3]) if good else "09:00~10:59"
+    bad_txt = ", ".join(bad[:2]) if bad else "없음"
 
     title = f"{d.month}월 {d.day}일 {day['hangul']}일 — {doh}의 기운이 {boh} 위로 지나갑니다"
     dek = (f"오늘의 일진은 {day['hanja']}({day['hangul']}). 천간 {ds[0]}({ds[1]})의 {doh} 기운이 "
            f"지지 {db[0]}({db[1]})의 {boh} 위에 앉았습니다. 정운타임즈가 오늘의 간지로 하루의 흐름을 세어 봤습니다.")
     lead = (f"{g['ymd']} — {g['label']}. 오늘 하루의 중심은 {doh}입니다. "
-            f"{doh}{j(doh, '은')} {OH[doh]['key']}의 기운, {OH[doh]['body']}이 말하는 결입니다. "
+            f"{doh}{j(doh, '은')} {OH[doh]['key']}의 기운, {OH[doh]['body']}{j(OH[doh]['body'], '이')} 말하는 결입니다. "
             f"이 기운이 오늘 하루의 말과 판단에 먼저 묻어납니다.")
 
     body = [
-        {"t": "p", "x": f"하루의 성질은 일진의 천간과 지지가 만드는 한 쌍으로 정해집니다. 간지는 60일마다 한 바퀴를 돌고, 그 안에서 매일 결이 달라집니다. "
-                        f"오늘은 {day['hanja']}일, 천간은 <strong>{ds[0]}({ds[1]})</strong>입니다. "
-                        f"{doh} 기운 가운데에서도 {ds[0]}은(는) {'양(陽)' if ds[3] else '음(陰)'}의 결이라, "
+        {"t": "p", "x": f"하루의 성질은 일진의 천간과 지지가 만드는 한 쌍으로 정해집니다. 간지는 60일마다 한 바퀴를 돌고, "
+                        f"그 안에서 매일 결이 달라집니다. 오늘은 {day['hanja']}일, 천간은 <strong>{ds[0]}({ds[1]})</strong>입니다. "
+                        f"{doh} 기운 가운데에서도 {ds[1]}{j(ds[1], '은')} {'양(陽)' if ds[3] else '음(陰)'}의 결이라, "
                         f"{'밖으로 먼저 나가려는' if ds[3] else '안에서 먼저 익히는'} 힘이 있습니다."},
         {"t": "p", "x": f"지지는 <strong>{db[0]}({db[1]})</strong>, {boh}의 자리입니다. "
-                        f"천간의 {doh}{j(doh, '과')} 지지의 {boh}{j(boh, '이')} 만나 <strong>{REL_LINE[r].split('—')[0].strip()}</strong> "
-                        f"구조가 됐습니다. {REL_LINE[r]}."},
-        {"t": "h", "x": f"오늘의 기운 — {REL_LINE[r]}"},
+                        f"천간의 {doh}{j(doh, '과')} 지지의 {boh}{j(boh, '이')} 만나 <strong>{term}</strong>의 관계가 됐습니다. {term_line}"},
+        {"t": "h", "x": f"오늘의 기운 — {term}"},
         {"t": "p", "x": f"사주에서 하루의 일진은 '내 사주에 잠깐 들어오는 손님'입니다. 오늘 들어온 손님은 {doh}입니다. "
                         f"내 일간이 {doh}{j(doh, '을')} 필요로 하는 사주라면 오늘은 일이 풀리고, 이미 {doh}{j(doh, '이')} 넘치는 사주라면 "
                         f"오늘은 잠시 비워 두는 편이 낫습니다. 같은 날짜라도 사람마다 답이 다른 이유입니다."},
@@ -245,14 +254,13 @@ def article_today(d, g):
         {"t": "h", "x": "띠별 오늘의 한 줄"},
         {"t": "ul", "x": zodiac},
         {"t": "p", "x": f"띠는 태어난 해의 지지입니다. 오늘 천간의 {doh}{j(doh, '과')} 내 띠의 오행이 어떤 관계인지로 한 줄을 세웠고, "
-                        f"오늘 지지 {db[0]}{j(db[0], '과')} 정면으로 부딪히는 띠(충)는 따로 표시했습니다. "
+                        f"오늘 지지 {db[1]}{j(db[1], '과')} 정면으로 부딪히는 띠(충)는 따로 표시했습니다. "
                         f"충은 나쁜 날이 아니라, 큰 결정을 하루 미루면 훨씬 부드러워지는 날입니다."},
         {"t": "h", "x": "오늘의 시간"},
         {"t": "p", "x": f"오늘 기운이 잘 통하는 시간대는 <strong>{good_txt}</strong>입니다. "
                         f"이 시간의 시지 오행이 오늘 천간의 {doh}{j(doh, '을')} 받아 주거나 같은 결이기 때문입니다. "
-                        f"반대로 <strong>{bad_txt}</strong>에는 오늘 지지와 충이 걸립니다. "
-                        f"계약·이사·큰 지출은 이 시간을 피해 잡으세요."},
-        {"t": "p", "x": f"절기로 보면 지금은 {month['hangul']}월, 다음 절기는 {term_txt}입니다. "
+                        f"반대로 <strong>{bad_txt}</strong>에는 오늘 지지와 충이 걸립니다. 계약·이사·큰 지출은 이 시간을 피해 잡으세요."},
+        {"t": "p", "x": f"절기로 보면 지금은 {month['hanja']}월, 다음 절기는 {term_txt}입니다. "
                         f"월지 {month['hanja']}의 기운이 이번 달 전체의 바탕이고, 오늘의 일진은 그 위에 하루치로 얹힌 결입니다. "
                         f"하루가 안 풀릴 때 달을 보면 답이 보이는 이유입니다."},
         {"t": "p", "x": "정운타임즈의 오늘의 운세는 회원가입도, 결제도 없이 볼 수 있습니다. "
@@ -323,9 +331,9 @@ def article_person(d, g, person):
            f"공개된 프로필의 생년월일은 {b.year}년 {b.month}월 {b.day}일"
            + (f", 태어난 시각 {person['hour']}시" if person.get("hour") else ", 태어난 시각은 공개되지 않았습니다")
            + f". 정운타임즈가 만세력으로 {"여덟" if person.get("hour") else "여섯"} 글자를 세어 봤습니다 — {pil_txt}.")
-    lead = (f"{(topic_date_ko + ' — ') if topic_date_ko else ''}{topic}. "
-            f"정운타임즈는 화제의 인물을 만날 때마다 공개된 생년월일로 사주를 세어 봅니다. "
-            f"오늘의 주인공은 {name}, 일간은 {ds[0]}({ds[1]})입니다.")
+    lead = ((f"{topic}. " if (topic_date_ko and topic.startswith(topic_date_ko)) else f"{(topic_date_ko + ' — ') if topic_date_ko else ''}{topic}. ")
+            + f"정운타임즈는 화제의 인물을 만날 때마다 공개된 생년월일로 사주를 세어 봅니다. "
+            + f"오늘의 주인공은 {name}, 일간은 {ds[0]}({ds[1]})입니다.")
 
     sip_lines = [f"{k} {v}자리 — {SIP_MEAN[k]}" for k, v in sip.items() if v > 0]
     body = [
@@ -423,7 +431,7 @@ def article_money(d, g):
                         f"충은 돈이 새는 자리가 아니라, 판단이 급해지는 자리입니다."},
         {"t": "h", "x": "이번 달의 그릇"},
         {"t": "p", "x": f"이번 달의 월건은 {month['hanja']}, 월간은 {mds[0]}({mds[1]}), {moh}입니다. "
-                        f"월의 기운이 {moh}이라는 것은 이번 달의 결정이 {OH[moh]['key']}의 결로 판단된다는 뜻입니다. "
+                        f"이번 달의 결정은 {moh}{j(moh, '으로')} 판단됩니다 — {OH[moh]['key']}의 결로 읽는 달입니다. "
                         f"{OH[moh]['key']}{j(OH[moh]['key'], '이')} 강한 달에는 그 방향의 일이 유독 잘 풀리고, 반대 방향은 자꾸 미끄러집니다."},
         {"t": "ul", "x": [
             f"들어올 돈은 오전에 확인하세요. 미루면 다음 달로 넘어갑니다.",

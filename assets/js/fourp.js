@@ -38,7 +38,17 @@
   }
   function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
   function pad2(n) { return String(n).padStart(2, '0'); }
-  function ganjiHanja(g) { return STEMS[g.stem].hanja + BRANCHES[g.branch].hanja; }
+  function hanjaOf(p) { return p && p.ganji ? p.ganji.hanja : ''; }
+  function jj(word, kind){
+    var w = String(word || '');
+    if (!w) return w;
+    var c = w.charCodeAt(w.length - 1);
+    var hasBatchim = (c >= 0xAC00 && c <= 0xD7A3) ? ((c - 0xAC00) % 28 !== 0) : '013678mnlrMNLR'.indexOf(w[w.length-1]) >= 0;
+    var withB = { '은':'은','이':'이','을':'을','과':'과','으로':'으로' }[kind] || '';
+    var noB   = { '은':'는','이':'가','을':'를','과':'와','으로':'로' }[kind] || '';
+    if (kind === '으로' && c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 === 8) return '로';
+    return hasBatchim ? withB : noB;
+  }
   function won(n) { return Number(n).toLocaleString('ko-KR'); }
 
   /* ------------------------------------------------------------------ *
@@ -486,8 +496,8 @@
 
   function gzCell(p) {
     if (!p || p.unknown) return '<td><span class="fp-unk">時?</span><span class="fp-us">시각 미상</span></td>';
-    return '<td><span class="fp-gz">' + p.ganji.hanja + '</span>' +
-      '<small>' + p.ganji.hangul + '</small>' +
+    return '<td><span class="fp-gz">' + STEMS[p.stem.idx].hanja + BRANCHES[p.branch.idx].hanja + '</span>' +
+      '<small>' + STEMS[p.stem.idx].hangul + BRANCHES[p.branch.idx].hangul + '</small>' +
       '<span class="fp-us">' + p.unseong.name + '</span></td>';
   }
 
@@ -499,7 +509,7 @@
       ['hour', 'day', 'month', 'year'].map(function (k) {
         var x = p[k];
         if (!x || x.unknown) return '<td class="fp-us">—</td>';
-        return '<td><span class="fp-sip">' + (x.stem.sip === null ? '일간' : x.stem.sip) + '</span></td>';
+        return '<td><span class="fp-sip">' + (x.stem.sip === null ? '일간' : SIP[x.stem.sip]) + '</span></td>';
       }).join('') + '</tr>' +
       '<tr><td style="text-align:left;font-size:10.5px;color:#7f8794">천간·지지</td>' +
       ['hour', 'day', 'month', 'year'].map(function (k) { return gzCell(p[k]); }).join('') + '</tr>' +
@@ -507,7 +517,7 @@
       ['hour', 'day', 'month', 'year'].map(function (k) {
         var x = p[k];
         if (!x || x.unknown) return '<td class="fp-us">—</td>';
-        return '<td style="font-size:11px;color:#a9b0bc">' + x.branch.sip + '</td>';
+        return '<td style="font-size:11px;color:#a9b0bc">' + SIP[x.branch.sip] + '</td>';
       }).join('') + '</tr>' +
       '<tr><td style="text-align:left;font-size:10.5px;color:#7f8794">12운성</td>' +
       ['hour', 'day', 'month', 'year'].map(function (k) {
@@ -561,7 +571,7 @@
     return '<section class="fp-sec">' +
       '<div class="fp-kicker">PAGE 01 · 본질 — 여덟 글자의 첫 문장</div>' +
       '<h2 class="fp-h2">' + title + '</h2>' +
-      '<p class="fp-p">일간(日干)은 <b>' + m.dayHanja + '(' + m.dayHangul + ')</b>, ' + OH_IMG[OHK[oh]].img + '입니다. ' +
+      '<p class="fp-p">일간(日干)은 <b>' + m.dayHanja + '(' + m.dayHangul + ')</b> — ' + OH_IMG[OHK[oh]].img + '입니다. ' +
       '태어난 달의 기운과 만나 <b>' + m.gyeok.name + '</b>으로 잡혔습니다 — ' + gd + '의 구조입니다.</p>' +
       wonTable(m) +
       '<p class="fp-p">' + ohPortrait(m) + '</p>' +
@@ -569,8 +579,8 @@
       '<p class="fp-p">' + strengthLine(m) + '</p>' +
       '<p class="fp-p">' + yongLine(m) + '</p>' +
       '<div class="fp-boxes">' +
-      '<div class="fp-box"><b>겉으로 보이는 당신</b><p>' + OH_IMG[OHK[oh]].key + '이 먼저 드러납니다. ' +
-      '처음 만나는 사람은 당신을 <b>' + OHK[oh] + '</b>의 사람으로 기억합니다 — ' + OH_IMG[OHK[oh]].body + '이 말하는 인상입니다.</p></div>' +
+      '<div class="fp-box"><b>겉으로 보이는 당신</b><p>' + OH_IMG[OHK[oh]].key + jj(OH_IMG[OHK[oh]].key, '이') + ' 먼저 드러납니다. ' +
+      '처음 만나는 사람은 당신을 <b>' + OHK[oh] + '</b>의 사람으로 기억합니다 — ' + OH_IMG[OHK[oh]].body + jj(OH_IMG[OHK[oh]].body, '이') + ' 말하는 인상입니다.</p></div>' +
       '<div class="fp-box"><b>안쪽의 진짜 당신</b><p>가장 두터운 기운은 <b>' + OHK[m.maxI] + '</b>(' + m.counts[m.maxI] + '개)입니다. ' +
       '결정적인 순간에 손이 먼저 가는 쪽은 ' + OH_IMG[OHK[m.maxI]].key + '입니다.</p></div>' +
       '</div>' +
@@ -610,8 +620,8 @@
         return '<div class="fp-bar"><span>' + b.year + '</span><span class="track"><span class="fill" style="width:' + b.score + '%"></span></span>' +
           '<span class="val">' + b.score + ' · ' + b.sip + '</span></div>';
       }).join('') + '</div>' +
-      '<p class="fp-p">가장 힘이 실리는 해는 <b>' + maxBar.year + '년(' + maxBar.ganji + ')</b>입니다. 이 해의 천간은 일간에 <b>' + maxBar.sip + '</b>으로 작용합니다. ' +
-      (m.y2027 ? '2027 정미년(丁未)은 천간이 <b>' + m.y2027.stemSip + '</b>, 지지가 <b>' + m.y2027.branchSip + '</b>으로 들어오는 해입니다. ' + yearToneText(m.y2027) : '') + '</p>' +
+      '<p class="fp-p">가장 힘이 실리는 해는 <b>' + maxBar.year + '년(' + maxBar.ganji + ')</b>입니다. 이 해의 천간은 일간에 <b>' + maxBar.sip + '</b>' + jj(maxBar.sip, '으로') + ' 작용합니다. ' +
+      (m.y2027 ? '2027 정미년(丁未)은 천간이 <b>' + m.y2027.stemSip + '</b>, 지지가 <b>' + m.y2027.branchSip + '</b>' + jj(m.y2027.branchSip, '으로') + ' 들어오는 해입니다. ' + yearToneText(m.y2027) : '') + '</p>' +
       (goodMonth ? '<p class="fp-p">2027년 안에서 재물이 실제로 움직이는 달은 <b>' + goodMonth.month + '월</b>(' + OHK[goodMonth.oh] + ' 기운, ' + goodMonth.score + '점)입니다. ' +
         (badMonth ? '반대로 <b>' + badMonth.month + '월</b>은 결제·계약을 미루는 편이 낫습니다.' : '') + '</p>' : '') +
       '<div class="fp-teaser"><div class="q">그 돈이 들어올 때, 당신 곁에 누가 서 있습니까?</div>' +
@@ -637,11 +647,11 @@
       '<div class="fp-score"><div class="fp-ring"><svg width="74" height="74" viewBox="0 0 74 74"><circle class="bg" cx="37" cy="37" r="30"></circle>' +
       '<circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="188.5" stroke-dashoffset="' + (188.5 - m.love / 100 * 188.5).toFixed(1) + '"></circle></svg><b>' + m.love + '</b></div>' +
       '<div class="t"><strong>애정 지수 ' + m.love + ' / 100</strong>' +
-      (p ? '배우자 자리(일지)는 <b>' + p.ganji.hanja + '(' + BRANCHES[p.branch.idx].hangul + ')</b>, 12운성으로 <b>' + p.unseong.name + '</b>입니다. ' +
+      (p ? '배우자 자리(일지)는 <b>' + STEMS[p.stem.idx].hanja + BRANCHES[p.branch.idx].hanja + '(' + BRANCHES[p.branch.idx].hangul + ')</b>, 12운성으로 <b>' + p.unseong.name + '</b>입니다. ' +
         (m.love >= 70 ? '관계에서 내 자리를 잃지 않는 편이라, 오래 갈수록 편안해집니다.' : m.love >= 50 ? '상대를 살피느라 내 감정을 늦게 말하는 편입니다.' : '가까워지는 속도보다 신뢰를 쌓는 시간이 긴 편입니다.') : '') +
       '</div></div>' +
       '<div class="fp-boxes">' +
-      '<div class="fp-box"><b>끌리는 사람</b><p>' + OHK[m.spouseOh] + '의 기운을 가진 사람 — ' + OH_IMG[OHK[m.spouseOh]].key + '이 분명한 사람에게 마음이 먼저 갑니다.</p></div>' +
+      '<div class="fp-box"><b>끌리는 사람</b><p>' + OHK[m.spouseOh] + '의 기운을 가진 사람 — ' + OH_IMG[OHK[m.spouseOh]].key + jj(OH_IMG[OHK[m.spouseOh]].key, '이') + ' 분명한 사람에게 마음이 먼저 갑니다.</p></div>' +
       '<div class="fp-box"><b>오래 가는 조건</b><p>' + (m.level === '신강' ? '내 힘이 센 편이라, 말투를 낮추는 것만으로 관계가 길어집니다.' : m.level === '신약' ? '상대의 속도에 맞추다 지치지 않도록, 내가 원하는 것을 먼저 말해야 합니다.' : '관계의 규칙을 함께 정할 때 가장 안정됩니다.') + '</p></div>' +
       '</div>' +
       (m.y2027 ? '<p class="fp-p">2027 정미년은 배우자 자리와 ' + (m.y2027.hap.length ? '합(合)으로 이어집니다. 인연이 구체적인 형태로 좁혀지는 해입니다.' : m.y2027.chung.length ? '부딪히는 자리가 생깁니다. 큰 결정은 한 번 더 확인하고 움직이세요.' : '직접 엮이지 않습니다. 관계보다 나를 정비하는 해입니다.') + '</p>' : '') +
@@ -679,9 +689,7 @@
       '<div class="fp-tl">' +
       m.bars.map(function (b, i) {
         return '<div class="it' + (i === 0 ? ' on' : '') + '"><div class="d">' + b.year + '년 · ' + b.ganji + ' · ' + b.sip + '</div>' +
-          '<div class="x">' + (b.score >= 70 ? '밀어붙이기 좋은 해입니다. 미뤄 둔 제안·이직·확장을 이 해에 놓으세요.' :
-            b.score >= 55 ? '무난합니다. 큰 변화보다 한 걸음씩 쌓는 해입니다.' :
-              '속도를 줄이는 해입니다. 새로 벌이기보다 정리와 회복에 쓰세요.') + '</div></div>';
+          '<div class="x">' + yearSipText(b) + '</div></div>';
       }).join('') +
       '</div>' +
       '<div class="fp-teaser"><div class="q">가장 조심해야 할 달은 따로 있습니다.</div>' +
@@ -700,7 +708,7 @@
         '큰 계약·이사·보증·충동적 투자는 이 달을 피해 잡으세요.</p>' : '') +
       '<p class="fp-p">일지 기준 12신살은 <b>' + m.daySibisal + '</b>, 조후는 <b>' + m.johu.label + '</b>입니다. ' +
         (m.lack.length ? '원국에 ' + m.lack.join('·') + ' 기운이 없어, 그 자리는 의식적으로 채워야 균형이 잡힙니다. ' : '') +
-        '용신 <b>' + m.yongKey + '</b>을 살리는 색은 ' + OH_IMG[m.yongKey].color + ', 방위는 ' + OH_IMG[m.yongKey].dir + ', 숫자는 ' + OH_IMG[m.yongKey].num + '입니다.</p>' +
+        '용신 <b>' + m.yongKey + '</b>' + jj(m.yongKey, '을') + ' 살리는 색은 ' + OH_IMG[m.yongKey].color + ', 방위는 ' + OH_IMG[m.yongKey].dir + ', 숫자는 ' + OH_IMG[m.yongKey].num + '입니다.</p>' +
       '<div class="fp-note">' +
       '· 계산 근거: 양력 ' + m.r.birthLabel.solar + (m.r.birthLabel.time ? ' ' + m.r.birthLabel.time : ' (시각 미상)') +
       (m.r.birthLabel.correctedTime && m.r.input.hourKnown ? ' · 진태양시 보정 ' + m.r.birthLabel.correctedTime : '') +
@@ -759,6 +767,25 @@
     if (sh2) sh2.classList.remove('active');
     if (sd2) sd2.classList.add('active');
     if (window.scrollTo) window.scrollTo(0, 0);
+  }
+
+  function yearSipText(b) {
+    var t = {
+      '비견': '동료와 힘을 합치거나, 같은 자리를 두고 겨루는 해입니다. 역할을 먼저 나누세요.',
+      '겁재': '돈이 새기 쉬운 해입니다. 보증·동업·큰 지출은 문서로 남기세요.',
+      '식신': '만들어 내는 해입니다. 꾸준히 쌓은 것이 평가받습니다.',
+      '상관': '표현이 강해지는 해입니다. 말과 글로 기회를 잡고, 말실수도 조심하세요.',
+      '편재': '판이 넓어지는 해입니다. 큰 거래·투자·이동이 들어옵니다.',
+      '정재': '새지 않게 모으는 해입니다. 현실적인 계약과 수입 관리에 좋습니다.',
+      '편관': '압박이 들어오는 해입니다. 규칙과 기록으로 버티면 자리가 단단해집니다.',
+      '정관': '자리가 정해지는 해입니다. 승진·계약·책임이 구체화됩니다.',
+      '편인': '혼자 파고드는 해입니다. 공부·연구·기술에 시간을 쓰면 남습니다.',
+      '정인': '배움이 들어오는 해입니다. 자격·문서·보호가 함께 옵니다.'
+    };
+    var base = t[b.sip] || '한 걸음씩 쌓는 해입니다.';
+    if (b.score >= 80) return base + ' 흐름이 강하게 실리니, 미뤄 둔 제안을 이 해에 놓으세요.';
+    if (b.score >= 65) return base;
+    return base + ' 속도를 조금 줄이고 마무리에 힘을 쓰는 편이 낫습니다.';
   }
 
   function sipTableWrap(m) {
