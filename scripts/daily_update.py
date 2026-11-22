@@ -270,7 +270,7 @@ def article_today(d, g):
     ]
     return {
         "id": f"today-{d.strftime('%Y%m%d')}", "cat": "today", "img": "today-main",
-        "time": "05:30", "views": views_for("today", d.isoformat()),
+        "time": "05:30", "views": views_for("today", d.isoformat(), lo=22000, hi=31000),
         "title": title, "dek": dek, "writer": "정운 선임기자", "lead": lead, "body": body,
         "date": d.isoformat(), "gen": 1,
     }
@@ -385,7 +385,7 @@ def article_person(d, g, person):
     ]
     return {
         "id": f"people-{d.strftime('%Y%m%d')}", "cat": "people", "img": "people-main",
-        "time": "05:30", "views": views_for("people", d.isoformat()),
+        "time": "05:30", "views": views_for("people", d.isoformat(), lo=11000, hi=17000),
         "title": title, "dek": dek, "writer": "정운타임즈 운명연구소", "lead": lead, "body": body,
         "date": d.isoformat(), "gen": 1, "person": name,
     }
@@ -449,7 +449,7 @@ def article_money(d, g):
     ]
     return {
         "id": f"money-{d.strftime('%Y%m%d')}", "cat": "money", "img": "money-main",
-        "time": "05:30", "views": views_for("money", d.isoformat()),
+        "time": "05:30", "views": views_for("money", d.isoformat(), lo=6000, hi=10000),
         "title": title, "dek": dek, "writer": "정운 선임기자", "lead": lead, "body": body,
         "date": d.isoformat(), "gen": 1,
     }
@@ -501,7 +501,7 @@ def article_dream(d, g):
     ]
     return {
         "id": f"dream-{d.strftime('%Y%m%d')}", "cat": "dream", "img": "dream-main",
-        "time": "05:30", "views": views_for("dream", d.isoformat()),
+        "time": "05:30", "views": views_for("dream", d.isoformat(), lo=5000, hi=9000),
         "title": title, "dek": dek, "writer": "정운타임즈 취재팀", "lead": lead, "body": body,
         "date": d.isoformat(), "gen": 1,
     }

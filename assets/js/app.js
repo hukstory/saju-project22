@@ -33,9 +33,10 @@ const byCat = (id)=> inCat(id).slice().sort((a,b)=> dayKey(b).localeCompare(dayK
 const dateStr = (a)=>{ const d=(a.date||'2026-11-22').split('-'); return `${d[0]}.${d[1]}.${d[2]}. ${a.time||'06:00'}`; };
 /* 매일 갱신 기사(ARTICLES_DAILY)가 있으면 그 지면의 최신 호를, 없으면 기본 기사를 쓴다 */
 const dayKey = (a)=> String(a.date||'');
+const SITE_BUILD_DATE = '2026-11-22';
 const daysAgo = (a)=>{
-  if (!a.date) return 999;
-  const t = new Date(a.date + 'T00:00:00+09:00').getTime();
+  const d = a.date || SITE_BUILD_DATE;   /* 날짜 없는 기본 기사는 사이트 제작일 기준 */
+  const t = new Date(d + 'T00:00:00+09:00').getTime();
   return Math.max(0, Math.floor((Date.now() - t) / 86400000));
 };
 function newestOf(cat){

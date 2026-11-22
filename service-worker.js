@@ -3,7 +3,7 @@
    - 앱 셸(app shell)은 미리 캐시, 문서는 네트워크 우선 + 캐시 폴백
    - 이미지·4P 등 정적 자원은 캐시 우선(백그라운드 갱신)
    ========================================================================== */
-const VERSION = 'jw-times-v20';
+const VERSION = 'jw-times-v21';
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 
