@@ -44,7 +44,7 @@
 <header class="masthead">
   <div class="masthead__in">
     <div class="masthead__left">
-      <button class="installbtn" type="button" data-install><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>바탕화면에 설치</button>
+      <button class="installbtn" type="button" data-install><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>앱 설치</button>
       <a href="#/free">무료 운세</a>
       <a href="#/4p">990원 4P</a>
     </div>
@@ -57,7 +57,7 @@
     </a>
     <div class="masthead__right">
       <div class="masthead__date" id="mastDate"><b>2026년 11월 22일 일요일</b><span>丙午年 · 己亥月 · 庚子日</span></div>
-      <button class="iconbtn only-mobile" type="button" data-install aria-label="앱 설치" title="앱 설치"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="appinstall only-mobile" type="button" data-install aria-label="앱 설치" title="바탕화면에 앱 설치"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><b>설치</b></button>
       <a class="iconbtn" href="#/free" aria-label="무료 운세 보기" title="무료 운세">正</a>
     </div>
     <button class="burger" id="burger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileMenu">
@@ -73,8 +73,9 @@
 
 
 <div class="installbar" id="installBar">
-  <span class="grow"><b>정운타임즈 앱</b> · 홈 화면에 바로 열기</span>
-  <button class="go" type="button" data-install>설치</button>
+  <span class="installbar__ico" aria-hidden="true">📲</span>
+  <span class="grow"><b>정운타임즈를 어플로 설치</b><i>주소창 없이, 홈 화면에서 한 번에 열립니다</i></span>
+  <button class="go" type="button" data-install>앱 설치</button>
   <button class="x" type="button" id="installBarClose" aria-label="배너 닫기">✕</button>
 </div>
 
@@ -100,6 +101,26 @@
     <a href="#/4p" class="pt">990원 4P</a>
     <a href="#/free">무료 1분 분석</a>
     <button class="installbtn mmenu__install" type="button" data-install><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>앱 설치 / 홈 화면에 추가</button>
+  </div>
+</div>
+
+<!-- 앱 설치 유도 시트 (첫 접속 1초 뒤 상승) -->
+<div class="installsheet" id="installSheet" role="dialog" aria-labelledby="installSheetTitle" aria-describedby="installSheetDesc">
+  <div class="installsheet__panel">
+    <button class="installsheet__x" type="button" id="installSheetClose" aria-label="설치 안내 닫기">✕</button>
+    <div class="installsheet__top">
+      <span class="installsheet__icon" aria-hidden="true"><b>正運</b></span>
+      <div class="installsheet__name">
+        <span class="installsheet__kicker">JUNGWOON TIMES · 어플 설치</span>
+        <b id="installSheetTitle">정운타임즈 · 운명사주22</b>
+      </div>
+    </div>
+    <p class="installsheet__desc" id="installSheetDesc">바탕화면에 설치하면 <b>주소창 없이 어플처럼 바로</b> 열려요. 오늘의 무료운세·TOP7 인기뉴스도 한 번에 열립니다.</p>
+    <button class="installsheet__cta" type="button" data-install><span aria-hidden="true">📲</span> 지금 바탕화면에 앱 설치하기</button>
+    <div class="installsheet__foot">
+      <span><b>설치 무료</b> · 아이폰은 공유 → 홈 화면에 추가</span>
+      <button class="installsheet__later" type="button" id="installSheetLater">오늘은 웹으로 보기</button>
+    </div>
   </div>
 </div>
 

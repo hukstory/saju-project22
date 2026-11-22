@@ -1011,6 +1011,31 @@ function setupPWA(){
   const barX = $('#installBarClose');
   if (barX) barX.addEventListener('click', ()=>{ $('#installBar').style.display='none'; try{localStorage.setItem('jwInstallBar','off');}catch(e){} });
   try{ if (localStorage.getItem('jwInstallBar')==='off'){ const b=$('#installBar'); if (b) b.style.display='none'; } }catch(e){}
+
+  /* --- 설치 유도 시트: 첫 접속 1초 뒤 부드럽게 상승 --- */
+  const sheet = $('#installSheet');
+  const SHEET_KEY = 'jwInstallSheetDismissedAt';
+  const SHEET_QUIET_MS = 20*60*60*1000; /* ‘오늘은 웹으로 보기’ → 20시간 쉼 */
+  const closeSheet = (remember)=>{
+    if (sheet) sheet.classList.remove('is-on');
+    if (remember){ try{ localStorage.setItem(SHEET_KEY, String(Date.now())); }catch(e){} }
+  };
+  const openSheet = ()=>{
+    if (!sheet || isStandalone()) return;
+    const modal = $('#installModal');
+    if (modal && modal.classList.contains('is-on')) return;
+    sheet.classList.add('is-on');
+  };
+  let quiet = false;
+  try{
+    const t = Number(localStorage.getItem(SHEET_KEY) || 0);
+    quiet = !!t && (Date.now() - t) < SHEET_QUIET_MS;
+  }catch(e){ quiet = false; }
+  if (!isStandalone() && !quiet) setTimeout(openSheet, 1000);
+  const sheetX = $('#installSheetClose'); if (sheetX) sheetX.addEventListener('click', ()=> closeSheet(true));
+  const sheetLater = $('#installSheetLater'); if (sheetLater) sheetLater.addEventListener('click', ()=> closeSheet(true));
+  document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && sheet && sheet.classList.contains('is-on')) closeSheet(true); });
+
   window.addEventListener('beforeinstallprompt', (e)=>{
     e.preventDefault(); deferredPrompt = e;
     $$('[data-install]').forEach(b=>{ b.style.display='inline-flex'; });
@@ -1019,6 +1044,7 @@ function setupPWA(){
     deferredPrompt = null;
     document.body.classList.add('installed');
     $$('[data-install]').forEach(b=> b.style.display='none');
+    closeSheet(false);
     const t = $('#toast'); if (t){ t.textContent='정운타임즈가 설치되었습니다. 홈 화면에서 열어 보세요.'; t.classList.add('is-on'); setTimeout(()=>t.classList.remove('is-on'), 3200); }
   });
   /* 설치 버튼은 1면·지면이 다시 그려질 때마다 생기므로 문서 단위로 받는다 */
@@ -1026,6 +1052,7 @@ function setupPWA(){
     const b = e.target.closest ? e.target.closest('[data-install]') : null;
     if (!b) return;
     e.preventDefault();
+    closeSheet(true);
     if (deferredPrompt){
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
