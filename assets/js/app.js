@@ -29,10 +29,15 @@ const num = (n)=> Number(String(n).replace(/[^0-9]/g,'')).toLocaleString('ko-KR'
 const pad2 = (n)=> String(n).padStart(2,'0');
 const catOf = (id)=> CATS.find(c=>c.id===id) || CATS[0];
 const inCat = (id)=> ARTICLES.filter(a=>a.cat===id);
-const byCat = (id)=> inCat(id).slice().sort((a,b)=> (b.top?1:0)-(a.top?1:0) || num(b.views)-num(a.views));
+const byCat = (id)=> inCat(id).slice().sort((a,b)=> dayKey(b).localeCompare(dayKey(a)) || (b.top?1:0)-(a.top?1:0) || num(b.views)-num(a.views));
 const dateStr = (a)=>{ const d=(a.date||'2026-11-22').split('-'); return `${d[0]}.${d[1]}.${d[2]}. ${a.time||'06:00'}`; };
 /* 매일 갱신 기사(ARTICLES_DAILY)가 있으면 그 지면의 최신 호를, 없으면 기본 기사를 쓴다 */
-const dayKey = (a)=> String(a.date||'2026-11-22');
+const dayKey = (a)=> String(a.date||'');
+const daysAgo = (a)=>{
+  if (!a.date) return 999;
+  const t = new Date(a.date + 'T00:00:00+09:00').getTime();
+  return Math.max(0, Math.floor((Date.now() - t) / 86400000));
+};
 function newestOf(cat){
   const list = inCat(cat).slice().sort((a,b)=> dayKey(b).localeCompare(dayKey(a))
     || (Number(String(b.views||'').replace(/[^0-9]/g,''))||0) - (Number(String(a.views||'').replace(/[^0-9]/g,''))||0));
@@ -173,9 +178,10 @@ function bindWidget(root){
 
 /* ---------- 1면 · TOP 7 ---------- */
 function top7Pick(n){
-  /* 인기뉴스 = 지금 조회수가 가장 높은 기사 순 (num()은 '12,840' 형태 문자열을 돌려주므로 숫자로 따로 센다) */
+  /* 인기뉴스 = 조회수 + 최신 가중 (오늘 발행한 호가 1면에서 밀리지 않도록) */
   const v = (a)=> Number(String(a.views||'').replace(/[^0-9]/g,'')) || 0;
-  return ARTICLES.slice().sort((a,b)=> v(b)-v(a)).slice(0, n||7);
+  const w = (a)=>{ const d = daysAgo(a); return d <= 0 ? 2.6 : d <= 1 ? 1.8 : d <= 3 ? 1.3 : d <= 10 ? 1.05 : 1; };
+  return ARTICLES.slice().sort((a,b)=> v(b)*w(b) - v(a)*w(a)).slice(0, n||7);
 }
 function rankBlock(){
   const list = top7Pick(7);
@@ -185,7 +191,7 @@ function rankBlock(){
       <span class="rank__badge">TOP 7</span>
       <h2 id="rankTitle">인기뉴스</h2>
       <span class="rank__en">MOST READ</span>
-      <span class="rank__note">지금 가장 많이 읽히는 기사 · 조회순</span>
+      <span class="rank__note">지금 가장 많이 읽히는 기사 · 조회순(최신 가중)</span>
     </div>
     <div class="rank__grid">
       <a class="rank__hero" href="#/article/${hero.id}">
