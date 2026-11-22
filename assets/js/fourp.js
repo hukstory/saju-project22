@@ -372,7 +372,8 @@
   }
   function ohPortrait(m) {
     var c = m.counts;
-    var s = '원국 여덟 글자는 ' + OHK.map(function (k, i) { return k + ' ' + c[i]; }).join(' · ') + '개로 놓여 있습니다. ';
+    var word = m.r.charTotal === 8 ? '여덟 글자' : '여섯 글자';
+    var s = '원국 ' + word + '는 ' + OHK.map(function (k, i) { return k + ' ' + c[i]; }).join(' · ') + '개로 놓여 있습니다. ';
     if (!m.lack.length) s += '다섯 기운이 모두 자리를 잡아, 무엇 하나 크게 비어 있지 않습니다. ';
     else s += m.lack.join('·') + ' 기운이 원국에 없어, 그 자리는 스스로 만들어 채워야 합니다. ';
     s += OHK[m.maxI] + ' 기운이 가장 두터워(' + c[m.maxI] + '개) 삶의 중심도 그쪽으로 기웁니다 — ' + OH_IMG[OHK[m.maxI]].key + '.';
@@ -701,7 +702,7 @@
   function secEnd(m) {
     var bad = m.months.slice().sort(function (a, b) { return a.score - b.score; })[0];
     return '<section class="fp-sec">' +
-      '<div class="fp-kicker">PAGE 05 · 맺음 — 피해야 할 때와 남은 이야기</div>' +
+      '<div class="fp-kicker">' + (V >= 3 ? 'PAGE 03' : 'PAGE 05') + ' · 맺음 — 피해야 할 때와 남은 이야기</div>' +
       '<h2 class="fp-h2">빛이 강한 해에는 <b>그림자도 같이</b> 옵니다.</h2>' +
       (m.y2027 ? '<p class="fp-p">2027 정미년(丁未)의 총평 점수는 <b>' + m.y2027.score + '점</b>입니다. ' + yearToneText(m.y2027) + '</p>' : '') +
       (bad ? '<p class="fp-p">이 해에 가장 조심할 달은 <b>' + bad.month + '월</b>입니다(' + OHK[bad.oh] + ' 기운, ' + bad.score + '점). ' +
@@ -738,8 +739,11 @@
     var head = $('#step-detail .detail-header');
     if (head) {
       var h1 = head.querySelector('h1');
+      var lunarNote = (m.r.input.calendar === '음력' && m.r.lunar)
+        ? ' · 음력 ' + m.r.lunar.year + '.' + pad2(m.r.lunar.month) + '.' + pad2(m.r.lunar.day) + (m.r.lunar.leap ? '(윤달)' : '') + ' → 양력'
+        : '';
       if (h1) h1.innerHTML = '신청자 <span class="name">' + esc(m.name) + '</span> 님<br><span style="font-size:15px;color:#c9a063">' +
-        m.r.birthLabel.solar + (m.r.birthLabel.time ? ' ' + m.r.birthLabel.time : ' · 시각 미상') + '</span> 분석리포트';
+        m.r.birthLabel.solar + (m.r.birthLabel.time ? ' ' + m.r.birthLabel.time : ' · 시각 미상') + lunarNote + '</span> 분석리포트';
       var p = head.querySelector('p');
       if (p) p.textContent = m.r.saju.year + ' ' + m.r.saju.month + ' ' + m.r.saju.day + (m.r.saju.hour ? ' ' + m.r.saju.hour : '') + ' · ' + m.gyeok.name + ' · ' + m.level;
     }
