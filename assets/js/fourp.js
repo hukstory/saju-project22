@@ -808,10 +808,11 @@
       '<div class="fp-card"><span>지지 십성</span><b style="font-size:14px">' + y.branchSip + '</b><i>未</i></div>' +
       '</div>' +
       '<table class="fp-table2"><thead><tr><th>2027년 달</th><th>기운</th><th>점수</th></tr></thead><tbody>' +
-      m.months.map(function (mo) {
-        return '<tr><td><b>' + mo.month + '월</b></td><td>' + OHK[mo.oh] + '</td><td>' + mo.score + '</td></tr>';
+      m.months.slice().sort(function (a, b) { return a.month - b.month; }).map(function (mo) {
+        var mark = mo.score >= 75 ? ' <span style="color:#c9a063">▲</span>' : (mo.score <= 30 ? ' <span style="color:#a35b52">▼</span>' : '');
+        return '<tr><td><b>' + mo.month + '월</b></td><td>' + OHK[mo.oh] + mark + '</td><td>' + mo.score + '</td></tr>';
       }).join('') + '</tbody></table>' +
-      '<p class="fp-p">점수는 이 사주의 용신 <b>' + m.yongKey + '</b>과 그 달의 기운이 맞는지, 세운 지지(未)와 합·충이 걸리는지를 합산한 값입니다. 70 이상인 달에 중요한 일을 놓으세요.</p>' +
+      '<p class="fp-p">점수는 이 사주의 용신 <b>' + m.yongKey + '</b>' + jj(m.yongKey, '과') + ' 그 달의 기운이 맞는지, 세운 지지(未)와 합·충이 걸리는지를 합산한 값입니다. 70 이상인 달에 중요한 일을 놓으세요.</p>' +
       secEndBody(m) +
       '</section>';
   }

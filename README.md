@@ -41,6 +41,14 @@ assets/js/engine.js       만세력·오늘의 운세·궁합·전생 계산 (KA
 assets/js/data.js         코너·티커·요금·푸터 문구
 assets/js/articles-1..3.js 기사 24편 (각 20~30줄 이상 본문)
 assets/js/app.js          해시 라우터 · 지면 렌더 · TOP7 · 위젯 · 4P 뷰어 · 프로그램 지면 · PWA 설치
+assets/js/articles-daily.js  매일 갱신 기사 (스크립트가 자동 생성)
+assets/js/saju-data.js       KASI 절기·음양력 테이블
+assets/js/saju-engine.js     만세력 엔진 (korean-saju 0.3.0 이식)
+assets/js/fourp.js           4P 개인화 렌더
+data/articles.json           누적 기사 아카이브 (60일·120편)
+data/people.json             화제의 인물 풀 (공개 생년월일 확인분)
+scripts/saju_calc.py         만세력 계산 (Python)
+scripts/daily_update.py      매일 자동 리뉴얼·푸시
 assets/img/*.webp         동양 감성 이미지 16종
 assets/icons/*            PWA 아이콘 (192/512/maskable/apple-touch)
 4p/01..04.html            990원 4P 샘플 4종 (마지막 페이지에 30~100P CTA 삽입)
@@ -58,6 +66,22 @@ assets/icons/*            PWA 아이콘 (192/512/maskable/apple-touch)
 - 안드로이드 크롬: `beforeinstallprompt`를 잡아 상단 **[바탕화면에 설치]** 버튼·무료운세 아래 설치 배너·모바일 설치 바에서 바로 설치 팝업을 띄웁니다.
 - iOS 사파리 등 미지원 브라우저: `공유 → 홈 화면에 추가` 안내 모달을 띄웁니다.
 - 이미 설치(standalone) 상태에서는 설치 버튼이 숨겨집니다.
+
+## 매일 자동 리뉴얼 (2026-11-22 구축)
+
+- `scripts/daily_update.py` — 오늘(KST) 간지를 만세력으로 계산해 기사 4편(오늘의 운세·화제의 인물·사주·재물·어젯밤 그 꿈)을 만들고, `data/articles.json` 에 **최근 60일 / 최대 120편**까지 누적한 뒤 `assets/js/articles-daily.js` 를 다시 써서 지면에 반영합니다. `--push` 를 주면 `hukstory/saju-project22` main 에 커밋·푸시합니다.
+- **화제의 인물**은 `data/people.json` 풀에서 매일 다음 사람으로 넘어갑니다. 공개 프로필로 생년월일이 확인된 인물만 넣고, 기사 본문에 출처를 남깁니다. 그 사람의 사주팔자·오행·십성·2027 정미년 세운은 `scripts/saju_calc.py` 로 실제 계산합니다.
+- 과거 호는 사이트의 `#/archive`(지난 기사 모아보기)에서 날짜·지면별로 볼 수 있습니다.
+- `data/system_alerts.json` — GitHub Pages 한도(저장소 1GB·월 100GB)에 가까워지면 경고를 남깁니다. 지면에는 표시하지 않고 사장님에게만 보고합니다.
+- 매일 05:30 실행은 `scheduled-actions/📰-정운타임즈-매일-새벽-자동-갱신-05-30/` 에 정의되어 있습니다. GitHub Actions 는 App 권한(`workflows`)이 없어 쓸 수 없습니다(푸시 거절 확인).
+
+## 990원 4P — 실제 만세력 개인화 (2026-11-22)
+
+- `4p/01~04.html` 은 신청자의 **이름·성별·양/음력·생년월일·태어난 시각**을 받아 실제 만세력 엔진으로 지면을 다시 씁니다. 하드코딩된 샘플 문장은 없습니다.
+- 엔진: `assets/js/saju-engine.js` + `assets/js/saju-data.js` (korean-saju 0.3.0 이식 — KASI 24절기·음양력, 진태양시 보정, 15개 케이스 교차검증 일치). 개인화 렌더: `assets/js/fourp.js`.
+- 계산 항목: 년·월·일·시주, 오행 비율, 십성 분포, 격국, 억부(신강·신약), 용신·희신, 대운, 2027 정미년 세운, 2027년 월별 길흉, 재물 그릇·애정·커리어 지수(모두 배치에서 계산, 랜덤 없음).
+- 1면 `#/4p` 에서 내 정보를 넣으면 같은 명식으로 4가지 버전이 모두 다시 계산됩니다(`?n=&g=&c=&y=&m=&d=&t=`).
+- 요금은 확정 요금만 표기합니다 — 30P 19,900원 / 60P 29,900원 / 100P 49,900원 (가짜 정가·할인 배지 제거).
 
 ## 배포
 

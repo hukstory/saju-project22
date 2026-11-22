@@ -318,6 +318,9 @@ JIJANGGAN = [  # (천간, 역할 0여기 1중기 2본기)
 def saju(birth, hour=None, minute=0, hour_known=True, standard_time=True, yaja_separated=True):
     """birth = (y, mo, d) 양력. 진태양시 보정은 서울 경도 기준."""
     y, mo, d = birth
+    if not hour_known:
+        # 시각 미상이면 정오 기준(엔진 calculate() 와 동일 규칙)
+        hour, minute = 12, 0
     kst_ms = kst_to_ms(y, mo, d, hour or 0, minute)
     lon = 126.9784 if standard_time else 135.0
     year_p = year_pillar_at(kst_ms)
