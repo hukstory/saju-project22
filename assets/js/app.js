@@ -339,7 +339,7 @@ function viewHome(){
       <div class="promo">
         <span class="promo__tag">990원 SPECIAL</span>
         <h4>4페이지로 먼저 확인하는<br>내 운명의 맛보기</h4>
-        <p>5장 정밀판·3장 요약판까지 4가지 버전. 지금 지면에서 바로 넘겨 보세요.</p>
+        <p>하얀 지면 3장으로 읽는 요약판. 지금 지면에서 바로 넘겨 보세요.</p>
         <div class="promo__price"><b>990</b><span>원 · 4P 분석지</span></div>
         <a class="btn btn--gold btn--block" href="#/4p">4P 바로 보기 →</a>
       </div>
@@ -367,7 +367,7 @@ function viewHome(){
     <div class="strip4p__in">
       <div>
         <h3>딱 4페이지로 보는<br><em>내 사주의 첫 장</em></h3>
-        <p>생년월일을 넣고 4페이지를 넘기면, 재물·애정·커리어의 첫 문장이 열립니다. 990원 특별분석 이벤트 — 4가지 버전 수록.</p>
+        <p>생년월일을 넣고 4페이지를 넘기면, 재물·애정·커리어의 첫 문장이 열립니다. 990원 특별분석 이벤트 — 하얀 지면 4P.</p>
         <div class="strip4p__btns">
           <a class="btn btn--red" href="#/4p">🔥 990원 4P 바로 보기</a>
           <a class="btn btn--ghost" href="#/free">무료 1분 분석</a>
@@ -437,7 +437,7 @@ function viewProgram(){
           <span class="plan__tag">맛보기</span>
           <b class="plan__name">990원 4P 분석지</b>
           <div class="plan__price"><b>990</b><span>원</span></div>
-          <p>재물·애정·커리어의 첫 문장. 4가지 버전 수록.</p>
+          <p>재물·애정·커리어의 첫 문장. 하얀 지면 3장.</p>
           <a class="btn btn--ghost btn--block" href="#/4p">4P 바로 보기</a>
         </div>
         <div class="plan">
@@ -734,28 +734,22 @@ function viewFree(){
       <div class="promo">
         <span class="promo__tag">990원 SPECIAL</span>
         <h4>4페이지 분석지<br>지금 바로 넘겨보기</h4>
-        <p>5장 정밀판 2종 · 3장 요약판 2종</p>
+        <p>하얀 지면 · 본질 → 재물 → 2027 세운 3장</p>
         <a class="btn btn--gold btn--block" href="#/4p">4P 열기 →</a>
       </div>
     </aside>
   </div>`;
 }
 
-/* ---------- 4P 뷰어 ---------- */
-const FOURP = [
-  { no:'01', title:'4P ① 정밀 5장판', file:'4p/01.html', note:'본질 → 재물 → 애정 → 커리어 → 클리프행어까지 5장 구성' },
-  { no:'02', title:'4P ② 확장 5장판', file:'4p/02.html', note:'여백과 차트를 키운 확장 레이아웃. 큰 화면에서 읽기 좋습니다' },
-  { no:'03', title:'4P ③ 요약 3장판 A', file:'4p/03.html', note:'본질 → 재물 → 위기까지 3장. 짧게 읽히는 구성' },
-  { no:'04', title:'4P ④ 요약 3장판 B', file:'4p/04.html', note:'가장 짧은 3장 구성. 모바일에서 빠르게 넘기기 좋습니다' }
-];
-function view4P(active){
-  const idx = Math.max(0, Math.min(3, Number(active||0)));
-  const cur = FOURP[idx];
+/* ---------- 4P 뷰어 (하얀 지면 단일 버전) ---------- */
+const FOURP = { file:'4p/04.html', title:'4P 요약 3장판' };
+function view4P(){
+  const src = FOURP.file + (window.__fourpQuery ? '?' + window.__fourpQuery : '');
   return `
   <div class="fourp-head">
     <div class="kicker">990원 SPECIAL · 4P SAMPLE</div>
     <h1>딱 4페이지, <em>내 사주의 첫 장</em></h1>
-    <p>990원 특별분석 4P 샘플 4종입니다. 아래 탭으로 버전을 바꿔 볼 수 있고, 마지막 페이지에서 정밀 전문분석지(30P·60P·100P)로 이어집니다.</p>
+    <p>990원 특별분석 4P입니다. 마지막 페이지에서 정밀 전문분석지(30P·60P·100P)로 이어집니다.</p>
   </div>
   <div class="fourp-me">
     <div class="fourp-me__t"><b>내 사주로 4P 채우기</b><span>이름·생년월일시(양/음력·성별)를 넣으면 실제 만세력 엔진이 내 여덟 글자로 지면을 다시 씁니다.</span></div>
@@ -770,31 +764,25 @@ function view4P(active){
         <label>시각 (모르면 비움)<input type="time" id="fmTime"></label>
         <button class="btn btn--red" type="submit">4P 다시 계산 →</button>
       </div>
-      <p class="fourp-me__note" id="fmNote">입력한 정보는 서버로 보내지 않고 브라우저 안에서만 계산합니다. 4가지 버전 모두 같은 명식으로 다시 그립니다.</p>
+      <p class="fourp-me__note" id="fmNote">입력한 정보는 서버로 보내지 않고 브라우저 안에서만 계산합니다. 4P 지면이 내 명식으로 다시 그려집니다.</p>
     </form>
-  </div>
-  <div class="fourp-tabs">
-    ${FOURP.map((f,i)=>`<button type="button" data-4p="${i}" class="${i===idx?'is-on':''}">${f.title}</button>`).join('')}
-  </div>
-  <div class="fourp-meta">
-    <span>현재: ${esc(cur.title)}</span><span>·</span><span>${esc(cur.note)}</span>
   </div>
   <div class="fourp-stage">
     <div>
       <div class="phone">
-        <iframe id="fourpFrame" src="${cur.file}${window.__fourpQuery ? '?' + window.__fourpQuery : ''}" title="990원 4P 분석지 ${esc(cur.title)}" loading="lazy"></iframe>
+        <iframe id="fourpFrame" src="${src}" title="990원 4P 분석지 ${esc(FOURP.title)}" loading="lazy"></iframe>
       </div>
       <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
-        <a class="btn btn--ghost" href="${cur.file}${window.__fourpQuery ? '?' + window.__fourpQuery : ''}" target="_blank" rel="noopener" id="fourpOpen">새 창에서 크게 보기</a>
-        <a class="btn btn--ghost" href="${cur.file}${window.__fourpQuery ? '?' + window.__fourpQuery : ''}" target="_blank" rel="noopener" id="fourpPrint">인쇄용으로 열기</a>
+        <a class="btn btn--ghost" href="${src}" target="_blank" rel="noopener" id="fourpOpen">새 창에서 크게 보기</a>
+        <a class="btn btn--ghost" href="${src}" target="_blank" rel="noopener" id="fourpPrint">인쇄용으로 열기</a>
       </div>
     </div>
     <aside class="fourp-side">
       <div class="side-card">
         <h4>이렇게 보세요</h4>
         <ol>
-          <li>생년월일을 넣고 카톡 추가 버튼을 누르면 4P가 열립니다.</li>
-          <li>스크롤해서 5장(또는 3장)을 끝까지 읽습니다.</li>
+          <li>이름·생년월일을 넣고 [4P 다시 계산]을 누르면 내 명식으로 지면이 바뀝니다.</li>
+          <li>스크롤해서 3장을 끝까지 읽습니다.</li>
           <li>마지막 페이지에서 정밀분석지로 이어집니다.</li>
         </ol>
       </div>
@@ -809,18 +797,12 @@ function view4P(active){
       <div class="side-card">
         <h4>전체 화면으로 보기</h4>
         <p>휴대폰에서는 ‘홈 화면에 추가’로 앱처럼 열 수 있습니다. PC에서는 새 창으로 열면 4P가 원본 크기로 선명하게 보입니다.</p>
-        <a class="btn btn--ink btn--block" href="${cur.file}" target="_blank" rel="noopener">4P 원본 열기</a>
+        <a class="btn btn--ink btn--block" href="${src}" target="_blank" rel="noopener">4P 원본 열기</a>
       </div>
     </aside>
   </div>`;
 }
 function bind4P(root){
-  $$('[data-4p]', root).forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const i = btn.getAttribute('data-4p');
-      location.hash = `#/4p${i==='0'?'':'/v'+i}`;
-    });
-  });
   const form = $('#fourpMe', root);
   if (form) form.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -843,7 +825,7 @@ function bind4P(root){
     const open = $('#fourpOpen', root), pr = $('#fourpPrint', root);
     if (open) open.href = open.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
     if (pr) pr.href = pr.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
-    if (note) note.innerHTML = '<b>내 명식으로 다시 계산했습니다.</b> 지면 아래로 내려가 1장부터 읽어 보세요. 다른 버전 탭을 눌러도 같은 명식으로 계산됩니다.';
+    if (note) note.innerHTML = '<b>내 명식으로 다시 계산했습니다.</b> 지면 아래로 내려가 1장부터 읽어 보세요.';
   });
   if (window.__fourpQuery) restoreFourpForm();
 }
@@ -965,6 +947,10 @@ function parseHash(){
 }
 function render(){
   const r = parseHash();
+  // 예전에 공유된 4종 링크(#/4p/v1~v3)는 하얀 지면 단일 버전으로 정리한다.
+  if (r.view==='4p' && /^#\/4p\/v[0-9]/.test(location.hash || '')){
+    try { history.replaceState(null, '', '#/4p'); } catch (e) { /* 구형 브라우저 무시 */ }
+  }
   const app = $('#app');
   let activeTab = 'main';
   if (r.view==='section') activeTab = r.cat;
@@ -981,7 +967,7 @@ function render(){
   else if (r.view==='today') html = viewToday();
   else if (r.view==='free') html = viewFree();
   else if (r.view==='program') html = viewProgram();
-  else if (r.view==='4p') html = view4P(r.v);
+  else if (r.view==='4p') html = view4P();
   else if (r.view==='archive') html = viewArchive();
   app.innerHTML = html;
   app.classList.remove('fade'); void app.offsetWidth; app.classList.add('fade');

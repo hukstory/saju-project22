@@ -5,7 +5,7 @@
    - 입력: URL 파라미터(?n=이름&g=여&c=solar&y=1980&m=1&d=22&t=1716) 또는 지면 폼
    - 계산: 년주·월주·일주·시주 / 오행 비율 / 십성 / 격국 / 억부(신강·신약) / 용신 /
            대운 / 2027 정미년 세운 / 월별 길흉
-   - 출력: 지면별(정밀 5장판 1·2, 요약 3장판 3·4) 리포트 HTML
+   - 출력: 지면별 리포트 HTML (지면은 4p/04.html 단일 — 요약 3장판, 하얀 지면)
    ========================================================================== */
 (function () {
   'use strict';
@@ -759,7 +759,7 @@
     else pages.push(secYear2027(m), ctaBlock());
 
     host.innerHTML = pages.join('') +
-      '<div class="fp-back"><a href="../index.html#/4p">정운타임즈 4P 목록</a>' +
+      '<div class="fp-back"><a href="../index.html#/4p">정운타임즈 4P</a>' +
       '<button type="button" data-fp-restart>다른 생년월일로 다시 보기</button>' +
       '<a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">정밀분석 30~100P</a></div>';
 
