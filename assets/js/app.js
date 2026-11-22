@@ -50,7 +50,8 @@ const DAILY = () => (typeof ARTICLES_DAILY !== 'undefined' ? ARTICLES_DAILY : []
 /* ---------- 상단 ---------- */
 function renderTicker(){
   const track = $('#tickerTrack'); if (!track) return;
-  const one = TICKER.map(t=>`<span class="ticker__item"><b>${esc(t.cat)}</b>${esc(t.text)}</span>`).join('');
+  const dayName = (typeof TODAY_DAY !== 'undefined') ? TODAY_DAY.hanja : '庚子';
+  const one = TICKER.map(t=>`<span class="ticker__item"><b>${esc(t.cat)}</b>${esc(String(t.text).replace('{day}', dayName))}</span>`).join('');
   track.innerHTML = one + one;
 }
 function renderTabs(active){
@@ -229,7 +230,7 @@ function fortuneBlock(){
         <p class="fortune__lead">생년월일만 넣으면 오늘의 기운 지수, 행운의 색과 숫자, 좋은 시간, 한 줄 조언이 <b>바로</b> 나옵니다. 회원가입도 결제도 없습니다.</p>
         <ul class="fortune__pts">
           <li><span class="fortune__ptno">1</span><span><b>1분이면 끝</b>생년월일 또는 띠 하나만 고르면 됩니다.</span></li>
-          <li><span class="fortune__ptno">2</span><span><b>실제 만세력</b>오늘의 간지(庚子日)로 기운을 계산합니다.</span></li>
+          <li><span class="fortune__ptno">2</span><span><b>실제 만세력</b>오늘의 간지(${(typeof TODAY_DAY!=='undefined')?TODAY_DAY.hanja:'庚子'}日)로 기운을 계산합니다.</span></li>
           <li><span class="fortune__ptno">3</span><span><b>무료</b>결과는 화면에서 바로, 저장 없이 확인합니다.</span></li>
         </ul>
         <p class="fortune__sub">더 깊이 보려면 <a href="#/4p">990원 4P 맛보기</a> → <a href="${AURA}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a></p>
@@ -613,16 +614,30 @@ function viewArticle(id){
 }
 
 /* ---------- 오늘의 운세 지면 ---------- */
+function kstDateKey(){
+  const d = new Date(Date.now() + 9 * 3600 * 1000);
+  return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth()+1)}-${pad2(d.getUTCDate())}`;
+}
+function seasonLine(){
+  if (typeof TODAY_MONTH === 'undefined') return '절기로 보는 오늘';
+  const b = TODAY_MONTH.b.idx;
+  const names = { 0:'대설(大雪) 지나 소한(小寒)으로', 1:'소한(小寒) 지나 입춘(立春)으로', 2:'입춘(立春) 지나 경칩(驚蟄)으로',
+    3:'경칩(驚蟄) 지나 청명(淸明)으로', 4:'청명(淸明) 지나 입하(立夏)으로', 5:'입하(立夏) 지나 망종(芒種)으로',
+    6:'망종(芒種) 지나 소서(小暑)로', 7:'소서(小暑) 지나 입추(立秋)으로', 8:'입추(立秋) 지나 백로(白露)로',
+    9:'백로(白露) 지나 한로(寒露)로', 10:'한로(寒露) 지나 입동(立冬)으로', 11:'입동(立冬) 지나 대설(大雪)로' };
+  return names[b] || '절기로 보는 오늘';
+}
 function viewToday(){
   const main = todayLead();
+  const isFresh = main && main.date === kstDateKey();
   return `
   <div class="today-hero">
     <div>
       <div class="kicker">DAILY FORTUNE · ${esc(TODAY_LABEL||'')}</div>
       <h1 class="today-title">오늘, 내 기운은<br>어디로 흐르는가</h1>
-      <div class="today-ganji"><b>丙午年 · 己亥月 · 庚子日</b><span>소설(小雪) 지나 대설(大雪)로</span></div>
+      <div class="today-ganji"><b>${(typeof TODAY_YEAR!=='undefined')?`${TODAY_YEAR.hanja}年 · ${TODAY_MONTH.hanja}月 · ${TODAY_DAY.hanja}日`:'丙午年 · 己亥月 · 庚子日'}</b><span>${seasonLine()}</span></div>
       <p class="deck">${esc(main.dek)}</p>
-      <div class="meta" style="margin-top:10px"><b>${esc(main.writer)}</b><span class="dot"></span><span>매일 05:30 갱신</span></div>
+      <div class="meta" style="margin-top:10px"><b>${esc(main.writer)}</b><span class="dot"></span><span>${isFresh ? '오늘 호 · 05:30 발행' : '최근 호 ' + esc(main.date||'') + ' · 오늘 호는 05:30 발행'}</span></div>
       <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
         <a class="btn btn--ink" href="#/article/${main.id}">오늘의 운세 기사 전문 보기</a>
         <a class="btn btn--ghost" href="#/4p">990원 4P</a>
