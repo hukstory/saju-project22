@@ -78,7 +78,7 @@
 
   function formHTML() {
     return '' +
-      '<div class="input-row"><label for="fpName">신청자 이름</label>' +
+      '<div class="input-row"><label for="fpName">이름 (없으면 비워도 됩니다)</label>' +
       '<input type="text" id="fpName" maxlength="20" placeholder="이름 (예: 김하늘)" autocomplete="name"></div>' +
       '<div class="input-row fp-two">' +
       '  <div><label for="fpGender">성별</label><select id="fpGender"><option value="여">여성</option><option value="남">남성</option></select></div>' +
@@ -86,12 +86,12 @@
       '</div>' +
       '<div class="input-row" id="fpLeapRow" style="display:none"><label class="fp-check"><input type="checkbox" id="fpLeap"> 음력 윤달입니다</label></div>' +
       '<div class="input-row"><label for="fpBirth">생년월일</label><input type="date" id="fpBirth" min="1900-01-01" max="2026-12-31"></div>' +
-      '<div class="input-row"><label class="fp-check"><input type="checkbox" id="fpTimeKnown" checked> 태어난 시각을 압니다 (모르면 체크 해제 → 6글자 분석)</label></div>' +
+      '<div class="input-row"><label class="fp-check"><input type="checkbox" id="fpTimeKnown" checked> 태어난 시각을 압니다 (모르면 체크 해제)</label></div>' +
       '<div class="input-row fp-two" id="fpTimeRow">' +
       '  <div><label for="fpHour">시</label><select id="fpHour"></select></div>' +
       '  <div><label for="fpMin">분</label><select id="fpMin"></select></div>' +
       '</div>' +
-      '<p class="fp-formnote">입력한 정보는 서버로 전송되지 않고 이 화면에서만 계산됩니다.</p>';
+      '<p class="fp-formnote">입력한 정보는 서버로 보내지 않고, 이 화면 안에서만 계산합니다.</p>';
   }
 
   function ensureForm() {
@@ -132,7 +132,7 @@
     if (tk && timeRow) tk.addEventListener('change', function () {
       timeRow.style.display = tk.checked ? '' : 'none';
     });
-    $$('.kakao-btn').forEach(function (b) {
+    $$('.kakao-btn, [data-fp-go]').forEach(function (b) {
       if (b.getAttribute('data-fp-bound')) return;
       b.setAttribute('data-fp-bound', '1');
       b.removeAttribute('onclick');
@@ -466,6 +466,42 @@
       + '.fp-back{display:flex;gap:8px;justify-content:center;margin:18px 0 4px;flex-wrap:wrap}'
       + '.fp-back a,.fp-back button{font-size:12px;padding:9px 14px;border-radius:20px;border:1px solid rgba(201,160,99,.45);background:none;color:var(--fp-acc);cursor:pointer;text-decoration:none}'
       + '#step-detail .detail-content{padding-bottom:0}'
+      /* ---- 2026-11-25 개편: 쉬운 말 4장 ---- */
+      + '.fp-8{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 18px}'
+      + '.fp-8 div{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:7px;padding:11px 6px;text-align:center}'
+      + '.fp-8 span{display:block;font-size:9.5px;color:var(--fp-acc);letter-spacing:.04em;margin-bottom:4px}'
+      + '.fp-8 b{display:block;font-family:"Noto Serif KR",serif;font-size:22px;line-height:1.2;color:#fff}'
+      + '.fp-8 i{display:block;font-style:normal;font-size:9.5px;color:#8d8578;margin-top:4px}'
+      + '.fp-say{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-left:3px solid var(--fp-acc);border-radius:0 7px 7px 0;padding:14px 15px;margin:14px 0 18px}'
+      + '.fp-say .q{font-family:"Noto Serif KR",serif;font-size:13.5px;font-weight:700;color:#f0e3c6;margin-bottom:8px;line-height:1.5}'
+      + '.fp-say ul{list-style:none;margin:0;padding:0}'
+      + '.fp-say li{position:relative;padding-left:14px;font-size:12.5px;line-height:1.8;color:#a9b0bc}'
+      + '.fp-say li:before{content:"·";position:absolute;left:3px;color:var(--fp-acc);font-weight:900}'
+      + '.fp-turn{display:flex;align-items:center;gap:9px;margin:6px 0 30px;font-family:"Noto Serif KR",serif;font-size:12px;color:var(--fp-acc);letter-spacing:.04em}'
+      + '.fp-turn:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(201,160,99,.4),transparent)}'
+      + '.fp-month{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;align-items:end;height:78px;margin:14px 0 4px}'
+      + '.fp-month i{display:block;background:linear-gradient(180deg,#e0c489,#a9812f);border-radius:2px 2px 0 0;opacity:.9}'
+      + '.fp-monthlab{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;font-size:8.5px;color:#948b7c;text-align:center;margin-bottom:14px}'
+      + '.fp-cliff{background:linear-gradient(160deg,#211a10,#2e2314);border:1px solid rgba(201,160,99,.5);border-radius:9px;padding:20px 18px;margin:16px 0 18px}'
+      + '.fp-cliff .k{font-family:"Noto Serif KR",serif;font-size:11.5px;letter-spacing:.16em;color:var(--fp-acc);font-weight:700;margin-bottom:8px}'
+      + '.fp-cliff p{font-family:"Noto Serif KR",serif;font-size:16px;line-height:1.7;color:#f2e7d2;font-weight:700;letter-spacing:-.02em}'
+      + '.fp-cliff p b{color:#e8c987}'
+      + '.fp-cliff em{font-style:normal;color:#b3a992;font-family:Pretendard,sans-serif;font-size:12px;font-weight:500;display:block;margin-top:10px;line-height:1.7}'
+      + '.fp-cta .a2{display:block;margin-top:9px;background:none;border:1px solid rgba(201,160,99,.45);color:#e8c987;font-weight:700;font-size:12.5px;padding:11px;border-radius:6px;text-decoration:none}'
+      + '.fp-cta .price{font-size:12px;color:#cbbd9e;margin-top:10px;letter-spacing:.01em}'
+      + 'body[data-fourp="4"] .fp-8 div{background:#f8f9fc;border-color:#e1e6ee}'
+      + 'body[data-fourp="4"] .fp-8 b{color:#1a2533}'
+      + 'body[data-fourp="4"] .fp-say{background:#fdf7e9;border-color:#e0cda6;border-left-color:#b8955f}'
+      + 'body[data-fourp="4"] .fp-say .q{color:#6b4e1f}'
+      + 'body[data-fourp="4"] .fp-say li{color:#43505f}'
+      + 'body[data-fourp="4"] .fp-cliff{background:#fdf7e9;border-color:#d8b979}'
+      + 'body[data-fourp="4"] .fp-cliff p{color:#2b2114}'
+      + 'body[data-fourp="4"] .fp-cliff p b{color:#8f1d17}'
+      + 'body[data-fourp="4"] .fp-cliff em{color:#6d6353}'
+      + 'body[data-fourp="4"] .fp-cta{background:linear-gradient(160deg,#1b1610,#2b2114)}'
+      + 'body[data-fourp="4"] .fp-cta .t{color:#fff}'
+      + 'body[data-fourp="4"] .fp-cta p{color:#cbbfa6}'
+      + 'body[data-fourp="4"] .fp-month span{color:#948b7c}'
       + 'body[data-fourp="4"] #step-hooking .input-group{background:#f8f9fc;border-color:rgba(184,149,95,.45)}'
       + 'body[data-fourp="4"] .input-row label{color:#8a6d34}'
       + 'body[data-fourp="4"] .input-row input[type=text],body[data-fourp="4"] .input-row input[type=date],body[data-fourp="4"] .input-row select{background:#fff;border:1px solid #d7dce5;color:#1a2533;color-scheme:light}'
@@ -741,27 +777,33 @@
     if (!host) return;
 
     var head = $('#step-detail .detail-header');
+    ORDER_QS = queryOf(m.input);
     if (head) {
       var h1 = head.querySelector('h1');
       var lunarNote = (m.r.input.calendar === '음력' && m.r.lunar)
         ? ' · 음력 ' + m.r.lunar.year + '.' + pad2(m.r.lunar.month) + '.' + pad2(m.r.lunar.day) + (m.r.lunar.leap ? '(윤달)' : '') + ' → 양력'
         : '';
-      if (h1) h1.innerHTML = '신청자 <span class="name">' + esc(m.name) + '</span> 님<br><span style="font-size:15px;color:#c9a063">' +
-        m.r.birthLabel.solar + (m.r.birthLabel.time ? ' ' + m.r.birthLabel.time : ' · 시각 미상') + lunarNote + '</span> 분석리포트';
+      if (h1) h1.innerHTML = '<span class="name">' + esc(m.name) + '</span> 님의 <span style="color:#b8955f">4장</span><br><span style="font-size:13px;color:#a0b0c0;font-weight:500">' +
+        m.r.birthLabel.solar + (m.r.birthLabel.time ? ' ' + m.r.birthLabel.time : ' · 시각 미상') + lunarNote + '</span>';
       var p = head.querySelector('p');
-      if (p) p.textContent = m.r.saju.year + ' ' + m.r.saju.month + ' ' + m.r.saju.day + (m.r.saju.hour ? ' ' + m.r.saju.hour : '') + ' · ' + m.gyeok.name + ' · ' + m.level;
+      if (p) p.textContent = '타고난 본성 · 돈 · 인연 · 2027 — 여덟 글자로 읽었습니다';
     }
 
     var pages = [secEssence(m), secWealth(m)];
     if (V === 1) pages.push(secLove(m), secCareer(m), secEnd(m), ctaBlock());
     else if (V === 2) pages.push(secLove(m), secCareer(m), sipTableWrap(m), secEnd(m), ctaBlock());
     else if (V === 3) pages.push(secEnd(m), ctaBlock());
-    else pages.push(secYear2027(m), ctaBlock());
+    else pages = easyPages(m);
 
     host.innerHTML = pages.join('') +
       '<div class="fp-back"><a href="../index.html#/4p">운명사주 정운타임즈 4P</a>' +
       '<button type="button" data-fp-restart>다른 생년월일로 다시 보기</button>' +
-      '<a href="https://aura-saju.pages.dev/" target="_blank" rel="noopener">정밀분석 30~100P</a></div>';
+      '<a href="' + orderHref() + '" target="_blank" rel="noopener">정밀분석 30~100P 주문</a></div>';
+
+    /* 지면 상단·요금제 링크도 같은 주문 주소로 맞춘다 */
+    var topLink = document.querySelector('.zw-top a');
+    if (topLink) topLink.href = orderHref();
+    $$('.pricing-card').forEach(function (c) { c.setAttribute('data-fp-order', '1'); });
 
     var pb = host.querySelector('[data-fp-pricing]');
     if (pb) pb.addEventListener('click', function () {
@@ -835,6 +877,281 @@
     return '<div class="fp-note">· 계산 근거: 사주 ' + m.r.saju.year + ' ' + m.r.saju.month + ' ' + m.r.saju.day + (m.r.saju.hour ? ' ' + m.r.saju.hour : '') +
       ' · 용신 ' + m.yongKey + ' · 격국 ' + m.gyeok.name + ' · ' + m.level +
       '<br>· 전통 명리학의 상징 해석이며 결과를 보장하지 않습니다.</div>';
+  }
+
+  /* ================================================================== *
+   * 4-2. 쉬운 말 4장 (2026-11-25 개편) — 전문용어 없이, 생활 공감 문장으로
+   *   ① 타고난 본성·속마음 ② 돈이 들어오고 새는 습관
+   *   ③ 인간관계·연애 스타일 ④ 2027년 가장 큰 변화 → 끊고 정밀 분석지로 직행
+   * ================================================================== */
+  var ORDER_URL = 'https://aura-saju.pages.dev/order.html';
+  var ORDER_QS = '';
+
+  function queryOf(inp) {
+    var q = new URLSearchParams();
+    q.set('n', inp.name || ''); q.set('g', inp.gender);
+    q.set('c', inp.calendar); if (inp.lunarLeap) q.set('lp', '1');
+    q.set('y', inp.y); q.set('m', inp.mo); q.set('d', inp.d);
+    if (inp.hourKnown) q.set('t', pad2(inp.h) + pad2(inp.mi)); else q.set('u', '1');
+    return q.toString();
+  }
+  function orderHref() { return ORDER_URL + (ORDER_QS ? '?' + ORDER_QS : ''); }
+  window.fpOrderHref = orderHref;
+  window.goReport = function () { window.open(orderHref(), '_blank', 'noopener'); };
+
+  /* --- 쉬운 말 사전 --- */
+  var DAY_HEAD = [
+    '당신은 <b>자라야 직성이 풀리는</b> 사람입니다.',
+    '당신은 <b>드러내야 직성이 풀리는</b> 사람입니다.',
+    '당신은 <b>중심을 잡아야 편한</b> 사람입니다.',
+    '당신은 <b>정리해야 다음으로 가는</b> 사람입니다.',
+    '당신은 <b>읽고 나서 움직이는</b> 사람입니다.'
+  ];
+  var DAY_TRAIT = [
+    '멈춰 있는 걸 못 견딥니다. 뭐든 자라게 하고 싶어 하고, 새로 시작할 때 눈이 반짝입니다.',
+    '속에 담아두는 걸 못 합니다. 기분이 얼굴에 그대로 쓰이고, 사람들 앞에서 말할 때 힘이 올라갑니다.',
+    '중간에서 판을 정리하고 끝까지 남아 있는 쪽입니다. 약속을 지키고, 남들이 기대는 자리에 자주 섭니다.',
+    '애매한 걸 못 견딥니다. 선을 긋는 데 빠르고, 한 번 정하면 잘 뒤집지 않습니다. 그래서 차갑다는 말도 듣습니다.',
+    '말보다 관찰이 먼저입니다. 사람을 다 읽고 나서야 한마디 하고, 머릿속에는 늘 저장된 게 많습니다.'
+  ];
+  var SAYS = [
+    ['“시작은 잘하는데 마무리가…”', '“새 프로젝트 얘기만 나오면 눈이 커진다”', '“계획표 만드는 걸 좋아한다”'],
+    ['“기분이 얼굴에 다 써 있다”', '“분위기 띄우는 건 너밖에 없다”', '“싫은 건 싫다고 바로 말한다”'],
+    ['“결국 너한테 물어보게 된다”', '“중간에서 조율하는 역할을 맡는다”', '“약속은 안 깨는 편이다”'],
+    ['“칼같다, 선이 분명하다”', '“한 번 싫어하면 다시 안 본다”', '“정리정돈은 확실하다”'],
+    ['“속을 알 수 없다는 말을 듣는다”', '“말수는 적은데 핵심은 정확하다”', '“조용히 다 준비해 놓는다”']
+  ];
+  var LEVEL_SAY = {
+    '신강': '기운이 안쪽에 두텁게 쌓여 있습니다. 시키기 전에 이미 시작하고, 도움 없이도 끝까지 갑니다. 대신 혼자 다 하려다 몸이 먼저 지칩니다.',
+    '중화': '힘을 주는 쪽과 받는 쪽이 반반입니다. 판이 바뀌면 생각도 같이 바뀌는 유연함이 있어서, 어디에 놓여도 크게 무너지지 않습니다.',
+    '신약': '기운이 바깥으로 얇게 퍼져 있습니다. 혼자 밀어붙이면 금방 지치지만, 좋은 사람과 좋은 제도를 만나면 몇 배로 커집니다. 주변을 고르는 게 곧 실력입니다.'
+  };
+  var LACK_SAY = {
+    '목': '“일단 해보자” 하고 첫발을 떼는 힘',
+    '화': '기분을 말로 꺼내는 힘',
+    '토': '중간에서 버티며 중심을 잡는 힘',
+    '금': '손절하고 끊어내는 힘',
+    '수': '멈추고 쉬면서 생각을 가라앉히는 힘'
+  };
+  var OVER_SAY = {
+    '목': '늘 뭔가를 시작해야 안심이 되는데, 벌여놓은 것들이 서로 시간을 잡아먹습니다.',
+    '화': '표현이 앞서서 말이 생각보다 먼저 나갑니다. 그 말이 사람을 세우기도 하고 자르기도 합니다.',
+    '토': '책임을 자꾸 떠안습니다. 남의 일까지 받으면 정작 내 일이 밀립니다.',
+    '금': '선을 너무 빨리 긋습니다. 한 번 정리한 관계는 다시 열기가 어렵습니다.',
+    '수': '생각이 많아 결정이 늦습니다. 머릿속에서 이미 세 번 끝낸 일을 다시 시작해야 합니다.'
+  };
+  var JAE_POS_SAY = {
+    '년': '돈 감각이 일찍 생겼고, 집안·부모 쪽에서 받은 영향이 큽니다.',
+    '월': '직장과 사회에서 버는 힘이 큽니다. 조직 안에 있을 때 돈이 따라옵니다.',
+    '일': '내 자리에 돈이 붙어 있습니다. 혼자 벌기보다 함께 벌 때 커집니다.',
+    '시': '뒤로 갈수록 커집니다. 늦게 크는 돈이라 조급해할 필요가 없습니다.'
+  };
+  var SPOUSE_UNSEONG = {
+    '장생': '나를 자라게 하는 사람', '목욕': '분위기와 감정이 풍부한 사람', '관대': '태도가 단정한 사람',
+    '임관': '자기 일이 분명한 사람', '제왕': '주도권이 강한 사람', '쇠': '조용하고 안정된 사람',
+    '병': '섬세하고 예민한 사람', '사': '마무리가 확실한 사람', '묘': '속을 잘 안 보여주는 사람',
+    '절': '거리감을 지키는 사람', '태': '보호본능이 생기는 사람', '양': '편안하고 포근한 사람'
+  };
+  var YEAR_THEME = {
+    '비견': '내 이름으로 다시 서는 일', '겁재': '경쟁이 붙고 돈이 나가는 일',
+    '식신': '만들어 둔 것이 결과로 나오는 일', '상관': '말과 표현이 힘을 얻는 일',
+    '편재': '돈의 판이 커지는 일', '정재': '돈이 구체적으로 들어오는 일',
+    '편관': '압박이 오고, 그 압박이 자리를 만드는 일', '정관': '자리가 정해지는 일 — 직함·계약·책임',
+    '편인': '혼자 파고들어 무언가를 얻는 일', '정인': '배움·자격·보호가 들어오는 일'
+  };
+  var SIP_PLACE = { '비겁': '사람과의 관계', '식상': '내가 만드는 일', '재성': '돈과 거래', '관성': '직장과 책임', '인성': '문서·집·배움' };
+  function sipGroup(s) {
+    if (!s) return '비겁';
+    if (s === '비견' || s === '겁재') return '비겁';
+    if (s === '식신' || s === '상관') return '식상';
+    if (s === '편재' || s === '정재') return '재성';
+    if (s === '편관' || s === '정관') return '관성';
+    return '인성';
+  }
+
+  /* PAGE 01 — 타고난 본성과 속마음 */
+  function p1(m) {
+    var oh = m.dayOh, p = {};
+    m.r.pillars.forEach(function (x) { p[x.key] = x; });
+    var strip = '';
+    ['hour', 'day', 'month', 'year'].forEach(function (k) {
+      var x = p[k];
+      var role = k === 'hour' ? '말년·자식' : k === 'day' ? '나·배우자' : k === 'month' ? '부모·사회' : '초년·집안';
+      strip += '<div><span>' + (k === 'hour' ? '태어난 시' : k === 'day' ? '태어난 날' : k === 'month' ? '태어난 달' : '태어난 해') + '</span>' +
+        (x && !x.unknown
+          ? '<b>' + STEMS[x.stem.idx].hanja + BRANCHES[x.branch.idx].hanja + '</b><i>' + STEMS[x.stem.idx].hangul + BRANCHES[x.branch.idx].hangul + ' · ' + role + '</i>'
+          : '<b style="font-size:15px;color:#9aa1ad">모름</b><i>' + role + '</i>') + '</div>';
+    });
+
+    var sayBox = '<div class="fp-say"><div class="q">이런 말을 들어본 적 있다면, 그건 성격이 아니라 여덟 글자입니다.</div><ul>' +
+      SAYS[oh].map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div>';
+
+    var inner = (m.maxI !== oh)
+      ? '처음 보는 사람은 당신을 <b>' + OHK[oh] + ' 사람</b>으로 기억합니다 — ' + OH_IMG[OHK[oh]].img + ' 쪽. 그런데 가까운 사람만 아는 진짜 무게는 <b>' + OHK[m.maxI] + '</b>에 있습니다. 결정적인 순간에 손이 먼저 가는 쪽도 그쪽입니다.'
+      : '겉과 속이 같은 결입니다. 처음 본 사람과 오래된 친구가 당신을 똑같이 설명합니다 — <b>' + OHK[oh] + ' 사람</b>. 기분이 그대로 보여서 숨기기가 어렵고, 그래서 사람을 빨리 가려냅니다.';
+
+    var weak = '';
+    if (m.lack.length) {
+      weak = '여덟 글자에 <b>' + m.lack.join('·') + '</b> 기운이 한 자리도 없습니다. ' + LACK_SAY[m.lack[0]] + ' — 이건 타고난 게 아니라 평생 만들어가야 하는 숙제입니다. 그래서 이 부분에서 스스로를 자주 의심합니다.';
+    } else if (m.counts[m.maxI] >= 4) {
+      weak = '<b>' + OHK[m.maxI] + '</b> 기운이 여덟 글자에 ' + m.counts[m.maxI] + '개나 됩니다. 넘치면 장점이 습관이 되고, 습관이 되면 발목을 잡습니다. ' + OVER_SAY[OHK[m.maxI]];
+    } else {
+      weak = '다섯 기운이 골고루 놓여 있습니다. 큰 구멍이 없다는 건 큰 장점이고, 대신 <b>눈에 띄는 무기 하나</b>가 없다는 뜻이기도 합니다. 하나를 골라 깊게 파면 나머지가 따라옵니다.';
+    }
+
+    return '<section class="fp-sec">' +
+      '<div class="fp-kicker">PAGE 01 · 타고난 본성</div>' +
+      '<h2 class="fp-h2">' + DAY_HEAD[oh] + '</h2>' +
+      '<p class="fp-p">태어난 날의 글자는 <b>' + m.dayHanja + '(' + m.dayHangul + ')</b>입니다. ' + DAY_TRAIT[oh] + '</p>' +
+      '<div class="fp-8">' + strip + '</div>' +
+      '<p class="fp-p">' + LEVEL_SAY[m.level] + '</p>' +
+      '<p class="fp-p">' + inner + '</p>' +
+      '<p class="fp-p">' + weak + '</p>' +
+      sayBox +
+      '<div class="fp-teaser"><div class="q">그런데 이 사람은, 돈 앞에서 완전히 달라집니다.</div>' +
+      '<div class="blur">본성은 사람을 설명하지만 통장을 설명하지는 못합니다. 돈이 어디로 들어오고 어디서 새는지는 여덟 글자의 다른 자리가 정합니다. 다음 장에서 숫자로 확인합니다.</div></div>' +
+      '<div class="fp-turn">다음 장 · 돈이 들어오는 문과 새는 구멍</div>' +
+      '</section>';
+  }
+
+  /* PAGE 02 — 돈 */
+  function p2(m) {
+    var jaePos = [];
+    m.r.pillars.forEach(function (x) {
+      if (x.unknown) return;
+      if (JAE.indexOf(E.internal.shipsinForStem(m.dayStem, x.stem.idx)) >= 0) jaePos.push(x.label.charAt(0));
+      if (JAE.indexOf(E.internal.shipsinForBranch(m.dayStem, x.branch.idx)) >= 0) jaePos.push(x.label.charAt(0));
+    });
+    var head = m.nJae >= 3 ? '돈은 <b>여러 문으로 동시에</b> 들어옵니다.'
+      : m.nJae === 2 ? '돈은 <b>두 개의 문</b>으로 들어옵니다.'
+      : m.nJae === 1 ? '돈은 <b>한 개의 문</b>으로 들어옵니다.'
+      : '돈은 <b>쫓아가면 멀어지고, 자리를 잡으면 들어오는</b> 사주입니다.';
+    var inText = m.nJae >= 3 ? '한 곳이 막혀도 다른 곳에서 들어오는 구조입니다. 다만 관리하지 않으면 여러 곳에서 동시에 샙니다.'
+      : m.nJae === 2 ? '하나는 안정적이고, 하나는 변동이 큽니다. 변동이 큰 쪽에 전 재산을 걸지 마세요.'
+      : m.nJae === 1 ? '그 한 곳을 깊게 파는 쪽이 훨씬 유리합니다. 여기저기 손대면 어느 것도 남지 않습니다.'
+      : '눈에 보이는 문이 없습니다. 그래서 돈은 “들어오는” 게 아니라 “만들어지는” 쪽입니다 — 기술·콘텐츠·사람을 통해.';
+    var posText = jaePos.length ? JAE_POS_SAY[jaePos[0]] : '돈이 드러나 있지 않아, 스스로 구조를 만들어야 합니다.';
+
+    var leaks = [];
+    if (m.nBi >= 3) leaks.push(['사람에서 샙니다', '보증, 동업, 밥값. 빌려주고 못 받은 돈을 세어보면 생각보다 큽니다.']);
+    if (m.nSik >= 3) leaks.push(['쓰는 손이 큽니다', '벌면 바로 씁니다. 갖고 싶은 게 생기면 계산보다 결제가 먼저입니다.']);
+    if (m.nIn >= 3) leaks.push(['배움·문서·집에 갑니다', '나쁜 지출은 아니지만 현금이 묶여 있다는 느낌이 듭니다.']);
+    if (m.nGwan >= 3) leaks.push(['책임에 묶입니다', '직장·가족·규칙 때문에 쓰고 싶어도 못 쓰는 지출이 생깁니다.']);
+    if (!leaks.length) leaks.push(['큰 구멍은 없습니다', '다만 한 달이 끝나면 남는 게 없습니다. 작은 결제가 새는 쪽입니다.']);
+    var fix = m.nBi >= 3 ? '돈 나가는 자리를 미리 정해두세요. 사람 만나기 전에 쓸 금액을 정하고 나가면 그 달이 남습니다.'
+      : m.nSik >= 3 ? '갖고 싶은 것이 생기면 3일만 기다리세요. 3일 뒤에도 사고 싶으면 사도 됩니다.'
+      : m.nIn >= 3 ? '배움에 쓰는 돈은 예산을 따로 떼어두세요. 통장 하나를 “공부·문서”로 분리하면 새는 느낌이 사라집니다.'
+      : m.nGwan >= 3 ? '책임 비용을 고정지출로 먼저 계산해 두세요. 남는 돈으로 사는 습관을 만들면 덜 답답합니다.'
+      : '일주일 지출을 한 번만 적어보세요. 새는 곳은 거의 똑같이 반복됩니다.';
+
+    return '<section class="fp-sec">' +
+      '<div class="fp-kicker">PAGE 02 · 돈</div>' +
+      '<h2 class="fp-h2">' + head + '</h2>' +
+      '<p class="fp-p">' + inText + ' ' + posText + '</p>' +
+      '<div class="fp-score">' +
+      '<div class="fp-ring"><svg width="74" height="74" viewBox="0 0 74 74"><circle class="bg" cx="37" cy="37" r="30"></circle>' +
+      '<circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="188.5" stroke-dashoffset="' + (188.5 - m.wealth / 100 * 188.5).toFixed(1) + '"></circle></svg><b>' + m.wealth + '</b></div>' +
+      '<div class="t"><strong>돈 그릇 ' + m.wealth + ' / 100</strong>' +
+      (m.wealth >= 75 ? '그릇이 큰 편입니다. 문제는 크기가 아니라 시기입니다.' : m.wealth >= 55 ? '그릇은 충분합니다. 새는 곳 하나만 막으면 남습니다.' : '그릇은 작지만 단단합니다. 크게 벌이기보다 오래 쥐는 쪽이 맞습니다.') +
+      '</div></div>' +
+      '<div class="fp-boxes">' +
+      '<div class="fp-box"><b>돈이 들어오는 통로</b><p>' + inText + '</p></div>' +
+      '<div class="fp-box"><b>돈이 새는 곳</b><p><b>' + leaks[0][0] + '</b> — ' + leaks[0][1] + (leaks[1] ? '<br><b>' + leaks[1][0] + '</b> — ' + leaks[1][1] : '') + '</p></div>' +
+      '</div>' +
+      '<p class="fp-p"><b>그래서 이렇게 하세요.</b> ' + fix + '</p>' +
+      '<div class="fp-teaser"><div class="q">그런데 이 습관이 가장 크게 새는 달이 따로 있습니다.</div>' +
+      '<div class="blur">2027년 열두 달 중 돈이 크게 나가는 달과 크게 들어오는 달은 같은 사람이라도 정반대입니다. 그 달을 피하는 법은 마지막 장에서 정리합니다.</div></div>' +
+      '<div class="fp-turn">다음 장 · 곁에 오는 사람과 마음이 가는 쪽</div>' +
+      '</section>';
+  }
+
+  /* PAGE 03 — 사람·인연 */
+  function p3(m) {
+    var p = null;
+    m.r.pillars.forEach(function (x) { if (x.key === 'day' && !x.unknown) p = x; });
+    var head = m.spouseN >= 3 ? '인연은 <b>여러 번 스치고, 그때마다 기준이 흔들립니다.</b>'
+      : m.spouseN >= 1 ? '인연은 <b>한 번 깊게</b> 옵니다.'
+      : '인연은 <b>늦게, 그러나 오래</b> 옵니다.';
+    var starText = m.spouseN >= 3 ? '별이 여러 개면 선택의 순간이 여러 번 옵니다. 그때마다 기준이 흔들리지 않는 게 중요합니다.'
+      : m.spouseN >= 1 ? '별이 하나로 모여 있어, 한 사람에게 마음이 깊게 가는 구조입니다.'
+      : '드러난 별이 없다고 인연이 없다는 뜻은 아닙니다. 흐름이 그 별을 데려오는 해에 관계가 시작되는 경우가 많습니다.';
+    var pattern = m.nBi >= m.nIn && m.nBi >= m.nSik && m.nBi >= m.nGwan ? '친구와 연인의 경계가 흐릿합니다. 편한 사람에게 마음이 가고, 그래서 시작이 늦거나 끝이 흐려집니다.'
+      : m.nIn >= m.nSik && m.nIn >= m.nGwan ? '보호받고 싶은 마음이 큽니다. 상대가 나를 얼마나 챙기는지로 애정을 확인하는 편입니다.'
+      : m.nSik >= m.nGwan ? '표현이 앞섭니다. 좋으면 다 보여주고, 서운하면 바로 티가 납니다.'
+      : m.nGwan >= 3 ? '책임지는 사람에게 끌립니다. 다만 그 사람이 무너지면 나도 같이 흔들립니다.'
+      : '관계의 속도가 일정합니다. 급하게 달아오르지도, 쉽게 식지도 않습니다.';
+
+    return '<section class="fp-sec">' +
+      '<div class="fp-kicker">PAGE 03 · 사람과 인연</div>' +
+      '<h2 class="fp-h2">' + head + '</h2>' +
+      '<p class="fp-p">' + starText + ' ' + pattern + '</p>' +
+      '<div class="fp-boxes">' +
+      '<div class="fp-box"><b>먼저 마음이 가는 사람</b><p>' + OHK[m.spouseOh] + '의 기운을 가진 사람 — ' + OH_IMG[OHK[m.spouseOh]].key + jj(OH_IMG[OHK[m.spouseOh]].key, '이') + ' 분명한 사람. 말보다 태도로 보여주는 쪽에 약합니다.</p></div>' +
+      '<div class="fp-box"><b>곁에 오는 사람</b><p>' + (p ? (SPOUSE_UNSEONG[p.unseong.name] || '편안한 사람') + ' — 배우자 자리에 앉은 글자가 그런 사람을 데려옵니다.' : '배우자 자리를 읽으려면 태어난 시각이 필요합니다.') + '</p></div>' +
+      '</div>' +
+      '<p class="fp-p"><b>오래 가는 조건.</b> ' + (m.level === '신강' ? '내 힘이 센 편이라, 말투를 낮추는 것만으로 관계가 길어집니다.' : m.level === '신약' ? '상대의 속도에 맞추다 지치지 않도록, 내가 원하는 것을 먼저 말해야 합니다.' : '관계의 규칙을 함께 정할 때 가장 안정됩니다.') + '</p>' +
+      (m.y2027 ? '<p class="fp-p">2027년에는 이 자리와 ' + (m.y2027.hap.length ? '이어지는 흐름이 생깁니다. 인연이 구체적인 형태로 좁혀지는 해입니다.' : m.y2027.chung.length ? '부딪히는 흐름이 생깁니다. 큰 결정은 한 번 더 확인하고 움직이세요.' : '직접 엮이지 않습니다. 관계보다 나를 정비하는 해입니다.') + '</p>' : '') +
+      '<div class="fp-teaser"><div class="q">2027년, 이 사람에게 가장 큰 변화가 오는 때</div>' +
+      '<div class="blur">바뀌는 건 돈도 사람도 아닐 수 있습니다. 여덟 글자에 새로 얹히는 한 글자가 어느 자리를 건드리느냐가 방향을 정합니다.</div></div>' +
+      '<div class="fp-turn">다음 장 · 2027년, 가장 큰 변화</div>' +
+      '</section>';
+  }
+
+  /* PAGE 04 — 2027 (여기서 끊는다) */
+  function p4(m) {
+    var y = m.y2027;
+    if (!y) return '';
+    var byMonth = {};
+    m.months.forEach(function (x) { byMonth[x.month] = x.score; });
+    var vals = [];
+    for (var i = 1; i <= 12; i++) vals.push(typeof byMonth[i] === 'number' ? byMonth[i] : 55);
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+    var bars = vals.map(function (sc) {
+      var h = 24 + Math.round(((sc - mn) / ((mx - mn) || 1)) * 46);
+      return '<i style="height:' + h + 'px"></i>';
+    }).join('');
+    var theme = YEAR_THEME[y.stemSip] || '생활의 판이 바뀌는 일';
+    var place = SIP_PLACE[sipGroup(y.branchSip)] || '내 자리';
+    var toneText = y.tone === 'gil' ? '들어오는 기운이 재물과 명예 쪽이라, 미뤄 둔 일을 꺼내기 좋은 해입니다.'
+      : y.tone === 'hyung' ? '들어오는 기운이 나를 누르거나 흔드는 쪽이라, 확장보다 정리가 유리한 해입니다.'
+      : y.chung.length ? '들어오는 기운이 ' + y.chung.map(function (c) { return c.label; }).join('·') + '와 부딪힙니다. 크게 벌이기보다 수습이 중요한 해입니다.'
+      : '무난한 흐름입니다. 크게 벌지도, 크게 잃지도 않는 해입니다.';
+    var toneLabel = y.tone === 'gil' ? '순풍' : y.tone === 'hyung' ? '주의' : '무난';
+
+    return '<section class="fp-sec">' +
+      '<div class="fp-kicker">PAGE 04 · 2027년</div>' +
+      '<h2 class="fp-h2">2027년, 당신에게 오는 가장 큰 변화는 <b>' + theme + '</b>입니다.</h2>' +
+      '<p class="fp-p">2027년은 정미(丁未)년입니다. 당신의 여덟 글자 위에 새 글자 한 쌍이 얹히는 해이고, 그 글자가 <b>' + y.stemSip + '</b>으로 들어옵니다. ' + toneText + '</p>' +
+      '<div class="fp-cards">' +
+      '<div class="fp-card"><span>2027년 총운</span><b>' + y.score + '</b><i>' + toneLabel + '</i></div>' +
+      '<div class="fp-card"><span>변화의 방향</span><b style="font-size:13px">' + theme + '</b><i>2027</i></div>' +
+      '<div class="fp-card"><span>변화가 오는 자리</span><b style="font-size:14px">' + place + '</b><i>' + y.branchSip + '</i></div>' +
+      '</div>' +
+      '<p class="fp-p">열두 달의 무게는 이렇게 다릅니다. 막대가 높은 달에 문이 열리고, 낮은 달에 돈과 사람이 새기 쉽습니다.</p>' +
+      '<div class="fp-month">' + bars + '</div>' +
+      '<div class="fp-monthlab">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(function (n) { return '<span>' + n + '</span>'; }).join('') + '</div>' +
+      '<div class="fp-cliff"><div class="k">여기서 끊습니다</div>' +
+      '<p>정확히 <b>몇 월에 조심해야 하는지</b>, 그리고 <b>돈이 가장 크게 움직이는 달</b>은 — 이 4장에서는 알려드리지 않습니다.</p>' +
+      '<em>그 달을 피하는 법과 그 달에 꼭 해야 할 한 가지는 정밀 분석지에 있습니다. 네 장으로는 여기까지가 한계입니다.</em></div>' +
+      '<div class="fp-cta">' +
+      '<div class="k">4P는 맛보기입니다</div>' +
+      '<div class="t">내 2027년 정밀 분석지<br><b>바로 받기</b></div>' +
+      '<p>같은 여덟 글자로 30장을 씁니다. 열두 달의 길흉, 조심할 달과 해야 할 일, 돈이 움직이는 시기, 귀인의 얼굴까지.</p>' +
+      '<a href="' + orderHref() + '" target="_blank" rel="noopener">👉 내 2027년 정밀 분석지 바로 받기</a>' +
+      '<div class="price">30P 19,900원 · 60P 29,900원 · 100P 49,900원</div>' +
+      '<div class="p">2장 요약본이 아니라, 30장부터 시작하는 정밀 분석입니다 · 생년월일은 방금 넣은 값 그대로 이어집니다</div>' +
+      '<button type="button" class="fp-cta__more" data-fp-pricing>30P · 60P · 100P 차이 보기 →</button>' +
+      '<a class="a2" href="../index.html#/free" target="_top" rel="noopener">오늘의 무료 운세 먼저 보기</a>' +
+      '</div>' +
+      '<div class="fp-note">· 계산 근거: 양력 ' + m.r.birthLabel.solar + (m.r.birthLabel.time ? ' ' + m.r.birthLabel.time : ' (시각 미상)') +
+      ' · 엔진: KASI 24절기·음양력 + 진태양시 보정 만세력(korean-saju 0.3.0 이식)' +
+      '<br>· 이 리포트는 전통 명리학의 상징 해석이며, 미래의 결과를 보장하지 않습니다. 의료·투자·법률 판단의 근거로 삼을 수 없습니다.' +
+      '</div>' +
+      '</section>';
+  }
+
+  function easyPages(m) {
+    return [p1(m), p2(m), p3(m), p4(m)];
   }
 
   /* ------------------------------------------------------------------ *

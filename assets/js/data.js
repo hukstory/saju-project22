@@ -27,7 +27,7 @@ const CATS = [
   { id:'shop',    ko:'운부르는것들',route:'#/shop',        en:'OBJECTS',  desc:'개운 소품과 동양의 부적' },
   { id:'lab',     ko:'운명연구소',  route:'#/lab',         en:'LAB',      desc:'운명전쟁49 · 관찰 기록' },
   { id:'program', ko:'사주프로그램',route:'#/program',     en:'PROGRAM',  desc:'만세력·자미두수 분석 프로그램 · 1년 이용권', point:true },
-  { id:'fourp',   ko:'990원 4P',    route:'#/4p',          en:'4P',       desc:'990원 특별분석 맛보기', point:true }
+  { id:'fourp',   ko:'무료 4P',    route:'#/4p',          en:'4P',       desc:'내 사주로 바로 읽는 네 장 · 무료', point:true }
 ];
 
 const CAT_KO = CATS.reduce((m,c)=>{ m[c.id]=c.ko; return m; },{});
@@ -55,7 +55,7 @@ const TICKER = [
   { cat:'오늘의운세', text:'{day}日, 오늘의 기운이 도는 하루…오늘의 운세 매일 05:30 갱신' },
   { cat:'MBTI궁합', text:'소개팅 나가기 전 3초 — 귀인·배우자 사주 특징' },
   { cat:'운부르는것들', text:'현관 신발 세 켤레만…돈 새는 지갑 막는 생활 개운 습관 5' },
-  { cat:'990원 4P', text:'990원 특별분석 4P, 지면에서 바로 보기' }
+  { cat:'무료 4P', text:'무료 4P 맛보기 — 생년월일만 넣으면 내 여덟 글자로 네 장이 열립니다' }
 ];
 
 /* ---------- 1면 추천 4P 안내 ---------- */

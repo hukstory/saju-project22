@@ -21,6 +21,7 @@ if (typeof ARTICLES_EXTRA !== 'undefined'){
 }
 const BY_ID = ARTICLES.reduce((m,a)=>{ m[a.id]=a; return m; },{});
 const IMG = (name)=>`assets/img/${name}.webp`;
+const ORDER = 'https://aura-saju.pages.dev/order.html';
 
 /* ---------- 유틸 ---------- */
 const $  = (s,r)=> (r||document).querySelector(s);
@@ -133,8 +134,8 @@ function widgetMarkup(idPrefix){
     </form>
     <div class="wresult" data-wresult="${idPrefix}"></div>
     <div class="widget__foot">
-      <a class="btn btn--gold" href="#/4p">990원 4P 맛보기</a>
-      <a class="btn btn--ghost" href="#/fourp_talk">정밀분석 안내</a>
+      <a class="btn btn--gold" href="#/4p">무료 4P 맛보기</a>
+      <a class="btn btn--ghost" href="${ORDER}" target="_blank" rel="noopener">정밀분석 주문</a>
     </div>`;
 }
 function bindWidget(root){
@@ -240,34 +241,62 @@ function rankBlock(){
   </section>`;
 }
 
-/* ---------- 1면 · 오늘의 무료운세 + 설치 ---------- */
-function fortuneBlock(){
-  return `<section class="fortune" id="fortune" aria-labelledby="fortuneTitle">
-    <div class="fortune__in">
-      <div class="fortune__copy">
-        <span class="kicker">TODAY'S FREE FORTUNE · 無料</span>
-        <h2 id="fortuneTitle">오늘, 내 기운은<br><em>어디로 흐르는가</em></h2>
-        <p class="fortune__lead">생년월일만 넣으면 오늘의 기운 지수, 행운의 색과 숫자, 좋은 시간, 한 줄 조언이 <b>바로</b> 나옵니다. 회원가입도 결제도 없습니다.</p>
-        <ul class="fortune__pts">
-          <li><span class="fortune__ptno">1</span><span><b>1분이면 끝</b>생년월일 또는 띠 하나만 고르면 됩니다.</span></li>
-          <li><span class="fortune__ptno">2</span><span><b>실제 만세력</b>오늘의 간지(${(typeof TODAY_DAY!=='undefined')?TODAY_DAY.hanja:'庚子'}日)로 기운을 계산합니다.</span></li>
-          <li><span class="fortune__ptno">3</span><span><b>무료</b>결과는 화면에서 바로, 저장 없이 확인합니다.</span></li>
-        </ul>
-        <p class="fortune__sub">더 깊이 보려면 <a href="#/4p">990원 4P 맛보기</a> → <a href="${LANDING}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a></p>
-      </div>
-      <div class="fortune__card">
-        <div class="widget widget--big">${widgetMarkup('hero')}</div>
-      </div>
+/* ---------- 1면 · 오늘의 한 줄 운세 (띠 12칩) ---------- */
+const ZODIAC = [
+  ['쥐','🐭','子'],['소','🐮','丑'],['호랑이','🐯','寅'],['토끼','🐰','卯'],['용','🐲','辰'],['뱀','🐍','巳'],
+  ['말','🐴','午'],['양','🐑','未'],['원숭이','🐵','申'],['닭','🐔','酉'],['개','🐶','戌'],['돼지','🐷','亥']
+];
+function onelineBlock(){
+  const g = (typeof TODAY_YEAR!=='undefined') ? `${TODAY_YEAR.hanja}年 ${TODAY_MONTH.hanja}月 ${TODAY_DAY.hanja}日` : '';
+  return `<section class="oneline" id="oneline" aria-labelledby="onelineTitle">
+    <div class="oneline__in">
+    <div class="oneline__head">
+      <span class="oneline__k">TODAY'S ONE LINE · 무료</span>
+      <h2 id="onelineTitle">오늘의 한 줄 운세</h2>
+      <p>띠만 고르면 오늘 하루가 바로 나옵니다. 생년월일도, 회원가입도 필요 없습니다.</p>
+      <span class="oneline__ganji">${esc(g)}</span>
     </div>
-    <div class="fortune__install">
-      <span class="fortune__instico" aria-hidden="true">📲</span>
-      <div class="fortune__insttxt">
-        <b>이 사이트, 바탕화면에 바로 설치하세요</b>
-        <span>주소창 없이 앱처럼 열립니다 · 안드로이드는 ‘앱 설치’, 아이폰은 ‘홈 화면에 추가’</span>
-      </div>
-      <button class="btn btn--ink fortune__instbtn" type="button" data-install>바탕화면에 설치하기</button>
+    <div class="oneline__right">
+    <div class="oneline__chips" role="group" aria-label="띠 선택">
+      ${ZODIAC.map((z,i)=>`<button type="button" class="oneline__chip" data-zod="${i}"><span aria-hidden="true">${z[1]}</span>${z[0]}띠</button>`).join('')}
+    </div>
+    <div class="oneline__out" id="onelineOut" aria-live="polite">
+      <span class="oneline__hint">띠를 하나 눌러 보세요 — 1초면 끝납니다.</span>
+    </div>
+    <div class="oneline__foot">
+      <a href="#/free">내 생년월일로 정확히 보기 →</a>
+      <span class="dot"></span>
+      <a href="#/4p">내 사주 4장 무료로 보기 →</a>
+    </div>
+    </div>
     </div>
   </section>`;
+}
+function bindOneline(root){
+  const out = $('#onelineOut', root); if (!out) return;
+  $$('[data-zod]', root).forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = Number(btn.getAttribute('data-zod'));
+      $$('[data-zod]', root).forEach(b=>b.classList.remove('is-on'));
+      btn.classList.add('is-on');
+      let r;
+      try { r = buildToday(null, i); } catch(e){ return; }
+      const z = ZODIAC[i];
+      out.classList.add('is-on');
+      out.innerHTML = `
+        <div class="oneline__top">
+          <span class="oneline__ring" style="--p:${r.score}"><b>${r.score}</b></span>
+          <span class="oneline__who"><b>${z[1]} ${z[0]}띠</b><i>${esc(r.oneLine)}</i></span>
+        </div>
+        <p class="oneline__headline">${esc(r.headline)}</p>
+        <div class="oneline__tags">
+          <span>행운의 색 <b>${esc(r.luckColor.name)}</b></span>
+          <span>숫자 <b>${r.nums.join('·')}</b></span>
+          <span>좋은 시간 <b>${esc(r.timeBest)}</b></span>
+        </div>
+        <p class="oneline__advice">${esc(r.advice)}</p>`;
+    });
+  });
 }
 
 /* ---------- 1면 · 사주프로그램 배너 ---------- */
@@ -282,125 +311,90 @@ function programBanner(){
   </a>`;
 }
 
-/* ---------- 1면 · MBTI 궁합 특집 ---------- */
-function mbtiSpecial(){
-  const lead = BY_ID['mbti-main'];
-  const minis = ['mbti-infp-enfj','mbti-tf'].map(id=>BY_ID[id]).filter(Boolean);
-  return `<section class="special" aria-labelledby="specialTitle">
-    <div class="special__head">
-      <span class="special__kicker">SPECIAL · 커버스토리</span>
-      <h2 id="specialTitle">MBTI 궁합 특집</h2>
-      <p>네 글자로 읽는 인연 — 잘 맞는 조합보다, 번역이 되는 조합</p>
-    </div>
-    <div class="special__grid">
-      <a class="special__lead" href="#/article/${lead.id}">
-        <img src="${IMG(lead.img)}" alt="${esc(lead.title)}">
-        <span class="special__cat">${esc(catOf(lead.cat).ko)}</span>
-        <h3>${esc(lead.title)}</h3>
-        <p>${esc(lead.dek)}</p>
+/* ---------- 1면 · 지면 모아보기 (탭 전환) ---------- */
+const DESK_TABS = ['mbti','today','money','dream','past','people','shop','lab'];
+function latestAcross(n){
+  const seen = {};
+  return ARTICLES.slice()
+    .sort((a,b)=> dayKey(b).localeCompare(dayKey(a)) || num(b.views)-num(a.views))
+    .filter(a=>{ if (seen[a.cat]) return false; seen[a.cat]=1; return true; })
+    .slice(0, n||4);
+}
+function deskPanel(id, on){
+  const list = (id==='latest') ? latestAcross(4) : byCat(id);
+  const lead = list[0]; if (!lead) return '';
+  const rows = list.slice(1, 4);
+  const name = (id==='latest') ? '오늘의 주요 기사' : catOf(id).ko;
+  return `<div class="desk__panel${on?' is-on':''}" data-panel="${id}">
+    <div class="desk__grid">
+      <a class="desk-lead" href="#/article/${lead.id}">
+        <img src="${IMG(lead.img)}" alt="${esc(lead.title)}" loading="lazy">
+        <span class="desk-lead__t">
+          <span class="desk-lead__cat">${esc(catOf(lead.cat).ko)}</span>
+          <b>${esc(lead.title)}</b>
+          <i>${esc(lead.dek)}</i>
+        </span>
       </a>
-      <div class="special__side">
-        ${minis.map(a=>`<a class="special__mini" href="#/article/${a.id}">
-          <img src="${IMG(a.img)}" alt="${esc(a.title)}" loading="lazy">
-          <span>
-            <span class="special__cat">${esc(catOf(a.cat).ko)}</span>
-            <span class="special__ttl">${esc(a.title)}</span>
-          </span>
-        </a>`).join('')}
-        <a class="special__quiz" href="#/free">
-          <b>내 궁합 점수, 1분 무료로 보기</b>
-          <span>두 사람의 MBTI만 고르면 점수와 어긋나는 축을 알려드립니다 →</span>
-        </a>
-      </div>
+      <ul class="desk-list">
+        ${rows.map(a=>`<li><a href="#/article/${a.id}">
+          <img src="${IMG(a.img)}" alt="" loading="lazy">
+          <span><b>${esc(a.title)}</b><i>${esc(catOf(a.cat).ko)}</i></span>
+        </a></li>`).join('')}
+      </ul>
+    </div>
+    <div class="desk__foot">
+      ${id==='mbti' ? '<a class="desk-quiz" href="#/free">내 궁합 점수 1분 무료로 보기 →</a>' : ''}
+      ${id==='latest' ? '<a href="#/archive">지난 기사 모아보기 →</a>' : `<a href="#/${id}">${esc(name)} 지면 전체 보기 →</a>`}
+    </div>
+  </div>`;
+}
+function deskTabs(){
+  return `<section class="desk" aria-labelledby="deskTitle">
+    <div class="desk__head">
+      <h2 id="deskTitle">지면 모아보기</h2>
+      <span class="en">SECTIONS</span>
+      <span class="desk__note">탭을 눌러 지면을 바꿔 보세요</span>
+    </div>
+    <div class="desk__tabs" id="deskTabs" role="tablist">
+      <button type="button" class="is-on" data-desk="latest">전체</button>
+      ${DESK_TABS.map(id=>`<button type="button" data-desk="${id}">${esc(catOf(id).ko)}</button>`).join('')}
+    </div>
+    <div class="desk__body" id="deskBody">
+      ${deskPanel('latest', true)}
+      ${DESK_TABS.map(id=>deskPanel(id,false)).join('')}
     </div>
   </section>`;
+}
+function bindDeskTabs(root){
+  const tabs = $$('#deskTabs button', root);
+  tabs.forEach(b=>b.addEventListener('click', ()=>{
+    tabs.forEach(x=>x.classList.remove('is-on'));
+    b.classList.add('is-on');
+    const id = b.getAttribute('data-desk');
+    $$('.desk__panel', root).forEach(p=>p.classList.toggle('is-on', p.getAttribute('data-panel')===id));
+    if (b.scrollIntoView) b.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+  }));
+}
+
+function strip4p(){
+  return `<a class="strip4p" href="#/4p">
+    <span class="strip4p__l">
+      <span class="strip4p__tag">FREE · 4P</span>
+      <b>내 사주로 읽는 <em>네 장</em></b>
+      <span class="strip4p__p">타고난 본성 · 돈이 새는 습관 · 인연의 결 · 2027년 가장 큰 변화. 생년월일만 넣으면 지금 바로, 무료입니다.</span>
+    </span>
+    <span class="strip4p__go">무료로 4장 열기 →</span>
+  </a>`;
 }
 
 /* ---------- 메인 ---------- */
 function viewHome(){
-  const mid = [todayLead(), BY_ID['money-timing'], BY_ID['dream-moon'], BY_ID['past-musician'],
-               newestOf('people') || BY_ID['people-stage'], BY_ID['shop-turtle'], BY_ID['lab-49'], BY_ID['money-people']].filter(Boolean);
-
-  const sections = ['money','today','dream','past','people','shop','lab'].map(cid=>{
-    const list = byCat(cid); const first = list[0]; const rest = list.slice(1,5);
-    return `<section class="section">
-      <div class="section__rule">
-        <h2>${esc(catOf(cid).ko)}</h2>
-        <span class="en" style="font-size:10.5px;letter-spacing:.18em;color:var(--gold);font-weight:700">${esc(catOf(cid).en)}</span>
-        <span class="line"></span>
-        <a class="more" href="#/${cid}">더 보기 →</a>
-      </div>
-      <div class="sec-grid">
-        <a class="sec-lead" href="#/article/${first.id}">
-          <img class="sec-lead__img" src="${IMG(first.img)}" alt="${esc(first.title)}" loading="lazy">
-          <h3>${esc(first.title)}</h3>
-          <p>${esc(first.dek)}</p>
-        </a>
-        <ul class="sec-list">${rest.map(secRow).join('')}</ul>
-      </div>
-    </section>`;
-  }).join('');
-
   return `
   ${rankBlock()}
-  ${fortuneBlock()}
+  ${onelineBlock()}
   ${programBanner()}
-  ${mbtiSpecial()}
-
-  <div class="home-mid">
-    <div>
-      <div class="sec-head">
-        <div class="sec-head__l"><h2>주요 뉴스</h2><span class="en">LATEST</span></div>
-        <a class="sec-head__more" href="#/archive">지난 기사 →</a>
-      </div>
-      <div class="newslist">${mid.map(listItem).join('')}</div>
-    </div>
-    <aside class="rail">
-      <div class="promo">
-        <span class="promo__tag">990원 SPECIAL</span>
-        <h4>4페이지로 먼저 확인하는<br>내 운명의 맛보기</h4>
-        <p>하얀 지면 3장으로 읽는 요약판. 지금 지면에서 바로 넘겨 보세요.</p>
-        <div class="promo__price"><b>990</b><span>원 · 4P 분석지</span></div>
-        <a class="btn btn--gold btn--block" href="#/4p">4P 바로 보기 →</a>
-      </div>
-      <a class="promo promo--prog" href="#/program">
-        <span class="promo__tag">PROGRAM · 1년 이용권</span>
-        <h4>내 사주를 직접 돌려보는<br>사주분석 웹 프로그램</h4>
-        <p>만세력·자미두수 12궁·교차 결론. 체험해 보고 1년 이용권으로 받으세요.</p>
-        <div class="promo__price"><b>체험</b><span>무료 · 다운로드 안내</span></div>
-        <span class="btn btn--gold btn--block">프로그램 보러 가기 →</span>
-      </a>
-      <a class="talk" href="${LANDING}" target="_blank" rel="noopener">
-        <span class="talk__ico" style="background:#171513"><span style="font-family:var(--serif);color:#c9a86a;font-size:13px">正</span></span>
-        <span><b>30P · 60P · 100P 정밀분석</b><span>19,900원부터 · 만족도 최상위</span></span>
-      </a>
-      <a class="talk" href="${KAKAO}" target="_blank" rel="noopener">
-        <span class="talk__ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3C6.5 3 2 6.5 2 10.8c0 2.9 1.9 5.4 4.6 6.8-.4.8-1 2.8-1.6 3.9-.4.7.1 1 .8.7 2-.8 4.2-2 5.5-2.8.5.1 1 .1 1.6.1 5.5 0 10-3.5 10-7.8C22 6.5 17.5 3 12 3Z" fill="#231f20"/></svg></span>
-        <span><b>카톡 1:1 상담</b><span>정운이 직접 답합니다 · 평일 10~19시</span></span>
-      </a>
-    </aside>
-  </div>
-
-  ${sections}
-
-  <div class="strip4p">
-    <div class="strip4p__in">
-      <div>
-        <h3>딱 4페이지로 보는<br><em>내 사주의 첫 장</em></h3>
-        <p>생년월일을 넣고 4페이지를 넘기면, 재물·애정·커리어의 첫 문장이 열립니다. 990원 특별분석 이벤트 — 하얀 지면 4P.</p>
-        <div class="strip4p__btns">
-          <a class="btn btn--red" href="#/4p">🔥 990원 4P 바로 보기</a>
-          <a class="btn btn--ghost" href="#/free">무료 1분 분석</a>
-          <a class="btn btn--ghost" href="#/program">사주프로그램 1년 이용권</a>
-        </div>
-      </div>
-      <div class="strip4p__pages" aria-hidden="true">
-        <div class="pagecard"><b>P.01</b><i></i><i></i><i></i><i></i><span>본질</span></div>
-        <div class="pagecard"><b>P.02</b><i></i><i></i><i></i><i></i><span>재물</span></div>
-        <div class="pagecard"><b>P.03</b><i></i><i></i><i></i><i></i><span>인연</span></div>
-      </div>
-    </div>
-  </div>`;
+  ${deskTabs()}
+  ${strip4p()}`;
 }
 
 /* ---------- 사주프로그램 지면 ---------- */
@@ -455,9 +449,9 @@ function viewProgram(){
         </div>
         <div class="plan">
           <span class="plan__tag">맛보기</span>
-          <b class="plan__name">990원 4P 분석지</b>
-          <div class="plan__price"><b>990</b><span>원</span></div>
-          <p>재물·애정·커리어의 첫 문장. 하얀 지면 3장.</p>
+          <b class="plan__name">무료 4P 맛보기</b>
+          <div class="plan__price"><b>무료</b><span>4장</span></div>
+          <p>본성·돈·인연의 첫 문장. 네 장.</p>
           <a class="btn btn--ghost btn--block" href="#/4p">4P 바로 보기</a>
         </div>
         <div class="plan">
@@ -485,7 +479,7 @@ function viewProgram(){
         <li><span>3</span><b>파일 · 코드 수령</b><i>프로그램 파일과 코드를 카톡·메일로 보내드립니다.</i></li>
         <li><span>4</span><b>코드 입력 후 사용</b><i>프로그램 첫 화면에 코드를 넣으면 1년간 열립니다.</i></li>
       </ol>
-      <p class="prog-flow__note"><b>결제 안내</b> — 현재 카드결제(PG) 연동 전입니다. 그래서 1년 이용권 신청과 결제는 카카오채널 1:1 상담으로 안내드리고, 결제 확인 후 프로그램 파일과 이용권 코드를 보내드립니다. 990원 4P는 이 사이트에서 바로 넘겨 볼 수 있고, 30P·60P·100P 정밀분석지는 정밀분석 페이지에서 진행됩니다. 환불·이용 조건은 결제 전 상담에서 안내드립니다.</p>
+      <p class="prog-flow__note"><b>결제 안내</b> — 현재 카드결제(PG) 연동 전입니다. 그래서 1년 이용권 신청과 결제는 카카오채널 1:1 상담으로 안내드리고, 결제 확인 후 프로그램 파일과 이용권 코드를 보내드립니다. 무료 4P는 이 사이트에서 바로 넘겨 볼 수 있고, 30P·60P·100P 정밀분석지는 정밀분석 페이지에서 진행됩니다. 환불·이용 조건은 결제 전 상담에서 안내드립니다.</p>
       <div class="prog-flow__btns">
         <a class="btn btn--gold" href="${KAKAO}" target="_blank" rel="noopener">카톡으로 1년 이용권 상담 →</a>
         <button class="btn btn--ghost" type="button" data-program-preview>프로그램 화면 먼저 보기</button>
@@ -498,8 +492,8 @@ function viewProgram(){
         <details><summary>프로그램을 따로 설치해야 하나요?</summary><p>아니요. 파일 하나(HTML)로 실행됩니다. PC나 휴대폰 브라우저에서 파일을 열면 되고, 계산은 인터넷 없이도 됩니다.</p></details>
         <details><summary>1년 이용권은 어떻게 쓰나요?</summary><p>결제 후 받은 이용권 코드를 프로그램 첫 화면에 넣으면 1년간 열립니다. 코드 하나로 한 대의 기기에서 사용하는 것을 기준으로 안내드립니다.</p></details>
         <details><summary>아이폰에서도 되나요?</summary><p>네. 사파리나 파일 앱에서 받은 파일을 열면 됩니다. 화면이 좁으면 가로로 돌려 보세요.</p></details>
-        <details><summary>미리보기에서 직접 입력해 볼 수는 없나요?</summary><p>미리보기는 실제 화면 3장만 보여 드립니다. 명식을 직접 입력해 보는 것은 1년 이용권을 받은 뒤 가능합니다. 내 사주를 글로 먼저 읽고 싶다면 990원 4P부터 보세요.</p></details>
-        <details><summary>결제는 어떻게 하나요?</summary><p>지금은 카드결제 연동 전이라 카톡 1:1 상담으로 신청과 결제를 안내합니다. 990원 4P는 사이트에서 바로, 정밀분석지는 정밀분석 페이지에서 진행됩니다.</p></details>
+        <details><summary>미리보기에서 직접 입력해 볼 수는 없나요?</summary><p>미리보기는 실제 화면 3장만 보여 드립니다. 명식을 직접 입력해 보는 것은 1년 이용권을 받은 뒤 가능합니다. 내 사주를 글로 먼저 읽고 싶다면 무료 4P부터 보세요.</p></details>
+        <details><summary>결제는 어떻게 하나요?</summary><p>지금은 카드결제 연동 전이라 카톡 1:1 상담으로 신청과 결제를 안내합니다. 무료 4P는 사이트에서 바로 보고, 정밀분석지 주문은 주문 페이지에서 진행됩니다.</p></details>
         <details><summary>분석 결과를 믿어도 되나요?</summary><p>모든 결과는 전통 명리학의 계산 규칙과 상징 해석을 바탕으로 한 참고·오락 정보입니다. 미래를 보장하지 않으며, 의료·투자·법률 같은 중요한 결정의 근거로 삼을 수 없습니다.</p></details>
       </div>
     </section>
@@ -614,7 +608,7 @@ function viewArticle(id){
       <p class="funnel__sub">생년월일 하나면 오늘의 기운부터 4페이지 분석까지. 결제 없이 먼저 확인할 수 있습니다.</p>
       <div class="funnel__btns">
         <a class="btn btn--ink" href="#/free">무료 사주·운세 바로 분석하기</a>
-        <a class="btn btn--red" href="#/4p">🔥 990원 특별분석 이벤트 (4P 바로보기)</a>
+        <a class="btn btn--red" href="#/4p">🔥 무료 4P 맛보기 (내 사주로 바로)</a>
       </div>
       <div class="pricechips">
         ${PRICING.map(p=>`<span>${esc(p.pages)} ${esc(p.price)}</span>`).join('')}
@@ -660,7 +654,7 @@ function viewToday(){
       <div class="meta" style="margin-top:10px"><b>${esc(main.writer)}</b><span class="dot"></span><span>${isFresh ? '오늘 호 · 05:30 발행' : '최근 호 ' + esc(main.date||'') + ' · 오늘 호는 05:30 발행'}</span></div>
       <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
         <a class="btn btn--ink" href="#/article/${main.id}">오늘의 운세 기사 전문 보기</a>
-        <a class="btn btn--ghost" href="#/4p">990원 4P</a>
+        <a class="btn btn--ghost" href="#/4p">무료 4P</a>
       </div>
     </div>
     <div class="paperbox todaycard">
@@ -732,9 +726,9 @@ function viewFree(){
 
       <div class="funnel" style="margin-top:22px">
         <div class="funnel__ttl">여기까지가 무료 맛보기입니다.</div>
-        <p class="funnel__sub">4페이지 특별분석으로 이어서 보시겠어요? 990원 4P에서 재물·애정·커리어 첫 문장이 열립니다.</p>
+        <p class="funnel__sub">4P 맛보기로 이어서 보시겠어요? 무료 4P에서 내 본성·돈·인연·2027년이 열립니다.</p>
         <div class="funnel__btns">
-          <a class="btn btn--red" href="#/4p">🔥 990원 4P 바로 보기</a>
+          <a class="btn btn--red" href="#/4p">🔥 무료 4P 맛보기 바로 보기</a>
           <a class="btn btn--gold" href="${LANDING}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a>
         </div>
       </div>
@@ -752,47 +746,47 @@ function viewFree(){
         <span><b>카톡 1:1 상담</b><span>결제 전 궁금한 점을 먼저 물어보세요</span></span>
       </a>
       <div class="promo">
-        <span class="promo__tag">990원 SPECIAL</span>
+        <span class="promo__tag">FREE · 4P</span>
         <h4>4페이지 분석지<br>지금 바로 넘겨보기</h4>
-        <p>하얀 지면 · 본질 → 재물 → 2027 세운 3장</p>
+        <p>본성 → 돈 → 인연 → 2027, 네 장</p>
         <a class="btn btn--gold btn--block" href="#/4p">4P 열기 →</a>
       </div>
     </aside>
   </div>`;
 }
 
-/* ---------- 4P 뷰어 (하얀 지면 단일 버전) ---------- */
-const FOURP = { file:'4p/04.html', title:'4P 요약 3장판' };
+/* ---------- 4P 뷰어 (무료 4장 · 내 사주로 바로) ---------- */
+const FOURP = { file:'4p/04.html', title:'내 사주 4장' };
 function view4P(){
   const src = FOURP.file + (window.__fourpQuery ? '?' + window.__fourpQuery : '');
   return `
   <div class="fourp-head">
-    <div class="kicker">990원 SPECIAL · 4P SAMPLE</div>
-    <h1>딱 4페이지, <em>내 사주의 첫 장</em></h1>
-    <p>990원 특별분석 4P입니다. 마지막 페이지에서 정밀 전문분석지(30P·60P·100P)로 이어집니다.</p>
+    <div class="kicker">FREE · 4P 맛보기</div>
+    <h1>내 사주로 읽는 <em>네 장</em></h1>
+    <p>타고난 본성 · 돈이 새는 습관 · 인연의 결 · 2027년 가장 큰 변화. 생년월일만 넣으면 바로 나오고, <b>결제는 없습니다</b>.</p>
   </div>
   <div class="fourp-me">
-    <div class="fourp-me__t"><b>내 사주로 4P 채우기</b><span>이름·생년월일시(양/음력·성별)를 넣으면 실제 만세력 엔진이 내 여덟 글자로 지면을 다시 씁니다.</span></div>
+    <div class="fourp-me__t"><b>생년월일 넣고 4장 열기</b><span>실제 만세력 엔진이 내 여덟 글자로 씁니다 · 입력값은 서버로 가지 않습니다</span></div>
     <form id="fourpMe" autocomplete="off">
       <div class="fourp-me__row">
-        <label>이름<input type="text" id="fmName" maxlength="20" placeholder="김하늘"></label>
+        <label>이름 (없으면 비워도 됩니다)<input type="text" id="fmName" maxlength="20" placeholder="김하늘"></label>
         <label>성별<select id="fmGender"><option value="여">여성</option><option value="남">남성</option></select></label>
         <label>달력<select id="fmCal"><option value="solar">양력</option><option value="lunar">음력</option></select></label>
       </div>
       <div class="fourp-me__row">
         <label>생년월일<input type="date" id="fmBirth" min="1900-01-01" max="2026-12-31"></label>
         <label>시각 (모르면 비움)<input type="time" id="fmTime"></label>
-        <button class="btn btn--red" type="submit">4P 다시 계산 →</button>
+        <button class="btn btn--gold" type="submit">무료로 4장 열기 →</button>
       </div>
-      <p class="fourp-me__note" id="fmNote">입력한 정보는 서버로 보내지 않고 브라우저 안에서만 계산합니다. 4P 지면이 내 명식으로 다시 그려집니다.</p>
+      <p class="fourp-me__note" id="fmNote">넣은 값은 이 브라우저 안에서만 계산됩니다. 지면이 내 여덟 글자로 다시 그려집니다.</p>
     </form>
   </div>
   <div class="fourp-stage">
-    <div>
-      <div class="phone">
-        <iframe id="fourpFrame" src="${src}" title="990원 4P 분석지 ${esc(FOURP.title)}" loading="lazy"></iframe>
+    <div class="fourp-main">
+      <div class="fourp-sheet">
+        <iframe id="fourpFrame" src="${src}" title="무료 4P 맛보기 — ${esc(FOURP.title)}" loading="lazy"></iframe>
       </div>
-      <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+      <div class="fourp-actions">
         <a class="btn btn--ghost" href="${src}" target="_blank" rel="noopener" id="fourpOpen">새 창에서 크게 보기</a>
         <a class="btn btn--ghost" href="${src}" target="_blank" rel="noopener" id="fourpPrint">인쇄용으로 열기</a>
       </div>
@@ -801,28 +795,55 @@ function view4P(){
       <div class="side-card">
         <h4>이렇게 보세요</h4>
         <ol>
-          <li>이름·생년월일을 넣고 [4P 다시 계산]을 누르면 내 명식으로 지면이 바뀝니다.</li>
-          <li>스크롤해서 3장을 끝까지 읽습니다.</li>
-          <li>마지막 페이지에서 정밀분석지로 이어집니다.</li>
+          <li>생년월일을 넣고 <b>무료로 4장 열기</b>를 누르면 지면이 내 여덟 글자로 바뀝니다.</li>
+          <li>본성 → 돈 → 인연 → 2027, 네 장을 끝까지 읽습니다.</li>
+          <li>마지막 장에서 2027년 정밀 분석지로 바로 이어집니다.</li>
         </ol>
       </div>
       <div class="side-card side-card--dark">
-        <h4 style="color:#f0e2c4">만족하셨다면?</h4>
-        <p>4P는 맛보기입니다. 정밀 전문분석지는 30P부터 시작합니다.</p>
+        <h4 style="color:#f0e2c4">네 장으로 부족했다면</h4>
+        <p>같은 여덟 글자로 30장을 씁니다. 조심할 달과 해야 할 일까지.</p>
         <div class="pricepills">
           ${PRICING.map(p=>`<div><span>${esc(p.pages)} · ${esc(p.name)}</span><b>${esc(p.price)}</b></div>`).join('')}
         </div>
-        <a class="btn btn--gold btn--block" href="${LANDING}" target="_blank" rel="noopener">✨ 30P·60P·100P 보러가기</a>
+        <a class="btn btn--gold btn--block" href="${ORDER}" target="_blank" rel="noopener" id="fourpOrder">👉 내 2027년 정밀 분석지 받기</a>
       </div>
       <div class="side-card">
         <h4>전체 화면으로 보기</h4>
-        <p>휴대폰에서는 ‘홈 화면에 추가’로 앱처럼 열 수 있습니다. PC에서는 새 창으로 열면 4P가 원본 크기로 선명하게 보입니다.</p>
+        <p>휴대폰에서는 ‘홈 화면에 추가’로 앱처럼 열 수 있습니다. PC에서는 새 창으로 열면 지면이 원본 크기로 선명하게 보입니다.</p>
         <a class="btn btn--ink btn--block" href="${src}" target="_blank" rel="noopener">4P 원본 열기</a>
       </div>
     </aside>
   </div>`;
 }
+/* 4P 지면(같은 출처)의 실제 높이에 iframe을 맞춘다 — 폰 액자 안 이중 스크롤을 없앤다 */
+function fitFourp(frame){
+  try{
+    const d = frame.contentDocument;
+    if (!d || !d.documentElement) return;
+    const h = Math.max(560, d.documentElement.scrollHeight || 0, (d.body && d.body.scrollHeight) || 0);
+    if (h > 200) frame.style.height = h + 'px';
+  }catch(e){ /* 출처가 다르면 그냥 둔다 */ }
+}
+function watchFourp(frame){
+  const sync = ()=>{
+    fitFourp(frame);
+    try{
+      const d = frame.contentDocument;
+      if (d && d.body && window.MutationObserver){
+        if (frame.__mo) frame.__mo.disconnect();
+        const mo = new MutationObserver(()=>fitFourp(frame));
+        mo.observe(d.body, { childList:true, subtree:true, characterData:true });
+        frame.__mo = mo;
+      }
+    }catch(e){}
+  };
+  frame.addEventListener('load', ()=>{ sync(); setTimeout(()=>fitFourp(frame), 350); setTimeout(()=>fitFourp(frame), 1200); });
+  setTimeout(sync, 400);
+}
 function bind4P(root){
+  const frame = $('#fourpFrame', root);
+  if (frame) watchFourp(frame);
   const form = $('#fourpMe', root);
   if (form) form.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -840,12 +861,13 @@ function bind4P(root){
     if (time){ const t = time.split(':'); q.set('t', t[0] + t[1]); } else q.set('u', '1');
     lastFourpQuery = q.toString();
     window.__fourpQuery = lastFourpQuery;
-    const frame = $('#fourpFrame', root);
     if (frame) frame.src = frame.getAttribute('src').split('?')[0] + '?' + lastFourpQuery;
-    const open = $('#fourpOpen', root), pr = $('#fourpPrint', root);
+    const open = $('#fourpOpen', root), pr = $('#fourpPrint', root), od = $('#fourpOrder', root);
     if (open) open.href = open.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
     if (pr) pr.href = pr.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
-    if (note) note.innerHTML = '<b>내 명식으로 다시 계산했습니다.</b> 지면 아래로 내려가 1장부터 읽어 보세요.';
+    if (od) od.href = ORDER + '?' + lastFourpQuery;
+    if (note) note.innerHTML = '<b>내 여덟 글자로 다시 계산했습니다.</b> 아래 지면에서 1장부터 읽어 보세요.';
+    if (frame) setTimeout(()=>{ try{ frame.scrollIntoView({behavior:'smooth', block:'start'}); }catch(e){} }, 300);
   });
   if (window.__fourpQuery) restoreFourpForm();
 }
@@ -884,7 +906,7 @@ function viewArchive(){
       <h1>운명사주 정운타임즈 지난 호</h1>
       <p>매일 05:30 새 호가 발행되고, 지난 호는 <b>최근 60일 · 최대 120편</b>까지 이곳에 쌓입니다. 오늘 ${groups.length}일치 ${total}편이 남아 있습니다.</p>
     </div>
-    <a class="btn btn--ink" href="#/4p">990원 4P 보기</a>
+    <a class="btn btn--ink" href="#/4p">무료 4P 보기</a>
   </div>
   <div class="arch-filter" id="archFilter">
     <button type="button" class="is-on" data-af="">전체 ${total}</button>
@@ -911,7 +933,7 @@ function viewArchive(){
     <div class="funnel__ttl">지난 호를 읽다 보면, 내 사주가 궁금해집니다.</div>
     <p class="funnel__sub">생년월일시를 넣으면 지금 이 지면의 기준으로 내 여덟 글자를 계산합니다.</p>
     <div class="funnel__btns">
-      <a class="btn btn--red" href="#/4p">🔥 990원 4P 바로 보기</a>
+      <a class="btn btn--red" href="#/4p">🔥 무료 4P 맛보기 바로 보기</a>
       <a class="btn btn--ink" href="#/free">무료 1분 분석</a>
     </div>
   </div>`;
@@ -993,6 +1015,7 @@ function render(){
   app.classList.remove('fade'); void app.offsetWidth; app.classList.add('fade');
   bindWidget(app);
   bind4P(app);
+  if (r.view==='home'){ bindOneline(app); bindDeskTabs(app); }
   if (r.view==='free') bindFree(app);
   if (r.view==='archive') bindArchive(app);
   if (r.view==='article') bindShare(app, r.id);
@@ -1001,7 +1024,8 @@ function render(){
   document.title = a ? `${a.title} | ${BRAND.name}`
     : cat ? `${cat.ko} | ${BRAND.name}`
     : (r.view==='archive' ? `지난 기사 모아보기 | ${BRAND.name}`
-    : (r.view==='program' ? `사주분석 프로그램 · 1년 이용권 | ${BRAND.name}` : '운명사주 정운타임즈 | 운명사주, 정운이 풀다'));
+    : (r.view==='4p' ? `무료 4P 맛보기 — 내 사주로 읽는 네 장 | ${BRAND.name}`
+    : (r.view==='program' ? `사주분석 프로그램 · 1년 이용권 | ${BRAND.name}` : '운명사주 정운타임즈 | 운명사주, 정운이 풀다')));
   window.scrollTo({ top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto' });
   const menu = $('#mobileMenu'); if (menu) menu.classList.remove('is-on');
 }
@@ -1107,7 +1131,7 @@ function openProgramModal(){
     </ol>
     <div class="paybox__btns">
       <a class="btn btn--gold" href="${KAKAO}" target="_blank" rel="noopener">카톡으로 1년 이용권 신청 →</a>
-      <a class="btn btn--ghost" href="#/4p" data-close-program>990원 4P 먼저 보기</a>
+      <a class="btn btn--ghost" href="#/4p" data-close-program>무료 4P 먼저 보기</a>
     </div>
     <p class="paybox__small">프로그램은 설치 없이 파일 하나로 실행되고 인터넷 없이도 계산됩니다. 결과는 참고·오락 정보입니다.</p>`;
   w.classList.add('is-on');
@@ -1124,10 +1148,10 @@ function openPreviewModal(){
       <figure><img src="assets/img/program-ziwei.webp" alt="자미두수 12궁 명반"><figcaption><b>② 자미두수 12궁</b>명궁·재백궁·관록궁까지 12궁 명반과 궁별 해설, 종합 해석을 함께 봅니다.</figcaption></figure>
       <figure><img src="assets/img/program-cross.webp" alt="사주와 자미두수 교차 결론"><figcaption><b>③ 교차 결론</b>사주와 자미두수가 같은 지점을 가리키는 곳만 추려 결론 카드로 정리합니다.</figcaption></figure>
     </div>
-    <p class="preview-note">화면은 정식 프로그램의 실제 화면입니다. 명식을 직접 입력해 보는 것은 1년 이용권을 받은 뒤 가능합니다. 내 사주를 글로 먼저 읽고 싶다면 990원 4P부터 보세요.</p>
+    <p class="preview-note">화면은 정식 프로그램의 실제 화면입니다. 명식을 직접 입력해 보는 것은 1년 이용권을 받은 뒤 가능합니다. 내 사주를 글로 먼저 읽고 싶다면 무료 4P부터 보세요.</p>
     <div class="paybox__btns">
       <button class="btn btn--gold" type="button" data-program-buy="year">1년 이용권 문의 →</button>
-      <a class="btn btn--ghost" href="#/4p" data-close-preview>990원 4P 먼저 보기</a>
+      <a class="btn btn--ghost" href="#/4p" data-close-preview>무료 4P 먼저 보기</a>
     </div>`;
   w.classList.add('is-on');
 }
