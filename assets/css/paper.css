@@ -757,7 +757,7 @@ footer{border-top:2px solid #141210;background:#fbfaf7;margin-top:50px}
   .rank__list a{grid-template-columns:20px 78px minmax(0,1fr);gap:9px;padding:8px 0}
   .rank__no{font-size:17px}
   .rank__thumb{width:78px;height:54px}
-  .rank__ttl{font-size:15.5px;line-height:1.4}
+  .rank__ttl{font-size:15.5px;line-height:1.4;-webkit-line-clamp:3}
   .rank__list .rank__meta{display:none}
   .fortune{margin-top:16px}
   .fortune__in{padding:20px 16px 16px;gap:18px}
