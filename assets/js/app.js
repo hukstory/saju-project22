@@ -5,7 +5,8 @@
 
 const ARTICLES = [].concat(
   (typeof ARTICLES_DAILY !== 'undefined' ? ARTICLES_DAILY : []),
-  ARTICLES_1, ARTICLES_2, ARTICLES_3
+  ARTICLES_1, ARTICLES_2, ARTICLES_3,
+  (typeof ARTICLES_TOP7 !== 'undefined' ? ARTICLES_TOP7 : [])
 );
 
 /* 심층 보강 블록 병합 — 원문 마지막 문단 앞에 삽입 (중복 문단은 제거) */
@@ -180,10 +181,22 @@ function bindWidget(root){
 
 /* ---------- 1면 · TOP 7 ---------- */
 function top7Pick(n){
-  /* 인기뉴스 = 조회수 + 최신 가중 (오늘 발행한 호가 1면에서 밀리지 않도록) */
+  const total = n || 7;
   const v = (a)=> Number(String(a.views||'').replace(/[^0-9]/g,'')) || 0;
   const w = (a)=>{ const d = daysAgo(a); return d <= 0 ? 2.6 : d <= 1 ? 1.8 : d <= 3 ? 1.3 : d <= 10 ? 1.05 : 1; };
-  return ARTICLES.slice().sort((a,b)=> v(b)*w(b) - v(a)*w(a)).slice(0, n||7);
+  /* 1) 편집국이 고른 TOP 7(data.js TOP7_PINNED)을 순서대로 먼저 채운다 */
+  const pinned = [];
+  if (typeof TOP7_PINNED !== 'undefined'){
+    TOP7_PINNED.forEach(id=>{
+      const a = BY_ID[id];
+      if (a && pinned.indexOf(a) === -1 && pinned.length < total) pinned.push(a);
+    });
+  }
+  /* 2) 남은 자리는 조회수 + 최신 가중으로 채운다 (고정 기사가 빠져도 TOP 7이 비지 않도록) */
+  const rest = ARTICLES
+    .filter(a=> pinned.indexOf(a) === -1)
+    .sort((a,b)=> v(b)*w(b) - v(a)*w(a));
+  return pinned.concat(rest).slice(0, total);
 }
 function rankBlock(){
   const list = top7Pick(7);
@@ -193,7 +206,7 @@ function rankBlock(){
       <span class="rank__badge">TOP 7</span>
       <h2 id="rankTitle">인기뉴스</h2>
       <span class="rank__en">MOST READ</span>
-      <span class="rank__note">지금 가장 많이 읽히는 기사 · 조회순(최신 가중)</span>
+      <span class="rank__note">편집국이 고른 오늘의 인기 기사 · 매일 05:30 갱신</span>
     </div>
     <div class="rank__grid">
       <a class="rank__hero" href="#/article/${hero.id}">
