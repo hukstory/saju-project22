@@ -34,6 +34,8 @@ const CAT_KO = CATS.reduce((m,c)=>{ m[c.id]=c.ko; return m; },{});
 
 /* ---------- 1면 TOP 7 고정 순서 (2026-11-24 꿀잼 주제 개편) ----------
    이 목록이 있으면 조회수와 무관하게 1면 TOP 7이 이 순서로 고정됩니다.
+   단, 2번 자리는 매일 05:30 새로 발행되는 '화제의 인물'(연예인 사주, cat:'people') 기사가
+   자동으로 차지합니다(app.js top7Pick). 그래서 이 목록에서는 앞에서 6편만 쓰입니다.
    기사 본문은 assets/js/articles-top7.js */
 const TOP7_PINNED = [
   'top7-mbti-t',        /* MBTI T인데 사주는 감성 폭발 — 16유형 × 일주 */

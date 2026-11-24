@@ -184,19 +184,26 @@ function top7Pick(n){
   const total = n || 7;
   const v = (a)=> Number(String(a.views||'').replace(/[^0-9]/g,'')) || 0;
   const w = (a)=>{ const d = daysAgo(a); return d <= 0 ? 2.6 : d <= 1 ? 1.8 : d <= 3 ? 1.3 : d <= 10 ? 1.05 : 1; };
-  /* 1) 편집국이 고른 TOP 7(data.js TOP7_PINNED)을 순서대로 먼저 채운다 */
+  /* 0) 오늘의 화제의 인물(연예인 사주) — 매일 05:30 daily_update.py 가 새로 발행하는
+        people 기사(최신 호)를 TOP 7 2번 자리에 반드시 앉힌다. 없으면 자리를 비워 둔다. */
+  const star = newestOf('people');
+  /* 1) 편집국이 고른 TOP 7(data.js TOP7_PINNED)을 순서대로 먼저 채운다 — 인물 기사 몫은 하나 비운다 */
   const pinned = [];
+  const own = star ? total - 1 : total;
   if (typeof TOP7_PINNED !== 'undefined'){
     TOP7_PINNED.forEach(id=>{
       const a = BY_ID[id];
-      if (a && pinned.indexOf(a) === -1 && pinned.length < total) pinned.push(a);
+      if (a && a !== star && pinned.indexOf(a) === -1 && pinned.length < own) pinned.push(a);
     });
   }
   /* 2) 남은 자리는 조회수 + 최신 가중으로 채운다 (고정 기사가 빠져도 TOP 7이 비지 않도록) */
   const rest = ARTICLES
-    .filter(a=> pinned.indexOf(a) === -1)
+    .filter(a=> a !== star && pinned.indexOf(a) === -1)
     .sort((a,b)=> v(b)*w(b) - v(a)*w(a));
-  return pinned.concat(rest).slice(0, total);
+  const list = pinned.concat(rest).slice(0, own);
+  /* 3) 인물 기사는 2번 자리(1~3위 안)에 끼워 넣는다 */
+  if (star) list.splice(Math.min(1, list.length), 0, star);
+  return list.slice(0, total);
 }
 function rankBlock(){
   const list = top7Pick(7);
