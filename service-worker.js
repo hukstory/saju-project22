@@ -68,7 +68,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // 매일 갱신되는 파일은 네트워크 우선(오프라인일 때만 캐시)
-  const VOLATILE = ['/assets/js/articles-daily.js', '/assets/js/fourp.js', '/assets/js/app.js', '/assets/js/data.js'];
+  const VOLATILE = ['/assets/js/articles-daily.js', '/assets/js/articles-top7.js', '/assets/js/fourp.js', '/assets/js/app.js', '/assets/js/data.js'];
   if (VOLATILE.some(p => url.pathname.endsWith(p))){
     event.respondWith((async () => {
       try {
