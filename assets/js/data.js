@@ -1,23 +1,23 @@
 /* ============================================================================
-   정운타임즈 · data.js — 지면 구성 · 코너 · 지면 부속 콘텐츠
+   운명사주 정운타임즈 · data.js — 지면 구성 · 코너 · 지면 부속 콘텐츠
    ========================================================================== */
 'use strict';
 
 const SITE  = 'https://hukstory.github.io/saju-project22/';
 const KAKAO = 'https://pf.kakao.com/_TguvX/chat';
-const AURA  = 'https://adorable-gaufre-c07661.netlify.app/';
+const LANDING = 'https://aura-saju.pages.dev/';
 const EMAIL = '22jutimes@gmail.com';
 
 const BRAND = {
-  name: '정운타임즈',
-  sub: '운명사주22',
+  name: '운명사주 정운타임즈',
+  sub: '22간지로 읽는 사주신문',
   slogan: '운명사주, 정운이 풀다',
   en: 'JUNGWOON TIMES'
 };
 
 /* ---------- 가로 카테고리 탭 ---------- */
 const CATS = [
-  { id:'main',    ko:'메인',        route:'#/',            en:'MAIN',    desc:'정운타임즈 1면' },
+  { id:'main',    ko:'메인',        route:'#/',            en:'MAIN',    desc:'운명사주 정운타임즈 1면' },
   { id:'mbti',    ko:'MBTI궁합',    route:'#/mbti',        en:'CHEMISTRY', desc:'네 글자로 읽는 인연' },
   { id:'today',   ko:'오늘의운세',  route:'#/today',       en:'FORTUNE',  desc:'오늘의 간지와 내 기운' },
   { id:'money',   ko:'사주·재물',   route:'#/money',       en:'WEALTH',   desc:'돈의 그릇과 때' },
@@ -54,7 +54,7 @@ const PRICING = [
 const FOOTER = {
   company:'제이투포커스', ceo:'이혁', biz:'159-47-00699', mail:'2022-고양일산서-1589',
   addr:'경기도 고양시 일산서구 가좌2로 53, 302동 1703호 (가좌동, 가좌마을3단지아파트)', tel:'070-8027-1303', email: EMAIL,
-  disc:'정운타임즈의 모든 기사와 분석은 동양 명리학 전통과 상징 해석을 바탕으로 한 참고·오락 정보입니다. 미래의 결과를 보장하지 않으며, 의료·투자·법률 등 중요한 결정의 근거로 삼을 수 없습니다. 기사에 등장하는 사례는 독자의 이해를 돕기 위한 재구성으로, 실제 인물과 무관할 수 있습니다.'
+  disc:'운명사주 정운타임즈의 모든 기사와 분석은 동양 명리학 전통과 상징 해석을 바탕으로 한 참고·오락 정보입니다. 미래의 결과를 보장하지 않으며, 의료·투자·법률 등 중요한 결정의 근거로 삼을 수 없습니다. 기사에 등장하는 사례는 독자의 이해를 돕기 위한 재구성으로, 실제 인물과 무관할 수 있습니다.'
 };
 
 /* ---------- 꿈 상징 사전 (간단) ---------- */

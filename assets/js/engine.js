@@ -1,5 +1,5 @@
 /* ============================================================================
-   정운타임즈 · engine.js
+   운명사주 정운타임즈 · engine.js
    1) 간지·사주 계산 (KASI 절기·음양력 기반 로직을 브라우저용으로 이식)
    2) 오늘의 운세 · 궁합 · 전생 · 오행 판정
    3) 공유 카드(캔버스) 렌더러
@@ -433,7 +433,7 @@ function drawFrame(ctx, opt){
   ctx.fillStyle = '#E4CF9F'; ctx.font = cardFont(22,700); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText('正', x+27, y+29);
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#14110F'; ctx.font = cardFont(23,700); ctx.fillText('정운타임즈', x+70, y+26);
+  ctx.fillStyle = '#14110F'; ctx.font = cardFont(23,700); ctx.fillText('운명사주 정운타임즈', x+70, y+26);
   ctx.fillStyle = '#837A6F'; ctx.font = cardFont(11,500,false); ctx.fillText('J U N G W O O N   T I M E S', x+70, y+45);
   // 우측 이슈
   ctx.textAlign = 'right'; ctx.fillStyle = '#837A6F'; ctx.font = cardFont(11,600,false);
@@ -452,7 +452,7 @@ function drawShareCard(opt){
 
   // 키커
   ctx.fillStyle = '#7B1E2B'; ctx.font = cardFont(12,700,false);
-  ctx.fillText((opt.kicker || '정운타임즈').toUpperCase(), pad, y);
+  ctx.fillText((opt.kicker || '운명사주 정운타임즈').toUpperCase(), pad, y);
   ctx.fillRect(pad, y+12, 34, 1.5);
   y += 52;
 
@@ -532,7 +532,7 @@ function drawShareCard(opt){
     ctx.fillStyle = '#14110F'; ctx.font = cardFont(size, 700);
     ctx.fillText(glyph, cx, cy - size * 0.1);
     ctx.fillStyle = '#A9873F'; ctx.font = cardFont(11, 600, false);
-    ctx.fillText((opt.glyphLabel || '정운타임즈').toUpperCase(), cx, cy + size * 0.62);
+    ctx.fillText((opt.glyphLabel || '운명사주 정운타임즈').toUpperCase(), cx, cy + size * 0.62);
     ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   }
 

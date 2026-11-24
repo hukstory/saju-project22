@@ -1,5 +1,5 @@
 /* ============================================================================
-   정운타임즈 · app.js — 라우터 · 지면 렌더 · 오늘의 운세 · 4P 뷰어 · PWA
+   운명사주 정운타임즈 · app.js — 라우터 · 지면 렌더 · 오늘의 운세 · 4P 뷰어 · PWA
    ========================================================================== */
 'use strict';
 
@@ -233,7 +233,7 @@ function fortuneBlock(){
           <li><span class="fortune__ptno">2</span><span><b>실제 만세력</b>오늘의 간지(${(typeof TODAY_DAY!=='undefined')?TODAY_DAY.hanja:'庚子'}日)로 기운을 계산합니다.</span></li>
           <li><span class="fortune__ptno">3</span><span><b>무료</b>결과는 화면에서 바로, 저장 없이 확인합니다.</span></li>
         </ul>
-        <p class="fortune__sub">더 깊이 보려면 <a href="#/4p">990원 4P 맛보기</a> → <a href="${AURA}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a></p>
+        <p class="fortune__sub">더 깊이 보려면 <a href="#/4p">990원 4P 맛보기</a> → <a href="${LANDING}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a></p>
       </div>
       <div class="fortune__card">
         <div class="widget widget--big">${widgetMarkup('hero')}</div>
@@ -350,7 +350,7 @@ function viewHome(){
         <div class="promo__price"><b>체험</b><span>무료 · 다운로드 안내</span></div>
         <span class="btn btn--gold btn--block">프로그램 보러 가기 →</span>
       </a>
-      <a class="talk" href="${AURA}" target="_blank" rel="noopener">
+      <a class="talk" href="${LANDING}" target="_blank" rel="noopener">
         <span class="talk__ico" style="background:#171513"><span style="font-family:var(--serif);color:#c9a86a;font-size:13px">正</span></span>
         <span><b>30P · 60P · 100P 정밀분석</b><span>19,900원부터 · 만족도 최상위</span></span>
       </a>
@@ -445,7 +445,7 @@ function viewProgram(){
           <b class="plan__name">30P · 60P · 100P</b>
           <div class="plan__price"><b>19,900</b><span>원부터</span></div>
           <p>운명의 나침반 30P · 지도 60P · 마스터 플랜 100P.</p>
-          <a class="btn btn--ghost btn--block" href="${AURA}" target="_blank" rel="noopener">정밀분석 보기</a>
+          <a class="btn btn--ghost btn--block" href="${LANDING}" target="_blank" rel="noopener">정밀분석 보기</a>
         </div>
         <div class="plan plan--year">
           <span class="plan__tag">PROGRAM</span>
@@ -541,7 +541,7 @@ function viewSection(cid){
         <h4>4페이지로 부족했다면<br>30P · 60P · 100P</h4>
         <p>재물·애정·커리어·월별 길흉·귀인까지. 정운이 직접 쓰는 정밀 분석지.</p>
         <div class="promo__price"><b>19,900</b><span>원부터</span></div>
-        <a class="btn btn--gold btn--block" href="${AURA}" target="_blank" rel="noopener">정밀분석 보러가기 →</a>
+        <a class="btn btn--gold btn--block" href="${LANDING}" target="_blank" rel="noopener">정밀분석 보러가기 →</a>
       </div>
     </aside>
   </div>`;
@@ -582,11 +582,11 @@ function viewArticle(id){
     <div class="leadbar">${esc(a.lead)}</div>
     <figure class="figure">
       <img src="${IMG(a.img)}" alt="${esc(a.title)}">
-      <figcaption>${esc(cat.ko)} 지면 이미지 · 정운타임즈 아카이브</figcaption>
+      <figcaption>${esc(cat.ko)} 지면 이미지 · 운명사주 정운타임즈 아카이브</figcaption>
     </figure>
     <div class="art__body">${bodyHTML(a.body)}</div>
     <div class="tagrow">
-      ${['사주','운세','명리','정운타임즈',cat.ko].map(t=>`<a href="#/${a.cat}">#${esc(t)}</a>`).join('')}
+      ${['사주','운세','명리','운명사주 정운타임즈',cat.ko].map(t=>`<a href="#/${a.cat}">#${esc(t)}</a>`).join('')}
     </div>
 
     <div class="funnel">
@@ -715,7 +715,7 @@ function viewFree(){
         <p class="funnel__sub">4페이지 특별분석으로 이어서 보시겠어요? 990원 4P에서 재물·애정·커리어 첫 문장이 열립니다.</p>
         <div class="funnel__btns">
           <a class="btn btn--red" href="#/4p">🔥 990원 4P 바로 보기</a>
-          <a class="btn btn--gold" href="${AURA}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a>
+          <a class="btn btn--gold" href="${LANDING}" target="_blank" rel="noopener">30P·60P·100P 정밀분석</a>
         </div>
       </div>
     </div>
@@ -792,7 +792,7 @@ function view4P(){
         <div class="pricepills">
           ${PRICING.map(p=>`<div><span>${esc(p.pages)} · ${esc(p.name)}</span><b>${esc(p.price)}</b></div>`).join('')}
         </div>
-        <a class="btn btn--gold btn--block" href="${AURA}" target="_blank" rel="noopener">✨ 30P·60P·100P 보러가기</a>
+        <a class="btn btn--gold btn--block" href="${LANDING}" target="_blank" rel="noopener">✨ 30P·60P·100P 보러가기</a>
       </div>
       <div class="side-card">
         <h4>전체 화면으로 보기</h4>
@@ -861,7 +861,7 @@ function viewArchive(){
   <div class="listhead">
     <div>
       <div class="kicker">ARCHIVE · 지난 기사 모아보기</div>
-      <h1>정운타임즈 지난 호</h1>
+      <h1>운명사주 정운타임즈 지난 호</h1>
       <p>매일 05:30 새 호가 발행되고, 지난 호는 <b>최근 60일 · 최대 120편</b>까지 이곳에 쌓입니다. 오늘 ${groups.length}일치 ${total}편이 남아 있습니다.</p>
     </div>
     <a class="btn btn--ink" href="#/4p">990원 4P 보기</a>
@@ -882,7 +882,7 @@ function viewArchive(){
         ${g.items.map(a=>`<li data-cat="${esc(a.cat)}"><a href="#/article/${a.id}">
           <span class="arch-cat">${esc(catOf(a.cat).ko)}</span>
           <span class="arch-ttl">${esc(a.title)}</span>
-          <span class="arch-meta">${esc(a.writer||'정운타임즈')} · ${esc(a.time||'05:30')}</span>
+          <span class="arch-meta">${esc(a.writer||'운명사주 정운타임즈')} · ${esc(a.time||'05:30')}</span>
         </a></li>`).join('')}
       </ul>
     </div>`).join('')}
@@ -981,7 +981,7 @@ function render(){
   document.title = a ? `${a.title} | ${BRAND.name}`
     : cat ? `${cat.ko} | ${BRAND.name}`
     : (r.view==='archive' ? `지난 기사 모아보기 | ${BRAND.name}`
-    : (r.view==='program' ? `사주분석 프로그램 · 1년 이용권 | ${BRAND.name}` : '정운타임즈 | 운명사주, 정운이 풀다'));
+    : (r.view==='program' ? `사주분석 프로그램 · 1년 이용권 | ${BRAND.name}` : '운명사주 정운타임즈 | 운명사주, 정운이 풀다'));
   window.scrollTo({ top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto' });
   const menu = $('#mobileMenu'); if (menu) menu.classList.remove('is-on');
 }
@@ -1209,7 +1209,7 @@ function setupPWA(){
     document.body.classList.add('installed');
     $$('[data-install]').forEach(b=> b.style.display='none');
     closeSheet(false);
-    const t = $('#toast'); if (t){ t.textContent='정운타임즈가 설치되었습니다. 홈 화면에서 열어 보세요.'; t.classList.add('is-on'); setTimeout(()=>t.classList.remove('is-on'), 3200); }
+    const t = $('#toast'); if (t){ t.textContent='운명사주 정운타임즈가 설치되었습니다. 홈 화면에서 열어 보세요.'; t.classList.add('is-on'); setTimeout(()=>t.classList.remove('is-on'), 3200); }
   });
   /* 설치 버튼은 1면·지면이 다시 그려질 때마다 생기므로 문서 단위로 받는다 */
   document.addEventListener('click', async (e)=>{

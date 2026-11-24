@@ -1,5 +1,5 @@
 /* ============================================================================
-   정운타임즈 · fourp.js
+   운명사주 정운타임즈 · fourp.js
    990원 4P 특별분석 — 실제 만세력 엔진(saju-engine.js = korean-saju 0.3.0 이식)으로
    신청자의 생년월일시(양/음력·성별·이름)를 계산해 4P 지면을 개인화한다.
    - 입력: URL 파라미터(?n=이름&g=여&c=solar&y=1980&m=1&d=22&t=1716) 또는 지면 폼
@@ -728,7 +728,7 @@
       '<div class="k">만족하셨다면</div>' +
       '<div class="t">찐 정밀 전문분석지<br><b>30P · 60P · 100P</b></div>' +
       '<p>여기까지는 여덟 글자의 첫 장입니다. 월별 길흉, 귀인의 얼굴, 위기를 피하는 달, 평생 재물의 그릇까지 — 정밀 분석지가 이어집니다.</p>' +
-      '<a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">✨ 30P · 60P · 100P 정밀분석 보러가기</a>' +
+      '<a href="https://aura-saju.pages.dev/" target="_blank" rel="noopener">✨ 30P · 60P · 100P 정밀분석 보러가기</a>' +
       '<button type="button" class="fp-cta__more" data-fp-pricing>요금제 3종 나란히 보기 →</button>' +
       '<div class="p">30P 19,900원 · 60P 29,900원 · 100P 49,900원</div></div>';
   }
@@ -759,9 +759,9 @@
     else pages.push(secYear2027(m), ctaBlock());
 
     host.innerHTML = pages.join('') +
-      '<div class="fp-back"><a href="../index.html#/4p">정운타임즈 4P</a>' +
+      '<div class="fp-back"><a href="../index.html#/4p">운명사주 정운타임즈 4P</a>' +
       '<button type="button" data-fp-restart>다른 생년월일로 다시 보기</button>' +
-      '<a href="https://adorable-gaufre-c07661.netlify.app/" target="_blank" rel="noopener">정밀분석 30~100P</a></div>';
+      '<a href="https://aura-saju.pages.dev/" target="_blank" rel="noopener">정밀분석 30~100P</a></div>';
 
     var pb = host.querySelector('[data-fp-pricing]');
     if (pb) pb.addEventListener('click', function () {
@@ -857,7 +857,7 @@
       var priceHTML = plain
         ? '<div class="pkg-price">' + p.price + '<span>원</span></div>'
         : '<div class="pkg-price-wrap"><span class="pkg-price-discount">' + p.price + '<span>원</span></span></div>';
-      return '<div class="pricing-card' + (p.pick ? ' recommend' : '') + '" onclick="goAura()" style="cursor:pointer">' +
+      return '<div class="pricing-card' + (p.pick ? ' recommend' : '') + '" onclick="goReport()" style="cursor:pointer">' +
         (p.pick ? '<div class="recommend-badge">가장 많이 선택</div>' : '') +
         '<div class="pkg-title">' + p.name + '</div>' +
         '<div class="pkg-pages">' + p.pages + ' Pages</div>' +

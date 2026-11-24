@@ -65,6 +65,8 @@ input,select{font-family:inherit;font-size:16px;color:var(--ink)}
 }
 .brand__word{display:flex;flex-direction:column;line-height:1.05}
 .brand__word b{font-family:var(--serif);font-weight:900;font-size:38px;letter-spacing:-.055em;color:#0d0d0d}
+.brand__word b.brand__lockup{display:block}
+.brand__lockup .brand__pre{display:block;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.34em;color:var(--gold);line-height:1;margin:0 0 4px 3px}
 .brand__word i{font-style:normal;font-size:12px;letter-spacing:.12em;color:var(--gold);font-weight:700;margin-top:6px;padding-left:3px}
 .masthead__right{justify-self:end;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted)}
 .masthead__date{text-align:right;line-height:1.35}
@@ -519,6 +521,7 @@ footer{border-top:2px solid #141210;background:#fbfaf7;margin-top:50px}
 @media (max-width:760px){
   .shell,.ticker__in,.masthead__in,.tabs__in,.footer__in{padding-left:15px;padding-right:15px}
   .brand__word b{font-size:29px}
+  .brand__lockup .brand__pre{font-size:9px;letter-spacing:.26em;margin:0 0 3px 2px}
   .brand__seal{width:38px;height:38px;font-size:14px;border-radius:2px}
   .brand__word i{font-size:10px;letter-spacing:.08em;margin-top:4px}
   .masthead__in{grid-template-columns:auto 1fr auto;padding-top:12px;padding-bottom:11px;gap:10px}
