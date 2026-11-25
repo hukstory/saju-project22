@@ -821,7 +821,7 @@ function fitFourp(frame){
   try{
     const d = frame.contentDocument;
     if (!d || !d.documentElement) return;
-    const h = Math.max(560, d.documentElement.scrollHeight || 0, (d.body && d.body.scrollHeight) || 0);
+    const h = Math.max(560, (d.documentElement.scrollHeight || 0) + 14, ((d.body && d.body.scrollHeight) || 0) + 14);
     if (h > 200) frame.style.height = h + 'px';
   }catch(e){ /* 출처가 다르면 그냥 둔다 */ }
 }
@@ -838,7 +838,7 @@ function watchFourp(frame){
       }
     }catch(e){}
   };
-  frame.addEventListener('load', ()=>{ sync(); setTimeout(()=>fitFourp(frame), 350); setTimeout(()=>fitFourp(frame), 1200); });
+  frame.addEventListener('load', ()=>{ sync(); [300, 900, 1800, 3000].forEach(t=>setTimeout(()=>fitFourp(frame), t)); });
   setTimeout(sync, 400);
 }
 function bind4P(root){

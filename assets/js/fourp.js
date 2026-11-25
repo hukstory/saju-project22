@@ -926,6 +926,7 @@
     '중화': '힘을 주는 쪽과 받는 쪽이 반반입니다. 판이 바뀌면 생각도 같이 바뀌는 유연함이 있어서, 어디에 놓여도 크게 무너지지 않습니다.',
     '신약': '기운이 바깥으로 얇게 퍼져 있습니다. 혼자 밀어붙이면 금방 지치지만, 좋은 사람과 좋은 제도를 만나면 몇 배로 커집니다. 주변을 고르는 게 곧 실력입니다.'
   };
+  var OH_NOUN = ['나무', '불', '흙', '쇠', '물'];
   var LACK_SAY = {
     '목': '“일단 해보자” 하고 첫발을 떼는 힘',
     '화': '기분을 말로 꺼내는 힘',
@@ -987,14 +988,14 @@
       SAYS[oh].map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div>';
 
     var inner = (m.maxI !== oh)
-      ? '처음 보는 사람은 당신을 <b>' + OHK[oh] + ' 사람</b>으로 기억합니다 — ' + OH_IMG[OHK[oh]].img + ' 쪽. 그런데 가까운 사람만 아는 진짜 무게는 <b>' + OHK[m.maxI] + '</b>에 있습니다. 결정적인 순간에 손이 먼저 가는 쪽도 그쪽입니다.'
-      : '겉과 속이 같은 결입니다. 처음 본 사람과 오래된 친구가 당신을 똑같이 설명합니다 — <b>' + OHK[oh] + ' 사람</b>. 기분이 그대로 보여서 숨기기가 어렵고, 그래서 사람을 빨리 가려냅니다.';
+      ? '처음 보는 사람은 당신을 <b>' + OH_NOUN[oh] + ' 같은 사람</b>으로 기억합니다 — ' + OH_IMG[OHK[oh]].img + ' 쪽. 그런데 가까운 사람만 아는 진짜 무게는 <b>' + OH_NOUN[m.maxI] + '</b>에 있습니다. 결정적인 순간에 손이 먼저 가는 쪽도 그쪽입니다.'
+      : '겉과 속이 같은 결입니다. 처음 본 사람과 오래된 친구가 당신을 똑같이 설명합니다 — <b>' + OH_NOUN[oh] + ' 같은 사람</b>. 기분이 그대로 보여서 숨기기가 어렵고, 그래서 사람을 빨리 가려냅니다.';
 
     var weak = '';
     if (m.lack.length) {
-      weak = '여덟 글자에 <b>' + m.lack.join('·') + '</b> 기운이 한 자리도 없습니다. ' + LACK_SAY[m.lack[0]] + ' — 이건 타고난 게 아니라 평생 만들어가야 하는 숙제입니다. 그래서 이 부분에서 스스로를 자주 의심합니다.';
+      weak = '여덟 글자에 <b>' + m.lack.map(function (k) { return OH_NOUN[OHK.indexOf(k)]; }).join('·') + '</b> 기운이 한 자리도 없습니다. ' + LACK_SAY[m.lack[0]] + ' — 이건 타고난 게 아니라 평생 만들어가야 하는 숙제입니다. 그래서 이 부분에서 스스로를 자주 의심합니다.';
     } else if (m.counts[m.maxI] >= 4) {
-      weak = '<b>' + OHK[m.maxI] + '</b> 기운이 여덟 글자에 ' + m.counts[m.maxI] + '개나 됩니다. 넘치면 장점이 습관이 되고, 습관이 되면 발목을 잡습니다. ' + OVER_SAY[OHK[m.maxI]];
+      weak = '<b>' + OH_NOUN[m.maxI] + '</b> 기운이 여덟 글자에 ' + m.counts[m.maxI] + '개나 됩니다. 넘치면 장점이 습관이 되고, 습관이 되면 발목을 잡습니다. ' + OVER_SAY[OHK[m.maxI]];
     } else {
       weak = '다섯 기운이 골고루 놓여 있습니다. 큰 구멍이 없다는 건 큰 장점이고, 대신 <b>눈에 띄는 무기 하나</b>가 없다는 뜻이기도 합니다. 하나를 골라 깊게 파면 나머지가 따라옵니다.';
     }
@@ -1047,7 +1048,7 @@
     return '<section class="fp-sec">' +
       '<div class="fp-kicker">PAGE 02 · 돈</div>' +
       '<h2 class="fp-h2">' + head + '</h2>' +
-      '<p class="fp-p">' + inText + ' ' + posText + '</p>' +
+      '<p class="fp-p">' + posText + ' ' + (m.nJae >= 3 ? '여러 문이 열려 있는 만큼, 관리가 곧 재능입니다.' : m.nJae === 2 ? '두 문 중 어디에 힘을 줄지가 관건입니다.' : m.nJae === 1 ? '그 한 문을 깊게 파는 쪽이 훨씬 유리합니다.' : '문이 보이지 않는다면, 문을 만드는 쪽이 맞습니다.') + '</p>' +
       '<div class="fp-score">' +
       '<div class="fp-ring"><svg width="74" height="74" viewBox="0 0 74 74"><circle class="bg" cx="37" cy="37" r="30"></circle>' +
       '<circle class="fg" cx="37" cy="37" r="30" stroke-dasharray="188.5" stroke-dashoffset="' + (188.5 - m.wealth / 100 * 188.5).toFixed(1) + '"></circle></svg><b>' + m.wealth + '</b></div>' +
@@ -1086,7 +1087,7 @@
       '<h2 class="fp-h2">' + head + '</h2>' +
       '<p class="fp-p">' + starText + ' ' + pattern + '</p>' +
       '<div class="fp-boxes">' +
-      '<div class="fp-box"><b>먼저 마음이 가는 사람</b><p>' + OHK[m.spouseOh] + '의 기운을 가진 사람 — ' + OH_IMG[OHK[m.spouseOh]].key + jj(OH_IMG[OHK[m.spouseOh]].key, '이') + ' 분명한 사람. 말보다 태도로 보여주는 쪽에 약합니다.</p></div>' +
+      '<div class="fp-box"><b>먼저 마음이 가는 사람</b><p>' + OH_NOUN[m.spouseOh] + ' 같은 사람 — ' + OH_IMG[OHK[m.spouseOh]].key + jj(OH_IMG[OHK[m.spouseOh]].key, '이') + ' 분명한 사람. 말보다 태도로 보여주는 쪽에 약합니다.</p></div>' +
       '<div class="fp-box"><b>곁에 오는 사람</b><p>' + (p ? (SPOUSE_UNSEONG[p.unseong.name] || '편안한 사람') + ' — 배우자 자리에 앉은 글자가 그런 사람을 데려옵니다.' : '배우자 자리를 읽으려면 태어난 시각이 필요합니다.') + '</p></div>' +
       '</div>' +
       '<p class="fp-p"><b>오래 가는 조건.</b> ' + (m.level === '신강' ? '내 힘이 센 편이라, 말투를 낮추는 것만으로 관계가 길어집니다.' : m.level === '신약' ? '상대의 속도에 맞추다 지치지 않도록, 내가 원하는 것을 먼저 말해야 합니다.' : '관계의 규칙을 함께 정할 때 가장 안정됩니다.') + '</p>' +
@@ -1121,11 +1122,11 @@
     return '<section class="fp-sec">' +
       '<div class="fp-kicker">PAGE 04 · 2027년</div>' +
       '<h2 class="fp-h2">2027년, 당신에게 오는 가장 큰 변화는 <b>' + theme + '</b>입니다.</h2>' +
-      '<p class="fp-p">2027년은 정미(丁未)년입니다. 당신의 여덟 글자 위에 새 글자 한 쌍이 얹히는 해이고, 그 글자가 <b>' + y.stemSip + '</b>으로 들어옵니다. ' + toneText + '</p>' +
+      '<p class="fp-p">2027년은 정미(丁未)년입니다. 당신의 여덟 글자 위에 새 글자 한 쌍이 얹히는 해이고, 그중 위 글자는 <b>' + theme + '</b> 쪽으로 들어옵니다. ' + toneText + '</p>' +
       '<div class="fp-cards">' +
       '<div class="fp-card"><span>2027년 총운</span><b>' + y.score + '</b><i>' + toneLabel + '</i></div>' +
       '<div class="fp-card"><span>변화의 방향</span><b style="font-size:13px">' + theme + '</b><i>2027</i></div>' +
-      '<div class="fp-card"><span>변화가 오는 자리</span><b style="font-size:14px">' + place + '</b><i>' + y.branchSip + '</i></div>' +
+      '<div class="fp-card"><span>변화가 오는 자리</span><b style="font-size:14px">' + place + '</b><i>2027</i></div>' +
       '</div>' +
       '<p class="fp-p">열두 달의 무게는 이렇게 다릅니다. 막대가 높은 달에 문이 열리고, 낮은 달에 돈과 사람이 새기 쉽습니다.</p>' +
       '<div class="fp-month">' + bars + '</div>' +
