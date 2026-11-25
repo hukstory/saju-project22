@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "note": "화제의 인물 후보 풀 — 생년월일은 공개 프로필(위키백과 등)로 확인한 값만 넣는다. topic/topic_date/topic_source 는 확인된 사실만 적고, 지면에는 이 날짜를 함께 표기한다.",
+  "note": "화제의 인물 후보 풀 — 생년월일은 공개 프로필(위키백과 등)로 확인한 값만 넣는다. topic/topic_date/topic_source 는 확인된 사실만 적고, 지면에는 이 날짜를 함께 표기한다. img 는 그 사람의 분위기에 맞춘 매거진 일러스트(assets/img/people-*.webp)다. 실존 인물의 사진·초상이 아니며, 지면에서 쓰는 이미지 이름만 적는다.",
   "people": [
     {
       "name": "전지윤",
@@ -12,7 +12,8 @@
       "topic": "2026년 11월 22일, 4살 연상의 일반인 예비 신랑과 결혼식을 올렸다",
       "topic_date": "2026-11-22",
       "topic_source": "https://www.starnewskorea.com/star/2026/11/07/2026110523382433668",
-      "wiki": "https://ko.wikipedia.org/wiki/전지윤"
+      "wiki": "https://ko.wikipedia.org/wiki/전지윤",
+      "img": "people-actress"
     },
     {
       "name": "유지애",
@@ -24,7 +25,8 @@
       "topic": "2026년 11월 28일, 배우 곽시양과 비공개 결혼식을 올릴 예정이다",
       "topic_date": "2026-11-28",
       "topic_source": "https://www.yna.co.kr/view/AKR20260903131800005",
-      "wiki": "https://ko.wikipedia.org/wiki/유지애"
+      "wiki": "https://ko.wikipedia.org/wiki/유지애",
+      "img": "people-diva"
     },
     {
       "name": "임영웅",
@@ -36,7 +38,8 @@
       "topic": "트로트와 발라드를 오가는 무대로 대중에게 이름을 알린 가수다",
       "topic_date": "2026-11",
       "topic_source": "https://www.mulgogimusic.com/",
-      "wiki": "https://ko.wikipedia.org/wiki/임영웅"
+      "wiki": "https://ko.wikipedia.org/wiki/임영웅",
+      "img": "people-trot"
     },
     {
       "name": "아이유",
@@ -48,7 +51,8 @@
       "topic": "가수와 배우로 활동을 이어오고 있다",
       "topic_date": "2026-11",
       "topic_source": "https://ko.wikipedia.org/wiki/아이유",
-      "wiki": "https://ko.wikipedia.org/wiki/아이유"
+      "wiki": "https://ko.wikipedia.org/wiki/아이유",
+      "img": "people-diva"
     },
     {
       "name": "유재석",
@@ -60,7 +64,8 @@
       "topic": "예능 진행자로 오래 활동해 온 인물이다",
       "topic_date": "2026-11",
       "topic_source": "https://ko.wikipedia.org/wiki/유재석",
-      "wiki": "https://ko.wikipedia.org/wiki/유재석"
+      "wiki": "https://ko.wikipedia.org/wiki/유재석",
+      "img": "people-host"
     },
     {
       "name": "김연아",
@@ -72,7 +77,8 @@
       "topic": "선수 은퇴 후에도 공식 석상에 모습을 드러내는 인물이다",
       "topic_date": "2026-11",
       "topic_source": "https://ko.wikipedia.org/wiki/김연아",
-      "wiki": "https://ko.wikipedia.org/wiki/김연아"
+      "wiki": "https://ko.wikipedia.org/wiki/김연아",
+      "img": "people-ice"
     },
     {
       "name": "손흥민",
@@ -84,7 +90,8 @@
       "topic": "해외 리그에서 뛰어온 축구 선수다",
       "topic_date": "2026-11",
       "topic_source": "https://ko.wikipedia.org/wiki/손흥민",
-      "wiki": "https://ko.wikipedia.org/wiki/손흥민"
+      "wiki": "https://ko.wikipedia.org/wiki/손흥민",
+      "img": "people-field"
     },
     {
       "name": "차은우",
@@ -96,7 +103,8 @@
       "topic": "배우와 가수 활동을 함께 이어가는 인물이다",
       "topic_date": "2026-11",
       "topic_source": "https://ko.wikipedia.org/wiki/차은우",
-      "wiki": "https://ko.wikipedia.org/wiki/차은우"
+      "wiki": "https://ko.wikipedia.org/wiki/차은우",
+      "img": "people-actor"
     },
     {
       "name": "옥주현",
@@ -108,7 +116,8 @@
       "topic": "2026년 11월, 한남동 펜트하우스 압류가 해제되며 다시 화제가 됐다",
       "topic_date": "2026-11-11",
       "topic_source": "https://www.segye.com/newsView/20261114503326",
-      "wiki": "https://ko.wikipedia.org/wiki/옥주현"
+      "wiki": "https://ko.wikipedia.org/wiki/옥주현",
+      "img": "people-actress"
     },
     {
       "name": "한소희",
@@ -120,7 +129,8 @@
       "topic": "드라마와 영화로 활동을 이어가는 배우다",
       "topic_date": "2026-11",
       "topic_source": "https://ko.wikipedia.org/wiki/한소희",
-      "wiki": "https://ko.wikipedia.org/wiki/한소희"
+      "wiki": "https://ko.wikipedia.org/wiki/한소희",
+      "img": "people-actress"
     },
     {
       "name": "뷔",
@@ -132,7 +142,8 @@
       "topic": "그룹 방탄소년단의 멤버로 활동하는 가수다",
       "topic_date": "2026-11",
       "topic_source": "https://ko.wikipedia.org/wiki/뷔",
-      "wiki": "https://ko.wikipedia.org/wiki/뷔"
+      "wiki": "https://ko.wikipedia.org/wiki/뷔",
+      "img": "people-idol"
     }
   ]
 }

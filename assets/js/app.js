@@ -376,6 +376,172 @@ function bindDeskTabs(root){
   }));
 }
 
+/* ---------- 1면 · 매거진 (지면 모아보기 아래 · 2026-11-25 개편) ---------- */
+function magPick(p){
+  const a = BY_ID[p.id]; if (!a) return null;
+  return Object.assign({}, p, { a, img: p.img || a.img });
+}
+function magLead(p){
+  return `<a class="mag-lead" href="#/article/${p.a.id}">
+    <span class="mag-lead__shot"><img src="${IMG(p.img)}" alt="${esc(p.hook)}" loading="lazy"><b class="mag-k">${esc(p.kicker)}</b></span>
+    <span class="mag-lead__body">
+      <b class="mag-lead__ttl">${esc(p.hook)}</b>
+      <span class="mag-lead__sum">${esc(p.sum)}</span>
+      <span class="mag-lead__more">기사 읽기 →</span>
+    </span>
+  </a>`;
+}
+function magMini(p){
+  return `<a class="mag-mini" href="#/article/${p.a.id}">
+    <span class="mag-mini__shot"><img src="${IMG(p.img)}" alt="" loading="lazy"><b class="mag-k">${esc(p.kicker)}</b></span>
+    <span class="mag-mini__body"><b>${esc(p.hook)}</b><span>${esc(p.sum)}</span></span>
+  </a>`;
+}
+function magGridCard(p){
+  return `<a class="mag-card" href="#/article/${p.a.id}">
+    <span class="mag-card__shot"><img src="${IMG(p.img)}" alt="" loading="lazy"><b class="mag-k">${esc(p.kicker)}</b></span>
+    <b class="mag-card__ttl">${esc(p.hook)}</b>
+    <span class="mag-card__sum">${esc(p.sum)}</span>
+  </a>`;
+}
+function magazineBlock(){
+  if (typeof MAG_FEATURED === 'undefined') return '';
+  const feat = MAG_FEATURED.map(magPick).filter(Boolean);
+  const grid = MAG_GRID.map(magPick).filter(Boolean);
+  if (!feat.length && !grid.length) return '';
+  const lead = feat[0], side = feat.slice(1, 3);
+  return `<section class="mag" aria-labelledby="magTitle">
+    <div class="mag__head">
+      <h2 id="magTitle">정운 매거진</h2>
+      <span class="en">MAGAZINE</span>
+      <span class="mag__note">재미로 읽다 보면, 결국 내 사주가 궁금해집니다</span>
+    </div>
+    <div class="mag__top">
+      ${lead ? magLead(lead) : ''}
+      <div class="mag__side">${side.map(magMini).join('')}</div>
+    </div>
+    ${grid.length ? `<div class="mag__grid">${grid.map(magGridCard).join('')}</div>` : ''}
+  </section>`;
+}
+
+/* ---------- 1면 · 사주 8컷 (SVG 만화) ---------- */
+function comicBlock(){
+  if (typeof COMIC === 'undefined' || !COMIC.cuts) return '';
+  return `<section class="comic" id="comic" aria-labelledby="comicTitle">
+    <div class="comic__head">
+      <span class="comic__k">8컷 만화 · 오늘의 사주</span>
+      <h2 id="comicTitle">${esc(COMIC.title)}</h2>
+      <p>${esc(COMIC.dek)}</p>
+    </div>
+    <div class="comic__grid">
+      ${COMIC.cuts.map(c=>`<article class="cut">
+        <div class="cut__art"><svg viewBox="0 0 320 188" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(c.ttl)}">${c.art}</svg><b class="cut__no">${c.no}</b></div>
+        <div class="cut__body">
+          <b class="cut__ttl">${esc(c.ttl)}</b>
+          <span class="cut__sig">${esc(c.sig)}</span>
+        </div>
+      </article>`).join('')}
+    </div>
+    <div class="comic__foot">
+      <span>내 사주에서는 이 신호가 언제 오는지 — 생년월일 하나면 네 장으로 확인됩니다.</span>
+      <a class="btn btn--ink" href="#/4p">내 사주 4장 무료로 보기 →</a>
+    </div>
+    <p class="comic__note">※ 8컷 만화는 전통 명리학의 상징을 이야기로 풀어낸 창작물입니다. 실제 인물·사건과 무관하며, 미래의 결과를 보장하지 않습니다.</p>
+  </section>`;
+}
+
+/* ---------- 1면 · 사주 미니게임 (2027 대박 달 3개 뽑기) ---------- */
+let GAME_LIST = [];
+function shuffleAll(a){
+  for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+function gameCardsHTML(){
+  return GAME_LIST.map((c,i)=>`<button type="button" class="gcard" data-gcard="${i}" aria-pressed="false" aria-label="${i+1}번째 카드 뒤집기">
+    <span class="gcard__in">
+      <span class="gcard__back" aria-hidden="true"><em>月</em><b>?</b></span>
+      <span class="gcard__front" aria-hidden="true"><b>${c.m}</b><i>월</i><em>${esc(c.key)}</em></span>
+    </span>
+  </button>`).join('');
+}
+function gameBlock(){
+  if (typeof GAME_MONTHS === 'undefined') return '';
+  GAME_LIST = shuffleAll(GAME_MONTHS.slice());
+  return `<section class="game" id="game" aria-labelledby="gameTitle">
+    <div class="game__main">
+      <div class="game__head">
+        <span class="game__k">MINI GAME · 무료</span>
+        <h2 id="gameTitle">2027 내 대박 달 3개 뽑기</h2>
+        <p>카드 12장 가운데 손이 가는 3장을 뒤집어 보세요. 정미년의 열두 달 중 당신의 달이 나옵니다.</p>
+      </div>
+      <div class="game__board" id="gameBoard">${gameCardsHTML()}</div>
+    </div>
+    <div class="game__panel" id="gamePanel" aria-live="polite">
+      <span class="game__hint">카드를 세 장 골라 주세요 — 망설여지는 순서대로.</span>
+      <ul class="game__how">
+        <li>12장 중 <b>3장</b>을 뒤집으면 결과가 나옵니다.</li>
+        <li>2027년은 정미년(丁未年) — 불이 흙을 낳는 해입니다.</li>
+        <li>마음에 걸린 달은 <b>무료 4P</b>에서 내 사주로 다시 확인하세요.</li>
+      </ul>
+    </div>
+  </section>`;
+}
+function bindGame(root){
+  const board = $('#gameBoard', root), panel = $('#gamePanel', root);
+  if (!board || !panel || !GAME_LIST.length) return;
+  let picked = [];
+  const hint = ()=>{
+    const left = 3 - picked.length;
+    panel.className = 'game__panel';
+    panel.innerHTML = `<span class="game__hint">${picked.length ? `고른 달 — ${picked.map(c=>c.m+'월').join(' · ')} <b>${left}장 남았습니다.</b>` : '카드를 세 장 골라 주세요 — 망설여지는 순서대로.'}</span>`
+      + `<ul class="game__how">
+        <li>12장 중 <b>3장</b>을 뒤집으면 결과가 나옵니다.</li>
+        <li>2027년은 정미년(丁未年) — 불이 흙을 낳는 해입니다.</li>
+        <li>마음에 걸린 달은 <b>무료 4P</b>에서 내 사주로 다시 확인하세요.</li>
+      </ul>`;
+  };
+  const result = ()=>{
+    const ms = picked.slice().sort((a,b)=>a.m-b.m);
+    const counts = {};
+    ms.forEach(c=>{ counts[c.el] = (counts[c.el]||0)+1; });
+    const topEl = Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
+    const color = GAME_COLORS[ms.reduce((s,c)=>s+c.m, 0) % GAME_COLORS.length];
+    const best = ms.slice().sort((a,b)=> (b.pow||0)-(a.pow||0) || a.m-b.m)[0];
+    panel.className = 'game__panel is-on';
+    panel.innerHTML = `<span class="game__k">2027 정미년 · 당신의 세 달</span>
+      <b class="game__picks">${ms.map(c=>`<i>${c.m}<em>월</em></i>`).join('<span>·</span>')}</b>
+      <p class="game__line">가장 크게 열리는 달은 <b>${best.m}월</b> — ${esc(best.line)}</p>
+      <div class="game__tags">
+        <span>기운 <b>${esc(topEl)}</b></span>
+        <span>행운의 색 <b>${esc(color.name)}</b><i class="swatch" style="background:${color.hex}"></i></span>
+        <span>키워드 <b>${esc(ms.map(c=>c.key).join(' · '))}</b></span>
+      </div>
+      <div class="game__btns">
+        <a class="btn btn--ink" href="#/4p">내 사주로 무료 4장 보기 →</a>
+        <a class="btn btn--gold" href="${ORDER}" target="_blank" rel="noopener">정밀분석 30~100P</a>
+      </div>
+      <button class="game__again" type="button" data-game-reset>다시 뽑기 ↺</button>
+      <p class="game__note">재미로 보는 2027 월운입니다. 내 사주의 실제 월운은 생년월일을 넣어 확인하세요.</p>`;
+  };
+  board.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-gcard]');
+    if (!btn || btn.classList.contains('is-open') || picked.length >= 3) return;
+    const c = GAME_LIST[Number(btn.getAttribute('data-gcard'))];
+    if (!c) return;
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-pressed', 'true');
+    picked.push(c);
+    if (picked.length === 3) setTimeout(result, 480); else hint();
+  });
+  panel.addEventListener('click', (e)=>{
+    if (!e.target.closest('[data-game-reset]')) return;
+    picked = [];
+    GAME_LIST = shuffleAll(GAME_MONTHS.slice());
+    board.innerHTML = gameCardsHTML();
+    hint();
+  });
+}
+
 function strip4p(){
   return `<a class="strip4p" href="#/4p">
     <span class="strip4p__l">
@@ -394,6 +560,9 @@ function viewHome(){
   ${onelineBlock()}
   ${programBanner()}
   ${deskTabs()}
+  ${magazineBlock()}
+  ${comicBlock()}
+  ${gameBlock()}
   ${strip4p()}`;
 }
 
@@ -1023,7 +1192,7 @@ function render(){
   app.classList.remove('fade'); void app.offsetWidth; app.classList.add('fade');
   bindWidget(app);
   bind4P(app);
-  if (r.view==='home'){ bindOneline(app); bindDeskTabs(app); }
+  if (r.view==='home'){ bindOneline(app); bindDeskTabs(app); bindGame(app); }
   if (r.view==='free') bindFree(app);
   if (r.view==='archive') bindArchive(app);
   if (r.view==='article') bindShare(app, r.id);

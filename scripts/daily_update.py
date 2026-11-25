@@ -277,6 +277,33 @@ def article_today(d, g):
 
 
 # ------------------------------------------------------------------ ② 화제의 인물
+def person_img(person):
+    """인물 기사 썸네일 — 그 사람의 분위기에 맞춘 매거진 일러스트 이름.
+    people.json 의 img 를 먼저 쓰고, 없으면 활동 분야로 고른다.
+    (실존 인물의 사진·초상은 쓰지 않는다. assets/img/people-*.webp 는 전부 창작 일러스트)"""
+    name = (person.get("img") or "").strip()
+    if name and os.path.exists(os.path.join(ROOT, "assets", "img", name + ".webp")):
+        return name
+    field = person.get("field", "") + " " + person.get("group", "")
+    if "피겨" in field or "스케이" in field:
+        return "people-ice"
+    if "축구" in field:
+        return "people-field"
+    if "방송인" in field:
+        return "people-host"
+    if "트로트" in field:
+        return "people-trot"
+    if "아이돌" in field or "방탄" in field:
+        return "people-idol"
+    if "뮤지컬" in field or "배우" in field:
+        return "people-actress" if person.get("gender") == "여" else "people-actor"
+    if person.get("gender") == "여" and "가수" in field:
+        return "people-diva"
+    if person.get("gender") == "남" and "가수" in field:
+        return "people-trot"
+    return "people-main"
+
+
 def article_person(d, g, person):
     b = date.fromisoformat(person["birth"])
     sj = S.saju((b.year, b.month, b.day), person.get("hour"), 0, hour_known=bool(person.get("hour")))
@@ -384,7 +411,7 @@ def article_person(d, g, person):
                         "미래의 결과를 보장하지 않습니다."},
     ]
     return {
-        "id": f"people-{d.strftime('%Y%m%d')}", "cat": "people", "img": "people-main",
+        "id": f"people-{d.strftime('%Y%m%d')}", "cat": "people", "img": person_img(person),
         "time": "05:30", "views": views_for("people", d.isoformat(), lo=11000, hi=17000),
         "title": title, "dek": dek, "writer": "정운타임즈 운명연구소", "lead": lead, "body": body,
         "date": d.isoformat(), "gen": 1, "person": name,
