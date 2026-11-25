@@ -535,11 +535,11 @@ DREAM_BOOK = [
 
 
 def article_dream(d, g):
-    idx = seed_int("dream", d.isoformat()) % len(DREAM_BOOK)
+    idx = d.toordinal() % len(DREAM_BOOK)
     dream, kind, key, mean, action = DREAM_BOOK[idx]
     animal = ANIMALS[g["day"]["branch"]]
     db = S.BRANCHES[g["day"]["branch"]]
-    title = f"오늘 밤 이 꿈을 꾼다면 — {dream.split(' ')[0]}… {kind}의 신호"
+    title = f"오늘 밤 ‘{dream}’을 꾼다면 — {kind}의 신호"
     dek = (f"오늘의 일지(日支)는 {db[0]}({db[1]}), {animal}입니다. 정운타임즈가 오늘의 기운에 맞춰 "
            f"옛 꿈사전의 상징 하나를 골랐습니다 — {dream}. 꿈은 예고가 아니라 오늘 내가 미처 말하지 못한 것의 언어입니다.")
     lead = f"{mean} 꿈을 꿨다면, 오늘 할 일은 하나입니다. {action}"
@@ -674,7 +674,7 @@ MBTI_THEMES = [
 
 
 def article_mbti(d, g):
-    t = MBTI_THEMES[seed_int("mbti", d.isoformat()) % len(MBTI_THEMES)]
+    t = MBTI_THEMES[d.toordinal() % len(MBTI_THEMES)]
     body = [
         {"t": "p", "x": "MBTI와 사주를 같이 보면 이상하게 설명이 되는 순간이 있다. 네 글자로는 이해가 안 되던 행동이, 여덟 글자를 펼치면 딱 맞아떨어질 때. "
                         "그 이유는 단순하다. <strong>MBTI는 지금 내가 쓰기로 한 방식이고, 사주는 그 방식을 쓰게 만든 재질</strong>이기 때문이다."},
@@ -743,7 +743,7 @@ PAST_TYPES = [
 
 
 def article_past(d, g):
-    (key, role, era, one, habit, lesson, job, sign, why) = PAST_TYPES[seed_int("past", d.isoformat()) % len(PAST_TYPES)]
+    (key, role, era, one, habit, lesson, job, sign, why) = PAST_TYPES[d.toordinal() % len(PAST_TYPES)]
     title = f"전생이 ‘{role}’였다면 — 지금도 남아 있는 습관 하나"
     dek = (f"전생을 믿지 않아도 재미있는 이유는, 그 이야기가 지금의 습관을 비추기 때문입니다. "
            f"오늘의 기운에 맞춰 열두 유형 중 ‘{role}’형을 골랐습니다. {era}의 {one}.")
@@ -823,7 +823,7 @@ SHOP_ITEMS = [
 
 
 def article_shop(d, g):
-    (name, oh, meaning, place, tip, act, why) = SHOP_ITEMS[seed_int("shop", d.isoformat()) % len(SHOP_ITEMS)]
+    (name, oh, meaning, place, tip, act, why) = SHOP_ITEMS[d.toordinal() % len(SHOP_ITEMS)]
     title = f"{name}, 어디에 두면 좋을까 — {meaning}의 상징과 오늘 바로 하는 법"
     dek = (f"좋은 소품도 자리가 틀리면 묻힙니다. {name}이 상징하는 것, 두는 자리, 그리고 오늘 바로 할 수 있는 일 하나. "
            f"비싼 부적보다 매일 보이는 물건 하나가 운을 바꿉니다.")
