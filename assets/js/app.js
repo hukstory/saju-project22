@@ -435,7 +435,7 @@ function comicBlock(){
     </div>
     <div class="comic__grid">
       ${COMIC.cuts.map(c=>`<article class="cut">
-        <div class="cut__art"><svg viewBox="0 0 320 188" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(c.ttl)}">${c.art}</svg><b class="cut__no">${c.no}</b></div>
+        <div class="cut__art"><svg viewBox="0 0 320 182" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(c.ttl)}">${c.art}</svg><b class="cut__no">${c.no}</b></div>
         <div class="cut__body">
           <b class="cut__ttl">${esc(c.ttl)}</b>
           <span class="cut__sig">${esc(c.sig)}</span>
