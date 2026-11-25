@@ -65,6 +65,13 @@ OH = {
     "수": {"img": "깊은 물", "key": "지혜", "body": "신장과 뼈", "season": "겨울",
            "color": "먹빛", "direct": "북쪽", "num": "1과 6", "taste": "짠맛", "virtue": "지(智)"},
 }
+SIP_TITLE = {
+    "비견": "동료가 많은 사람", "겁재": "겨루며 크는 사람",
+    "식신": "만들어 내는 사람", "상관": "틀을 깨는 사람",
+    "편재": "큰돈을 만지는 사람", "정재": "새지 않게 모으는 사람",
+    "편관": "압박에 강한 사람", "정관": "신뢰를 쌓는 사람",
+    "편인": "남다르게 파고드는 사람", "정인": "배워서 이루는 사람",
+}
 SIP_MEAN = {
     "비견": "동료와 경쟁, 나와 같은 편", "겁재": "빼앗고 겨루는 힘",
     "식신": "꾸준히 만들어 내는 손", "상관": "틀을 뒤집는 표현",
@@ -351,7 +358,16 @@ def article_person(d, g, person):
         td = date.fromisoformat(topic_date)
         topic_date_ko = f"{td.year}년 {td.month}월 {td.day}일"
 
-    title = f"{name}, {topic_description(person, name)}… 여섯 글자로 읽는 {OH[doh]['key']}의 사람"
+    n_char = "여덟" if person.get("hour") else "여섯"
+    sip_top = max(sip.items(), key=lambda kv: kv[1])[0]
+    desc = topic_description(person, name)
+    title_forms = [
+        f"{name}, {desc}… {n_char} 글자로 읽는 {OH[doh]['key']}의 사람",
+        f"{name}, {desc}… 사주로 본 ‘{SIP_MEAN[sip_top].split(',')[0]}’의 사람",
+        f"{name}의 {n_char} 글자 — {desc}, 그 안에 숨은 {OH[doh]['key']}",
+        f"{name}, {desc}… {SIP_TITLE[sip_top]}",
+    ]
+    title = title_forms[seed_int("people-title", name, d.isoformat()) % len(title_forms)]
     dek = (f"{name}{j(name, '은')} {person['field']}로 활동해 온 인물입니다. "
            f"공개된 생년월일은 {b.year}년 {b.month}월 {b.day}일"
            + (f", 태어난 시각 {person['hour']}시" if person.get("hour") else ", 태어난 시각은 공개되지 않았습니다")
@@ -1104,7 +1120,8 @@ def main():
         "note": "이 파일은 사장님(사용자)에게만 보고하는 내부 점검 기록입니다. 지면에는 표시하지 않습니다.",
     }
 
-    print(f"[{today} {g['label']}] 인물={person['name']} · 오늘 {len([a for a in merged if a.get('date')==today.isoformat()])}편 · "
+    today_person = next((a.get("person") for a in merged if a.get("date") == today.isoformat() and a.get("person")), person["name"])
+    print(f"[{today} {g['label']}] 인물={today_person} · 오늘 {len([a for a in merged if a.get('date')==today.isoformat()])}편 · "
           f"누적 {len(merged)}편/{len(days)}일")
     for a in [x for x in merged if x.get("date") == today.isoformat()]:
         print(f"  - {a['cat']:7s} {a['title'][:56]}")
