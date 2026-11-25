@@ -862,10 +862,18 @@ function bind4P(root){
     lastFourpQuery = q.toString();
     window.__fourpQuery = lastFourpQuery;
     if (frame) frame.src = frame.getAttribute('src').split('?')[0] + '?' + lastFourpQuery;
+    /* 주문 링크는 order.html 이 읽는 형식으로 따로 만든다(?name&birth&time&gender&cal) */
+    const oq = new URLSearchParams();
+    if (name) oq.set('name', name);
+    oq.set('birth', birth);
+    oq.set('time', time ? time : '모름');
+    oq.set('gender', gender === '남' ? '남' : '여');
+    oq.set('cal', cal === 'lunar' ? 'lunar' : 'solar');
+    const orderUrl = ORDER + '?' + oq.toString();
     const open = $('#fourpOpen', root), pr = $('#fourpPrint', root), od = $('#fourpOrder', root);
     if (open) open.href = open.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
     if (pr) pr.href = pr.getAttribute('href').split('?')[0] + '?' + lastFourpQuery;
-    if (od) od.href = ORDER + '?' + lastFourpQuery;
+    if (od) od.href = orderUrl;
     if (note) note.innerHTML = '<b>내 여덟 글자로 다시 계산했습니다.</b> 아래 지면에서 1장부터 읽어 보세요.';
     if (frame) setTimeout(()=>{ try{ frame.scrollIntoView({behavior:'smooth', block:'start'}); }catch(e){} }, 300);
   });

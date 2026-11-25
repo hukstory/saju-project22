@@ -887,12 +887,16 @@
   var ORDER_URL = 'https://aura-saju.pages.dev/order.html';
   var ORDER_QS = '';
 
+  /* 정밀분석 주문 페이지(aura-saju/order.html)가 읽는 형식 —
+     ?name=홍길동&birth=1990-03-15&time=14:30&gender=남&cal=solar|lunar|lunar-leap
+     생시를 모르면 time=모름 으로 보내면 주문 폼이 ‘시각 모름’을 체크한다. */
   function queryOf(inp) {
     var q = new URLSearchParams();
-    q.set('n', inp.name || ''); q.set('g', inp.gender);
-    q.set('c', inp.calendar); if (inp.lunarLeap) q.set('lp', '1');
-    q.set('y', inp.y); q.set('m', inp.mo); q.set('d', inp.d);
-    if (inp.hourKnown) q.set('t', pad2(inp.h) + pad2(inp.mi)); else q.set('u', '1');
+    if (inp.name) q.set('name', inp.name);
+    q.set('birth', inp.y + '-' + pad2(inp.mo) + '-' + pad2(inp.d));
+    q.set('time', inp.hourKnown ? pad2(inp.h) + ':' + pad2(inp.mi) : '모름');
+    q.set('gender', inp.gender === '남' ? '남' : '여');
+    q.set('cal', inp.calendar === 'lunar' ? (inp.lunarLeap ? 'lunar-leap' : 'lunar') : 'solar');
     return q.toString();
   }
   function orderHref() { return ORDER_URL + (ORDER_QS ? '?' + ORDER_QS : ''); }
