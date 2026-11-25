@@ -1085,7 +1085,8 @@
     return '<section class="fp-sec">' +
       '<div class="fp-kicker">PAGE 03 · 사람과 인연</div>' +
       '<h2 class="fp-h2">' + head + '</h2>' +
-      '<p class="fp-p">' + starText + ' ' + pattern + '</p>' +
+      '<p class="fp-p">' + starText + '</p>' +
+      '<p class="fp-p">' + pattern + '</p>' +
       '<div class="fp-boxes">' +
       '<div class="fp-box"><b>먼저 마음이 가는 사람</b><p>' + OH_NOUN[m.spouseOh] + ' 같은 사람 — ' + OH_IMG[OHK[m.spouseOh]].key + jj(OH_IMG[OHK[m.spouseOh]].key, '이') + ' 분명한 사람. 말보다 태도로 보여주는 쪽에 약합니다.</p></div>' +
       '<div class="fp-box"><b>곁에 오는 사람</b><p>' + (p ? (SPOUSE_UNSEONG[p.unseong.name] || '편안한 사람') + ' — 배우자 자리에 앉은 글자가 그런 사람을 데려옵니다.' : '배우자 자리를 읽으려면 태어난 시각이 필요합니다.') + '</p></div>' +
@@ -1108,8 +1109,10 @@
     for (var i = 1; i <= 12; i++) vals.push(typeof byMonth[i] === 'number' ? byMonth[i] : 55);
     var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
     var bars = vals.map(function (sc) {
-      var h = 24 + Math.round(((sc - mn) / ((mx - mn) || 1)) * 46);
-      return '<i style="height:' + h + 'px"></i>';
+      var t = (sc - mn) / ((mx - mn) || 1);
+      var h = 20 + Math.round(t * 50);
+      var op = (0.4 + t * 0.6).toFixed(2);
+      return '<i style="height:' + h + 'px;opacity:' + op + '"></i>';
     }).join('');
     var theme = YEAR_THEME[y.stemSip] || '생활의 판이 바뀌는 일';
     var place = SIP_PLACE[sipGroup(y.branchSip)] || '내 자리';
