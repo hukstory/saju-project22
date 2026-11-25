@@ -1103,3 +1103,20 @@ footer{border-top:2px solid #141210;background:#fbfaf7;margin-top:50px}
   .game__picks{font-size:26px}
   .game__btns .btn{flex:1 1 auto;text-align:center}
 }
+
+/* ---------- 기사 본문 안의 확인 유도 카드 (2026-11-25) ---------- */
+.artcta{margin:34px 0;padding:22px 22px 18px;border:1px solid #e6d6ae;border-left:4px solid #b08a3e;border-radius:6px;
+  background:linear-gradient(180deg,#fffdf7 0%,#faf3e2 100%);position:relative;overflow:hidden}
+.artcta::after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,106,.20),transparent 70%);pointer-events:none}
+.artcta__t{display:block;font-family:var(--serif);font-size:20px;font-weight:900;letter-spacing:-.045em;color:#171310;line-height:1.45}
+.artcta__s{font-size:13px;color:#6c6252;margin:6px 0 0;line-height:1.65}
+.artcta__btns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px;position:relative}
+.artcta__btns .btn{min-height:50px;font-size:13.5px;padding:11px 8px}
+.artcta__n{display:block;font-size:10.5px;color:#9a8d74;margin-top:9px;letter-spacing:-.01em}
+@media(max-width:640px){
+  .artcta{padding:18px 16px 15px;margin:26px 0}
+  .artcta__t{font-size:17.5px}
+  .artcta__btns{grid-template-columns:1fr}
+  .artcta__btns .btn{min-height:46px}
+}

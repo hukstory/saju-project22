@@ -20,7 +20,13 @@ if (typeof ARTICLES_EXTRA !== 'undefined'){
   });
 }
 const BY_ID = ARTICLES.reduce((m,a)=>{ m[a.id]=a; return m; },{});
-const IMG = (name)=>`assets/img/${name}.webp`;
+/* 이미지 주소 — 이름에 확장자가 있으면 그대로, 없으면 기존 .webp */
+const IMG = (name)=>{
+  const n = String(name||'');
+  if (/\.[a-z0-9]+$/i.test(n)) return `assets/img/${n}`;          /* 확장자까지 적힌 이름 */
+  if (n.indexOf('g/')===0) return `assets/img/${n}.svg`;           /* 생성 일러스트는 SVG */
+  return `assets/img/${n}.webp`;                                   /* 기존 사진·일러스트 */
+};
 const ORDER = 'https://aura-saju.pages.dev/order.html';
 
 /* ---------- 유틸 ---------- */
@@ -35,7 +41,7 @@ const byCat = (id)=> inCat(id).slice().sort((a,b)=> dayKey(b).localeCompare(dayK
 const dateStr = (a)=>{ const d=(a.date||'2026-11-22').split('-'); return `${d[0]}.${d[1]}.${d[2]}. ${a.time||'06:00'}`; };
 /* 매일 갱신 기사(ARTICLES_DAILY)가 있으면 그 지면의 최신 호를, 없으면 기본 기사를 쓴다 */
 const dayKey = (a)=> String(a.date||'');
-const SITE_BUILD_DATE = '2026-11-22';
+const SITE_BUILD_DATE = '2026-11-25';
 const daysAgo = (a)=>{
   const d = a.date || SITE_BUILD_DATE;   /* 날짜 없는 기본 기사는 사이트 제작일 기준 */
   const t = new Date(d + 'T00:00:00+09:00').getTime();
@@ -60,7 +66,7 @@ function renderTabs(active){
   const nav = $('#tabsIn'); if (!nav) return;
   nav.innerHTML = CATS.map(c=>{
     const on = (c.id===active) ? ' is-active' : '';
-    const hot = (c.id==='mbti'||c.id==='today'||c.id==='program') ? '<span class="hot">NEW</span>' : '';
+    const hot = (c.id==='main'||c.id==='today'||c.id==='people'||c.id==='program') ? '<span class="hot">NEW</span>' : '';
     return `<a class="tab${on}${c.point?' tab--point':''}" href="${c.route}">${c.ko}${hot}</a>`;
   }).join('');
   /* 모바일에서 활성 지면 탭이 가려져 있으면 보이게 옆으로 밀어 준다 */
@@ -312,7 +318,7 @@ function programBanner(){
 }
 
 /* ---------- 1면 · 지면 모아보기 (탭 전환) ---------- */
-const DESK_TABS = ['mbti','today','money','dream','past','people','shop','lab'];
+const DESK_TABS = ['today','people','mbti','money','dream','past','shop'];
 function latestAcross(n){
   const seen = {};
   return ARTICLES.slice()
@@ -321,7 +327,12 @@ function latestAcross(n){
     .slice(0, n||4);
 }
 function deskPanel(id, on){
-  const list = (id==='latest') ? latestAcross(4) : byCat(id);
+  let list = (id==='latest') ? latestAcross(12) : byCat(id);
+  if (id==='latest'){
+    /* 1면 TOP 7에 이미 실린 기사는 ‘오늘의 주요 기사’에서 빼서 같은 그림이 한 화면에 두 번 보이지 않게 한다 */
+    const used = {}; top7Pick(7).forEach(a=>{ used[a.id]=1; });
+    list = list.filter(a=>!used[a.id]).slice(0, 4);
+  }
   const lead = list[0]; if (!lead) return '';
   const rows = list.slice(1, 4);
   const name = (id==='latest') ? '오늘의 주요 기사' : catOf(id).ko;
@@ -735,6 +746,15 @@ function bodyHTML(blocks){
   return blocks.map(b=>{
     if (b.t==='h') return `<h3>${b.x}</h3>`;
     if (b.t==='q') return `<div class="quote">${b.x}</div>`;
+    if (b.t==='cta') return `<div class="artcta">
+      <b class="artcta__t">${b.x||'내 사주에도 이 기운이 있을까?'}</b>
+      <p class="artcta__s">${b.y||'생년월일 하나면 네 장이 바로 열립니다. 무료입니다.'}</p>
+      <div class="artcta__btns">
+        <a class="btn btn--red" href="#/4p">🔥 내 사주 4P 무료로 열기</a>
+        <a class="btn btn--gold" href="${ORDER}" target="_blank" rel="noopener">2027 정밀분석 보기</a>
+      </div>
+      <span class="artcta__n">무료 4P → 본성 · 돈 · 인연 · 2027 &nbsp;|&nbsp; 정밀분석 30P 19,900원부터</span>
+    </div>`;
     if (b.t==='ul') return `<ul>${b.x.map(x=>`<li>${x}</li>`).join('')}</ul>`;
     return `<p>${b.x}</p>`;
   }).join('');
@@ -1061,8 +1081,23 @@ function restoreFourpForm(){
 }
 
 /* ---------- 지난 기사 아카이브 ---------- */
+/* 지면에 싣는 articles-daily.js 는 최근 45일만. 그 이전 호는 data/articles.json 에서 한 번만 불러와 합친다. */
+let ARCHIVE_FULL = null, ARCHIVE_LOADING = false, ARCHIVE_FAILED = false;
+function loadFullArchive(){
+  if (ARCHIVE_FULL || ARCHIVE_LOADING) return;
+  ARCHIVE_LOADING = true;
+  fetch('data/articles.json', {cache:'no-store'}).then(r=>r.json()).then(j=>{
+    const list = Array.isArray(j) ? j : (j.articles || []);
+    const have = {}; ARTICLES.forEach(a=>{ have[a.id]=1; });
+    let added = 0;
+    list.forEach(a=>{ if (a && a.id && !have[a.id]){ ARTICLES.push(a); BY_ID[a.id]=a; have[a.id]=1; added++; } });
+    ARTICLES.sort((a,b)=> String(b.date||'').localeCompare(String(a.date||'')) || num(b.views)-num(a.views));
+    ARCHIVE_FULL = list; ARCHIVE_LOADING = false;
+    if ((location.hash||'').indexOf('#/archive')===0) render();
+  }).catch(()=>{ ARCHIVE_LOADING = false; ARCHIVE_FAILED = true; });
+}
 function archiveGroups(){
-  const daily = DAILY().filter(a=>a.date);
+  const daily = ARTICLES.filter(a=>a.date);
   const map = {};
   daily.forEach(a=>{ (map[a.date] = map[a.date] || []).push(a); });
   return Object.keys(map).sort((a,b)=>b.localeCompare(a)).map(d=>({ date:d, items: map[d].slice().sort((x,y)=> (y.top?1:0)-(x.top?1:0) || num(y.views)-num(x.views)) }));
@@ -1081,7 +1116,7 @@ function viewArchive(){
     <div>
       <div class="kicker">ARCHIVE · 지난 기사 모아보기</div>
       <h1>운명사주 정운타임즈 지난 호</h1>
-      <p>매일 05:30 새 호가 발행되고, 지난 호는 <b>최근 60일 · 최대 120편</b>까지 이곳에 쌓입니다. 오늘 ${groups.length}일치 ${total}편이 남아 있습니다.</p>
+      <p>매일 05:30 새 호가 발행되고, 지난 호는 <b>최근 365일 · 최대 2,600편</b>까지 이곳에 쌓입니다. 지금 ${groups.length}일치 ${total}편이 보입니다.</p>
     </div>
     <a class="btn btn--ink" href="#/4p">무료 4P 보기</a>
   </div>
@@ -1089,6 +1124,9 @@ function viewArchive(){
     <button type="button" class="is-on" data-af="">전체 ${total}</button>
     ${cats.map(c=>`<button type="button" data-af="${esc(c)}">${esc(catOf(c).ko)} ${groups.reduce((n,g)=>n+g.items.filter(a=>a.cat===c).length,0)}</button>`).join('')}
   </div>
+  <p class="arch-load" style="font-size:12px;color:#8b8378;margin:6px 0 0">
+    ${ARCHIVE_FULL ? '전체 아카이브를 모두 불러왔습니다.' : (ARCHIVE_FAILED ? '지난 호 전체를 불러오지 못했습니다. 지면에 실린 최근 호만 보입니다.' : '지난 호 전체를 불러오는 중… 아래는 최근 호입니다.')}
+  </p>
   <div id="archBody">
   ${groups.map(g=>`
     <div class="arch-day" data-day="${esc(g.date)}">
@@ -1194,7 +1232,7 @@ function render(){
   bind4P(app);
   if (r.view==='home'){ bindOneline(app); bindDeskTabs(app); bindGame(app); }
   if (r.view==='free') bindFree(app);
-  if (r.view==='archive') bindArchive(app);
+  if (r.view==='archive'){ bindArchive(app); loadFullArchive(); }
   if (r.view==='article') bindShare(app, r.id);
   const a = (r.view==='article') ? BY_ID[r.id] : null;
   const cat = (r.view==='section') ? catOf(r.cat) : null;
@@ -1416,7 +1454,9 @@ function setupPWA(){
     const t = Number(localStorage.getItem(SHEET_KEY) || 0);
     quiet = !!t && (Date.now() - t) < SHEET_QUIET_MS;
   }catch(e){ quiet = false; }
-  if (!isStandalone() && !quiet) setTimeout(openSheet, 1000);
+  /* 설치 시트는 휴대폰에서만 — PC 방문자에게는 본문을 가리지 않는다 */
+  const phone = window.matchMedia('(max-width: 820px)').matches;
+  if (!isStandalone() && !quiet && phone) setTimeout(openSheet, 1000);
   const sheetX = $('#installSheetClose'); if (sheetX) sheetX.addEventListener('click', ()=> closeSheet(true));
   const sheetLater = $('#installSheetLater'); if (sheetLater) sheetLater.addEventListener('click', ()=> closeSheet(true));
   document.addEventListener('keydown', (e)=>{ if (e.key==='Escape' && sheet && sheet.classList.contains('is-on')) closeSheet(true); });

@@ -18,15 +18,14 @@ const BRAND = {
 /* ---------- 가로 카테고리 탭 ---------- */
 const CATS = [
   { id:'main',    ko:'메인',        route:'#/',            en:'MAIN',    desc:'운명사주 정운타임즈 1면' },
+  { id:'today',   ko:'오늘의운세',  route:'#/today',       en:'FORTUNE', desc:'오늘의 간지와 내 기운' },
+  { id:'people',  ko:'화제의인물',  route:'#/people',      en:'PEOPLE',  desc:'지금 뜨는 사람의 여덟 글자' },
   { id:'mbti',    ko:'MBTI궁합',    route:'#/mbti',        en:'CHEMISTRY', desc:'네 글자로 읽는 인연' },
-  { id:'today',   ko:'오늘의운세',  route:'#/today',       en:'FORTUNE',  desc:'오늘의 간지와 내 기운' },
-  { id:'money',   ko:'사주·재물',   route:'#/money',       en:'WEALTH',   desc:'돈의 그릇과 때' },
-  { id:'dream',   ko:'어젯밤그꿈',  route:'#/dream',       en:'DREAMS',   desc:'꿈 상징 사전' },
+  { id:'money',   ko:'사주·재물',   route:'#/money',       en:'WEALTH',  desc:'돈의 그릇과 때' },
+  { id:'dream',   ko:'어젯밤그꿈',  route:'#/dream',       en:'DREAMS',  desc:'꿈 상징 사전' },
   { id:'past',    ko:'전생',        route:'#/past',        en:'PAST LIFE',desc:'반복되는 습관의 뿌리' },
-  { id:'people',  ko:'화제의인물',  route:'#/people',      en:'PEOPLE',   desc:'지금 뜨는 사람의 여덟 글자' },
-  { id:'shop',    ko:'운부르는것들',route:'#/shop',        en:'OBJECTS',  desc:'개운 소품과 동양의 부적' },
-  { id:'lab',     ko:'운명연구소',  route:'#/lab',         en:'LAB',      desc:'운명전쟁49 · 관찰 기록' },
-  { id:'program', ko:'사주프로그램',route:'#/program',     en:'PROGRAM',  desc:'만세력·자미두수 분석 프로그램 · 1년 이용권', point:true },
+  { id:'shop',    ko:'운부르는것들',route:'#/shop',        en:'OBJECTS', desc:'개운 소품과 동양의 부적' },
+  { id:'program', ko:'사주프로그램',route:'#/program',     en:'PROGRAM', desc:'만세력·자미두수 분석 프로그램 · 1년 이용권', point:true },
   { id:'fourp',   ko:'무료 4P',    route:'#/4p',          en:'4P',       desc:'내 사주로 바로 읽는 네 장 · 무료', point:true }
 ];
 

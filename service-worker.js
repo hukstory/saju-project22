@@ -3,7 +3,7 @@
    - 앱 셸(app shell)은 미리 캐시, 문서는 네트워크 우선 + 캐시 폴백
    - 이미지·4P 등 정적 자원은 캐시 우선(백그라운드 갱신)
    ========================================================================== */
-const VERSION = 'jw-times-v48';
+const VERSION = 'jw-times-v50';
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 
@@ -17,7 +17,6 @@ const SHELL_FILES = [
   './assets/js/articles-1.js',
   './assets/js/articles-2.js',
   './assets/js/articles-3.js',
-  './assets/js/articles-extra.js',
   './assets/js/articles-top7.js',
   './assets/js/articles-daily.js',
   './assets/js/magazine.js',
@@ -72,7 +71,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // 매일 갱신되는 파일은 네트워크 우선(오프라인일 때만 캐시)
-  const VOLATILE = ['/assets/js/articles-daily.js', '/assets/js/magazine.js', '/assets/js/articles-top7.js', '/assets/js/fourp.js', '/assets/js/app.js', '/assets/js/data.js'];
+  const VOLATILE = ['/assets/js/articles-daily.js', '/assets/js/magazine.js', '/assets/js/articles-top7.js', '/assets/js/fourp.js', '/assets/js/app.js', '/assets/js/data.js', '/data/articles.json'];
   if (VOLATILE.some(p => url.pathname.endsWith(p))){
     event.respondWith((async () => {
       try {

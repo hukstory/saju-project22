@@ -4,10 +4,10 @@
 
 ## 1면 구성 (2026-11-25 매거진 개편)
 
-0. **정운 매거진** — 지면 모아보기 아래. 커버 1 + 미니 2 + 그리드 9(총 12장)의 후킹 기사 카드. 이미지는 `assets/img`를 돌려 쓰고, 제목·2~3줄 요약은 `assets/js/magazine.js`의 `MAG_FEATURED`·`MAG_GRID`에 있다. 카드의 `id`가 기사 아카이브에 없으면 그 카드는 자동으로 빠진다.
+0. **정운 매거진** — 지면 모아보기 아래. 커버 1 + 미니 2 + 그리드 9(총 12장)의 후킹 기사 카드. 이미지는 카드마다 `assets/img/g/mag-*.svg` 고유 일러스트를 쓰고(기사 그림과 겹치지 않음), 제목·2~3줄 요약은 `assets/js/magazine.js`의 `MAG_FEATURED`·`MAG_GRID`에 있다. 카드의 `id`가 기사 아카이브에 없으면 그 카드는 자동으로 빠진다.
    - **사주 8컷 만화** — `COMIC`(magazine.js). 컷마다 SVG 일러스트 문자열(`art`)을 들고 있어 외부 이미지·유료 API 없이 지면에서 바로 그린다. 8컷 = 재물운이 터지기 전 나타나는 사주 신호.
    - **사주 미니게임** — `GAME_MONTHS`(magazine.js). 2027 정미년 12달 카드 중 3장을 뒤집으면 대박 달·키워드·행운의 색이 나오고, 무료 4P(`#/4p`)와 정밀분석 주문으로 이어진다. 결과는 브라우저에서만 계산(서버·결제 없음).
-   - **연예인 기사 썸네일** — 인물 기사는 그 사람의 분위기에 맞춘 매거진 일러스트(`assets/img/people-diva|trot|idol|actor|actress|host|ice|field.webp`)를 쓴다. 실존 인물의 사진·초상은 쓰지 않는다. 지정은 `data/people.json`의 `img`, 없으면 `scripts/daily_update.py`의 `person_img()`가 활동 분야로 고른다.
+   - **연예인 기사 썸네일** — 인물 기사도 날짜·지면별 고유 일러스트(`assets/img/g/d-YYYY-MM-DD-people.svg`)를 쓴다. 실존 인물의 사진·초상은 쓰지 않는다.
 
 ## 1면 구성 (2026-11-24 TOP 7 개편)
 
@@ -25,14 +25,13 @@
 | 지면 | 경로 |
 | --- | --- |
 | 1면(메인) | `#/` |
-| MBTI궁합 | `#/mbti` |
 | 오늘의운세 | `#/today` |
+| 화제의인물 | `#/people` (탭 3번째) |
+| MBTI궁합 | `#/mbti` |
 | 사주·재물 | `#/money` |
 | 어젯밤그꿈 | `#/dream` |
 | 전생 | `#/past` |
-| 화제의인물 | `#/people` |
 | 운부르는것들 | `#/shop` |
-| 운명연구소 | `#/lab` |
 | 사주프로그램 · 1년 이용권 | `#/program` |
 | 990원 4P | `#/4p` |
 | 무료 1분 분석 | `#/free` |
@@ -50,14 +49,16 @@ assets/js/data.js         코너·티커·요금·푸터 문구
 assets/js/articles-1..3.js 기사 24편 (각 20~30줄 이상 본문)
 assets/js/app.js          해시 라우터 · 지면 렌더 · TOP7 · 위젯 · 4P 뷰어 · 프로그램 지면 · PWA 설치
 assets/js/articles-top7.js 1면 TOP 7 기사 7편 (편집국 고정 목록 · 2026-11-24 개편)
-assets/js/articles-daily.js  매일 갱신 기사 (스크립트가 자동 생성)
+assets/js/articles-daily.js  매일 갱신 기사 (최근 45일 · 그 이전은 data/articles.json 에서 불러옴)
 assets/js/magazine.js     1면 매거진 카드 · 8컷 만화(SVG) · 2027 대박 달 미니게임
 assets/js/saju-data.js       KASI 절기·음양력 테이블
 assets/js/saju-engine.js     만세력 엔진 (korean-saju 0.3.0 이식)
 assets/js/fourp.js           4P 개인화 렌더
-data/articles.json           누적 기사 아카이브 (60일·120편)
+data/articles.json           누적 기사 아카이브 (365일·최대 2,600편 · 압축 JSON)
 data/people.json             화제의 인물 풀 (공개 생년월일 확인분)
 scripts/saju_calc.py         만세력 계산 (Python)
+scripts/make_art.py          기사 전용 동양풍 SVG 일러스트 생성기 (키마다 고유)
+scripts/daily_update.py      매일 05:30 자동 발행 — 전 지면 7편 + 고유 일러스트 + 중복 검사
 scripts/daily_update.py      매일 자동 리뉴얼·푸시
 assets/img/*.webp         동양 감성 이미지 16종
 assets/icons/*            PWA 아이콘 (192/512/maskable/apple-touch)
