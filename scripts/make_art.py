@@ -932,15 +932,15 @@ def sprout(cx, base_y, w_, pal):
         path(f"M {_d(cx)} {_d(base_y)} C {_d(cx - 8)} {_d(base_y - w_ * 0.4)} {_d(cx - 6)} {_d(top + 20)} {_d(cx - 4)} {_d(top)}",
              stroke=ink, w=8),
         # 왼쪽 잎
-        path(f"M {_d(cx - 6)} {_d(base_y - w_ * 0.52)} C {_d(cx - w_ * 0.3)} {_d(base_y - w_ * 0.66)} "
-             f"{_d(cx - w_ * 0.44)} {_d(base_y - w_ * 0.8)} {_d(cx - w_ * 0.46)} {_d(base_y - w_ * 0.86)} "
-             f"C {_d(cx - w_ * 0.52)} {_d(base_y - w_ * 0.62)} {_d(cx - w_ * 0.26)} {_d(base_y - w_ * 0.5)} "
-             f"{_d(cx - 6)} {_d(base_y - w_ * 0.52)} Z", fill=gold, stroke=ink, w=5, op=0.55),
+        path(f"M {_d(cx - 6)} {_d(base_y - w_ * 0.5)} C {_d(cx - w_ * 0.22)} {_d(base_y - w_ * 0.62)} "
+             f"{_d(cx - w_ * 0.33)} {_d(base_y - w_ * 0.72)} {_d(cx - w_ * 0.35)} {_d(base_y - w_ * 0.77)} "
+             f"C {_d(cx - w_ * 0.4)} {_d(base_y - w_ * 0.58)} {_d(cx - w_ * 0.2)} {_d(base_y - w_ * 0.48)} "
+             f"{_d(cx - 6)} {_d(base_y - w_ * 0.5)} Z", fill=gold, stroke=ink, w=5, op=0.55),
         # 오른쪽 잎
-        path(f"M {_d(cx - 2)} {_d(top + 16)} C {_d(cx + w_ * 0.2)} {_d(top - w_ * 0.06)} "
-             f"{_d(cx + w_ * 0.34)} {_d(top - w_ * 0.02)} {_d(cx + w_ * 0.38)} {_d(top)} "
-             f"C {_d(cx + w_ * 0.4)} {_d(top + w_ * 0.16)} {_d(cx + w_ * 0.16)} {_d(top + w_ * 0.2)} "
-             f"{_d(cx - 2)} {_d(top + 16)} Z", fill=gold, stroke=ink, w=5, op=0.8),
+        path(f"M {_d(cx - 2)} {_d(top + 14)} C {_d(cx + w_ * 0.16)} {_d(top - w_ * 0.04)} "
+             f"{_d(cx + w_ * 0.26)} {_d(top - w_ * 0.01)} {_d(cx + w_ * 0.3)} {_d(top + 0.02)} "
+             f"C {_d(cx + w_ * 0.32)} {_d(top + w_ * 0.14)} {_d(cx + w_ * 0.13)} {_d(top + w_ * 0.17)} "
+             f"{_d(cx - 2)} {_d(top + 14)} Z", fill=gold, stroke=ink, w=5, op=0.8),
         # 흙
         path(f"M {_d(cx - 56)} {_d(base_y - 6)} q {_d(56)} {_d(16)} {_d(112)} 0", stroke=ink, w=4, op=0.35),
     ])

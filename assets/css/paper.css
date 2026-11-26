@@ -1218,7 +1218,7 @@ footer{border-top:2px solid #141210;background:#fbfaf7;margin-top:50px}
   .mag-lead__sum{font-size:12px}
   .mag__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
   .mag__grid > :last-child:nth-child(odd){grid-column:1/-1}
-  .mag__grid > :last-child:nth-child(odd) .mag-card__shot{aspect-ratio:16/7.4}
+  .mag__grid > :last-child:nth-child(odd) .mag-card__shot{aspect-ratio:16/9}
   .mag-card__shot{aspect-ratio:16/9.6;margin-bottom:6px}
   .mag-card__ttl{font-size:12.5px;line-height:1.42;-webkit-line-clamp:2}
   .mag-mini{grid-template-columns:96px minmax(0,1fr);gap:10px}
