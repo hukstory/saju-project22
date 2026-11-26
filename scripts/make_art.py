@@ -524,6 +524,12 @@ def red_thread(cx, cy, w_, pal):
     return "".join(out)
 
 
+def thread_line(cx, cy, w_, pal, op=0.9):
+    """실 한 가닥 — 두 사람 사이를 잇는 붉은 실."""
+    return path(f"M {_d(cx - w_ / 2)} {_d(cy - 12)} Q {_d(cx)} {_d(cy + 30)} {_d(cx + w_ / 2)} {_d(cy - 12)}",
+                stroke=pal["red"], w=7, op=op)
+
+
 def bed(cx, base_y, w_, pal):
     """침대와 잠든 사람 — 이불은 언덕처럼 부풀게(사람이 덮고 있는 모양)."""
     ink, gold, red, soft = pal["ink"], pal["gold"], pal["red"], pal["soft"]
@@ -750,7 +756,12 @@ def scene_duo(rng, pal):
     parts.append(bust(lx, 712, r=r, hair=rng.pick(["bun", "bob", "short"]), pal=pal, tilt=4, w=6))
     parts.append(bust(rx_, 712, r=r, hair=rng.pick(["short", "topknot", "band", "gat"]), pal=pal, tilt=-4, w=6))
     mid = (lx + rx_) / 2
-    parts.append(red_thread(mid, 336, 210, pal))
+    parts.append(thread_line(mid, 392, 268, pal))
+    hs = 17
+    parts.append(path(f"M {_d(mid)} {_d(348 + hs)} C {_d(mid - hs * 1.16)} {_d(348 - hs * 0.4)} "
+                      f"{_d(mid - hs * 0.58)} {_d(348 - hs * 1.16)} {_d(mid)} {_d(348 - hs * 0.46)} "
+                      f"C {_d(mid + hs * 0.58)} {_d(348 - hs * 1.16)} {_d(mid + hs * 1.16)} {_d(348 - hs * 0.4)} {_d(mid)} {_d(348 + hs)} Z",
+                      fill=pal["red"], stroke=pal["ink"], w=3, op=0.92))
     bw = 132
     parts.append(speech(mid - 86, 186, bw, 78, pal, tail="left"))
     parts.append(line(mid - 128, 186, mid - 52, 186, stroke=pal["ink"], w=4, op=0.5))
