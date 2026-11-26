@@ -1120,3 +1120,230 @@ footer{border-top:2px solid #141210;background:#fbfaf7;margin-top:50px}
   .artcta__btns{grid-template-columns:1fr}
   .artcta__btns .btn{min-height:46px}
 }
+
+/* ============================================================================
+   2026-11-26 · 모바일 최적화 (390px 기준) — 여백·글자·카드·폼
+   ========================================================================== */
+@media (max-width:760px){
+  html{-webkit-text-size-adjust:100%}
+  body{letter-spacing:-.008em}
+  .shell,.ticker__in,.masthead__in,.tabs__in,.footer__in{padding-left:14px;padding-right:14px}
+  main,main.shell{padding-top:14px;padding-bottom:64px}
+
+  /* ---- 속보 티커 ---- */
+  .ticker{font-size:11.5px}
+  .ticker__in{height:32px;gap:8px}
+  .ticker__viewport{height:32px}
+  .ticker__badge{font-size:10px;padding:2px 6px}
+  .ticker__track{gap:28px;animation-duration:38s}
+
+  /* ---- 마스트헤드: 로고 가운데, 설치 버튼은 상단 배너로 ---- */
+  .masthead__in{grid-template-columns:40px minmax(0,1fr) 40px;gap:4px;padding:8px 14px 7px}
+  .burger{width:40px;height:40px;display:grid;place-items:center;order:-1;justify-self:start;border-radius:10px;color:#1b1b1b}
+  .burger:active{background:#f4f0e6}
+  .brand{justify-self:center;gap:7px}
+  .brand__seal{width:31px;height:31px;font-size:11.5px;border-radius:2px}
+  .brand__word b{font-size:24px;letter-spacing:-.05em}
+  .brand__lockup .brand__pre{font-size:7.5px;letter-spacing:.22em;margin:0 0 2px 1px}
+  .brand__word i{font-size:8.5px;letter-spacing:.08em;margin-top:2px;padding-left:1px}
+  .masthead__right{display:none}
+
+  /* ---- 카테고리 탭 ---- */
+  .tabs::after{content:"";position:absolute;right:0;top:0;bottom:0;width:26px;pointer-events:none;
+    background:linear-gradient(90deg,rgba(255,255,255,0),#fff 72%)}
+  .tabs__in{padding:0 8px}
+  .tabs__in.is-scrolled{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px);mask-image:linear-gradient(90deg,transparent 0,#000 16px)}
+  .tab{padding:12px 12px 11px;font-size:13.5px}
+  .tab.is-active::after{left:10px;right:10px;height:2.5px}
+  .tab .hot{font-size:8.5px;padding:1px 3px;margin-left:4px}
+
+  /* ---- 공통 ---- */
+  .sec-head{margin-bottom:11px;gap:8px}
+  .sec-head h2,.section__rule h2{font-size:18px}
+  .sec-head .en{font-size:9px;letter-spacing:.18em}
+  .sec-head__more{font-size:11.5px;padding:4px 10px}
+  .rule{margin:20px 0}
+  .kicker{font-size:10.5px}
+  .meta{font-size:11px;gap:4px 8px}
+
+  /* ---- TOP 7 ---- */
+  .rank{padding:10px 0 12px}
+  .rank__badge{font-size:10px;padding:4px 7px}
+  .rank__head h2{font-size:21px}
+  .rank__en{font-size:9px}
+  .rank__shot img{aspect-ratio:16/9.6}
+  .rank__heroNo{font-size:21px;padding:7px 11px 9px}
+  .rank__heroTtl{font-size:21px;line-height:1.36}
+  .rank__cat{font-size:10.5px}
+  .rank__list a{grid-template-columns:18px 74px minmax(0,1fr);gap:8px;padding:9px 0}
+  .rank__no{font-size:15px}
+  .rank__thumb{width:74px;height:52px}
+  .rank__ttl{font-size:14.5px;line-height:1.4;-webkit-line-clamp:3}
+  .rank__list .rank__cat{font-size:9.5px}
+
+  /* ---- 오늘의 한 줄 ---- */
+  .oneline{padding:15px 14px 14px;margin-top:14px}
+  .oneline__in{grid-template-columns:1fr;gap:12px}
+  .oneline__head{padding-right:0}
+  .oneline__head h2{font-size:20px}
+  .oneline__head p{font-size:11.5px}
+  .oneline__chips{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .oneline__chip{justify-content:center;padding:8px 4px;font-size:11.5px;gap:3px}
+  .oneline__chip span{font-size:12px}
+  .oneline__headline{font-size:14px}
+  .oneline__advice{font-size:11.5px}
+
+  /* ---- 프로그램 배너 ---- */
+  .progbanner{padding:13px 14px;gap:7px}
+  .progbanner__mid b{font-size:15.5px}
+  .progbanner__mid span{font-size:11px}
+  .progbanner__tag{font-size:9px;padding:4px 8px}
+
+  /* ---- 지면 모아보기 ---- */
+  .desk{margin-top:22px;padding-top:16px}
+  .desk__head h2{font-size:21px}
+  .desk__tabs{gap:5px;margin-bottom:10px;padding-bottom:1px}
+  .desk__tabs button{padding:7px 12px;font-size:12px}
+  .desk__grid{grid-template-columns:1fr;gap:14px}
+  .desk-lead{grid-template-columns:1fr;gap:9px}
+  .desk-lead img{width:100%;height:auto;aspect-ratio:16/9.4}
+  .desk-lead__t b{font-size:17px;-webkit-line-clamp:3;margin:4px 0 5px}
+  .desk-lead__t i{font-size:12.5px;-webkit-line-clamp:2}
+
+  /* ---- 매거진 ---- */
+  .mag{margin-top:24px;padding-top:16px}
+  .mag__head h2{font-size:19px}
+  .mag__lead .mag-card__shot,.mag-lead__shot{aspect-ratio:16/9.4}
+  .mag-lead__ttl{font-size:18px;line-height:1.38}
+  .mag-lead__sum{font-size:12px}
+  .mag__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
+  .mag__grid > :last-child:nth-child(odd){grid-column:1/-1}
+  .mag__grid > :last-child:nth-child(odd) .mag-card__shot{aspect-ratio:16/7.4}
+  .mag-card__shot{aspect-ratio:16/9.6;margin-bottom:6px}
+  .mag-card__ttl{font-size:12.5px;line-height:1.42;-webkit-line-clamp:2}
+  .mag-mini{grid-template-columns:96px minmax(0,1fr);gap:10px}
+  .mag-mini img{height:64px}
+  .mag-mini__body b{font-size:12.5px}
+
+  /* ---- 8컷 만화 ---- */
+  .comic{padding:14px 12px 12px;margin-top:20px}
+  .comic__head h2{font-size:17px;line-height:1.32}
+  .comic__head p{font-size:11.5px}
+  .comic__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .cut__ttl{font-size:11px;line-height:1.38}
+  .cut__sig{font-size:9.5px;line-height:1.45;padding-left:5px}
+  .cut__no{width:17px;height:17px;font-size:9.5px}
+  .comic__note{font-size:9.5px}
+
+  /* ---- 미니게임 ---- */
+  .game{padding:14px 12px;margin-top:18px}
+  .game__head h2{font-size:17px}
+  .game__head p{font-size:11.5px}
+  .game__board{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .gcard{border-radius:4px}
+  .gcard__back b{font-size:14px}
+  .gcard__front b{font-size:17px}
+  .gcard__front i{font-size:8.5px}
+  .gcard__front em{font-size:9px}
+  .game__picks{font-size:22px}
+  .game__line{font-size:11.5px}
+
+  /* ---- 4P 스트립 ---- */
+  .strip4p{padding:20px 14px;margin-top:26px}
+  .strip4p h3{font-size:21px}
+  .strip4p p{font-size:12.5px}
+  .strip4p__pages{display:none}
+  .strip4p__btns{flex-direction:column;gap:8px}
+  .strip4p__btns .btn{width:100%}
+
+  /* ---- 기사 ---- */
+  .art__cat{font-size:11.5px}
+  .art__title{font-size:25px;line-height:1.34;letter-spacing:-.045em;margin:7px 0 9px}
+  .art__dek{font-size:14px;line-height:1.62}
+  .art__byline{padding:10px 0;gap:10px}
+  .art__writer b{font-size:12.5px}
+  .art__writer span{font-size:11px}
+  .art__tools{gap:5px;flex-wrap:wrap}
+  .art__tools button{font-size:11px;padding:5px 10px}
+  .leadbar{font-size:15px;line-height:1.72;margin:18px 0 20px;padding-left:14px}
+  .figure{margin:18px 0 22px}
+  .figure figcaption{font-size:11px}
+  .art__body{font-size:15.5px;line-height:1.88}
+  .art__body p{margin-bottom:16px}
+  .art__body h3{font-size:18px;margin:26px 0 10px}
+  .art__body .quote{font-size:16px;padding:14px 2px;margin:22px 0}
+  .funnel{padding:18px 15px 16px;margin-top:26px}
+  .funnel__ttl{font-size:18px}
+  .funnel__sub{font-size:12px}
+  .related a{font-size:13px}
+  .arch-day__head b{font-size:15.5px}
+  .arch-ttl{font-size:14px}
+
+  /* ---- 목록 ---- */
+  .listhead h1{font-size:24px}
+  .listhead p{font-size:12px}
+  .artlist li{padding:13px 0}
+  .artlist a{grid-template-columns:104px minmax(0,1fr);gap:11px}
+  .artlist img{width:104px;height:74px}
+  .artlist .l-ttl{font-size:15px;line-height:1.42}
+  .artlist .l-dek{font-size:12px;-webkit-line-clamp:2}
+
+  /* ---- 오늘의 운세 지면 ---- */
+  .today-title{font-size:26px;line-height:1.25}
+  .deck{font-size:14px}
+
+  /* ---- 4P 지면 ---- */
+  .fourp-head{margin-bottom:16px}
+  .fourp-head h1{font-size:23px;line-height:1.3}
+  .fourp-head p{font-size:12.5px;line-height:1.6}
+  .fourp-tabs{gap:5px;margin:12px 0 4px}
+  .fourp-tabs button{padding:8px 13px;font-size:12px}
+  .fourp-meta{font-size:10.5px;gap:10px;margin-bottom:12px}
+  .fourp-me{padding:14px 13px;margin-bottom:14px}
+  .fourp-me__t b{font-size:15px}
+  .fourp-me__t span{font-size:11px;line-height:1.5}
+  .fourp-me__row{gap:9px;margin-bottom:9px}
+  .fourp-me__row label{font-size:11px;gap:5px}
+  .fourp-me__row input,.fourp-me__row select{height:46px;font-size:16px;border-radius:8px;padding:0 12px}
+  .fourp-me__row .btn{height:48px;font-size:14px;border-radius:8px}
+  .fourp-me__note{font-size:11px}
+  .phone{border-width:7px;border-radius:26px}
+  .phone iframe{height:540px}
+
+  /* ---- 폼 공통: 손가락에 맞는 높이 ---- */
+  .freegrid{gap:9px}
+  .freegrid input,.freegrid select{height:46px;font-size:16px;border-radius:8px}
+  .wform input,.wform select{height:44px;font-size:15px}
+  .wform .btn{height:46px}
+  select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%238b8378' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+  input[type=date],input[type=time]{font-variant-numeric:tabular-nums}
+
+  /* ---- 프리미엄 배지·가격 ---- */
+  .pricepills div{font-size:12px}
+
+  /* ---- 플로팅 ---- */
+  .float{right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0))}
+  .float__ico{width:46px;height:46px}
+
+  /* ---- 푸터 ---- */
+  footer{margin-top:26px}
+  .footer__in{padding:22px 14px 34px}
+  .footer__brand{gap:10px;margin-bottom:10px;align-items:flex-start}
+  .footer__brand b{font-size:17px}
+  .footer__brand span{display:block;margin:1px 0 0;font-size:10px;letter-spacing:.08em}
+  .footer__links{gap:7px 14px;font-size:11.5px;margin:10px 0}
+  .footer__info{font-size:11px;line-height:1.8}
+  .footer__disc{font-size:10.5px}
+}
+
+@media (max-width:430px){
+  .lead__title{font-size:23px}
+  .rank__heroTtl{font-size:20px}
+  .art__title{font-size:23.5px}
+  .fourp-head h1{font-size:21px}
+  .mag__grid{gap:12px 9px}
+  .mag-card__ttl{font-size:12px}
+  .oneline__chips{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .tab{padding:11px 11px 10px;font-size:13px}
+  .footer__links{gap:6px 12px}
+}

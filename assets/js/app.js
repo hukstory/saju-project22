@@ -72,7 +72,14 @@ function renderTabs(active){
   /* 모바일에서 활성 지면 탭이 가려져 있으면 보이게 옆으로 밀어 준다 */
   const act = nav.querySelector('.tab.is-active');
   if (act && nav.scrollWidth > nav.clientWidth + 4){
-    nav.scrollLeft = Math.max(0, act.offsetLeft - 18);
+    nav.scrollLeft = Math.max(0, act.offsetLeft - 14);
+  }
+  /* 왼쪽으로 밀린 상태에서는 앞 탭 꼬리가 비치지 않게 흐리게 */
+  const syncEdge = ()=> nav.classList.toggle('is-scrolled', nav.scrollLeft > 6);
+  syncEdge();
+  if (!nav.dataset.edge){
+    nav.dataset.edge = '1';
+    nav.addEventListener('scroll', syncEdge, { passive: true });
   }
 }
 function renderMastDate(){

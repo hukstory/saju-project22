@@ -57,7 +57,7 @@ assets/js/fourp.js           4P 개인화 렌더
 data/articles.json           누적 기사 아카이브 (365일·최대 2,600편 · 압축 JSON)
 data/people.json             화제의 인물 풀 (공개 생년월일 확인분)
 scripts/saju_calc.py         만세력 계산 (Python)
-scripts/make_art.py          기사 전용 동양풍 SVG 일러스트 생성기 (키마다 고유)
+scripts/make_art.py          기사 전용 SVG 일러스트 생성기 — 주제별 장면(사람 초상·엽전·서찰·달력·나침반·거북·모래시계 등), 키마다 고유
 scripts/daily_update.py      매일 05:30 자동 발행 — 전 지면 7편 + 고유 일러스트 + 중복 검사
 scripts/daily_update.py      매일 자동 리뉴얼·푸시
 assets/img/*.webp         동양 감성 이미지 16종
