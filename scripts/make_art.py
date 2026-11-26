@@ -433,19 +433,37 @@ def compass_rose(cx, cy, r, pal):
 
 
 def turtle(cx, cy, w_, pal):
+    """황동 거북 — 위에서 본 등딱지와 판 무늬, 머리·다리 넷."""
     ink, gold = pal["ink"], pal["gold"]
-    h = w_ * 0.6
-    out = [ellipse(cx, cy, w_ / 2, h / 2, fill=gold, stroke=ink, w=6, op=0.9),
-           ellipse(cx, cy - h * 0.1, w_ * 0.38, h * 0.3, fill="none", stroke=ink, w=4, op=0.6)]
-    for k in range(5):
-        a = math.radians(210 + k * 30)
-        out.append(circle(cx + math.cos(a) * w_ * 0.2, cy + math.sin(a) * h * 0.26 - h * 0.06,
-                          w_ * 0.045, fill=pal["paper"][0], stroke=ink, w=3))
-    out += [circle(cx + w_ * 0.47, cy - h * 0.12, w_ * 0.1, fill=gold, stroke=ink, w=5),
-            circle(cx + w_ * 0.5, cy - h * 0.17, w_ * 0.02, fill=ink, stroke=ink, w=1),
-            path(f"M {_d(cx - w_ * 0.34)} {_d(cy + h * 0.32)} l {_d(-w_ * 0.1)} {_d(h * 0.3)}", stroke=ink, w=9),
-            path(f"M {_d(cx + w_ * 0.3)} {_d(cy + h * 0.32)} l {_d(w_ * 0.09)} {_d(h * 0.3)}", stroke=ink, w=9),
-            path(f"M {_d(cx - w_ * 0.48)} {_d(cy + h * 0.04)} l {_d(-w_ * 0.13)} {_d(h * 0.2)}", stroke=ink, w=8)]
+    rx, ry = w_ * 0.34, w_ * 0.25
+    out = []
+    # 다리 넷
+    for dx, dy, rot in ((-0.95, -0.62, -32), (0.95, -0.62, 32), (-0.95, 0.62, 32), (0.95, 0.62, -32)):
+        lx, ly = cx + rx * dx, cy + ry * dy
+        out.append(f'<rect x="{_d(lx - w_ * 0.055)}" y="{_d(ly - w_ * 0.035)}" width="{_d(w_ * 0.11)}" '
+                   f'height="{_d(w_ * 0.07)}" rx="{_d(w_ * 0.03)}" fill="{gold}" stroke="{ink}" '
+                   f'stroke-width="5" transform="rotate({rot} {_d(lx)} {_d(ly)})"/>')
+    # 꼬리
+    out.append(path(f"M {_d(cx - rx * 0.95)} {_d(cy)} l {_d(-w_ * 0.09)} {_d(-w_ * 0.03)} "
+                    f"l {_d(w_ * 0.02)} {_d(w_ * 0.06)} Z", fill=gold, stroke=ink, w=4))
+    # 머리
+    hx = cx + rx * 1.12
+    out.append(path(f"M {_d(cx + rx * 0.9)} {_d(cy - w_ * 0.035)} L {_d(hx - w_ * 0.03)} {_d(cy - w_ * 0.045)} "
+                    f"L {_d(hx - w_ * 0.03)} {_d(cy + w_ * 0.045)} L {_d(cx + rx * 0.9)} {_d(cy + w_ * 0.035)} Z",
+                    fill=gold, stroke=ink, w=4))
+    out.append(ellipse(hx, cy, w_ * 0.085, w_ * 0.07, fill=gold, stroke=ink, w=5))
+    out.append(circle(hx + w_ * 0.02, cy - w_ * 0.02, w_ * 0.014, fill=ink, stroke=ink, w=1))
+    # 등딱지
+    out.append(ellipse(cx, cy, rx, ry, fill=gold, stroke=ink, w=6, op=0.95))
+    out.append(ellipse(cx, cy, rx * 0.78, ry * 0.78, fill="none", stroke=ink, w=3, op=0.45))
+    for px, py in ((0, -0.42), (-0.46, -0.1), (0.46, -0.1), (-0.28, 0.42), (0.28, 0.42)):
+        hx2, hy2 = cx + rx * px, cy + ry * py
+        rr = rx * 0.19
+        pts = " ".join(f"{_d(hx2 + rr * math.cos(math.radians(60 * i + 30)))},"
+                       f"{_d(hy2 + rr * 0.9 * math.sin(math.radians(60 * i + 30)))}" for i in range(6))
+        out.append(f'<polygon points="{pts}" fill="none" stroke="{ink}" stroke-width="3.5" opacity="0.45"/>')
+    # 등딱지 테두리 점
+    out.append(ellipse(cx, cy, rx * 0.9, ry * 0.9, fill="none", stroke=ink, w=2, op=0.25))
     return "".join(out)
 
 
@@ -485,14 +503,25 @@ def incense(cx, base_y, w_, pal, rng):
 
 
 def red_thread(cx, cy, w_, pal):
-    red, ink = pal["red"], pal["ink"]
-    return "".join([
-        path(f"M {_d(cx - w_ / 2)} {_d(cy)} C {_d(cx - w_ * 0.2)} {_d(cy - w_ * 0.34)} "
-             f"{_d(cx + w_ * 0.2)} {_d(cy + w_ * 0.34)} {_d(cx + w_ / 2)} {_d(cy)}", stroke=red, w=9),
-        circle(cx - w_ * 0.06, cy - w_ * 0.02, w_ * 0.11, fill="none", stroke=red, w=8),
-        path(f"M {_d(cx - w_ * 0.15)} {_d(cy + w_ * 0.06)} l {_d(w_ * 0.15)} {_d(w_ * 0.24)}", stroke=red, w=7),
-        path(f"M {_d(cx + w_ * 0.11)} {_d(cy - w_ * 0.08)} l {_d(w_ * 0.11)} {_d(w_ * 0.26)}", stroke=red, w=6, op=0.85),
-    ])
+    """붉은 실뭉치 — 감긴 실의 결, 아래로 풀린 한 가닥."""
+    ink, red = pal["ink"], pal["red"]
+    r = w_ * 0.26
+    out = [circle(cx, cy, r, fill=red, stroke=ink, w=6, op=0.92)]
+    for k, rot in enumerate((-28, 12, 52)):
+        out.append(f'<ellipse cx="{_d(cx)}" cy="{_d(cy)}" rx="{_d(r * 0.94)}" ry="{_d(r * 0.42)}" '
+                   f'fill="none" stroke="{ink}" stroke-width="3.5" opacity="0.35" '
+                   f'transform="rotate({rot} {_d(cx)} {_d(cy)})"/>')
+    out.append(f'<ellipse cx="{_d(cx)}" cy="{_d(cy)}" rx="{_d(r * 0.5)}" ry="{_d(r * 0.22)}" '
+               f'fill="none" stroke="{ink}" stroke-width="3" opacity="0.25" '
+               f'transform="rotate(8 {_d(cx)} {_d(cy)})"/>')
+    # 풀린 실
+    out.append(path(f"M {_d(cx + r * 0.82)} {_d(cy + r * 0.5)} C {_d(cx + r * 1.5)} {_d(cy + r * 0.9)} "
+                    f"{_d(cx + r * 1.3)} {_d(cy + r * 1.8)} {_d(cx + r * 2.2)} {_d(cy + r * 2.1)}",
+                    stroke=red, w=7))
+    out.append(path(f"M {_d(cx - r * 0.9)} {_d(cy + r * 0.35)} C {_d(cx - r * 1.5)} {_d(cy + r * 0.9)} "
+                    f"{_d(cx - r * 1.2)} {_d(cy + r * 1.7)} {_d(cx - r * 1.9)} {_d(cy + r * 2.0)}",
+                    stroke=red, w=7, op=0.8))
+    return "".join(out)
 
 
 def bed(cx, base_y, w_, pal):
@@ -917,10 +946,13 @@ def scene_love(rng, pal):
 def scene_sprout(rng, pal):
     """개운·시작 — 화분에서 돋는 새싹."""
     parts = [scene_bg(pal, rng, "grid")]
-    parts.append(ground_shadow(600, 646, 220, pal, 0.06))
-    parts.append(path("M 420 646 L 462 496 L 738 496 L 780 646 Z", fill=pal["soft"], stroke=pal["ink"], w=7))
-    parts.append(rect(398, 474, 404, 34, fill=pal["gold"], stroke=pal["ink"], w=6, rx=8))
-    parts.append(sprout(600, 474, 300, pal))
+    base = 596
+    parts.append(ground_shadow(600, base + 6, 190, pal, 0.06))
+    parts.append(path(f"M 470 {base} L 500 452 L 700 452 L 730 {base} Z",
+                      fill=pal["soft"], stroke=pal["ink"], w=7))
+    parts.append(rect(452, 430, 296, 30, fill=pal["gold"], stroke=pal["ink"], w=6, rx=7))
+    parts.append(path(f"M 470 {base - 6} q 130 26 260 0", stroke=pal["ink"], w=3, op=0.25))
+    parts.append(sprout(600, 430, 270, pal))
     return parts
 
 
@@ -973,7 +1005,7 @@ RULES = [
     ("mbti", "duo"),
     ("past", "past"),
     ("leak", "keydoor"),
-    ("shop", "shop"), ("gaewoon", "sprout"),
+    ("shop", "shop"), ("gaewoon", "shop"),
     ("work", "work"),
     ("cycle", "timing"), ("timing", "timing"),
     ("people", "portrait"),
