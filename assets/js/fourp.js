@@ -764,7 +764,7 @@
       '<div class="k">만족하셨다면</div>' +
       '<div class="t">찐 정밀 전문분석지<br><b>30P · 60P · 100P</b></div>' +
       '<p>여기까지는 여덟 글자의 첫 장입니다. 월별 길흉, 귀인의 얼굴, 위기를 피하는 달, 평생 재물의 그릇까지 — 정밀 분석지가 이어집니다.</p>' +
-      '<a href="https://aura-saju.pages.dev/" target="_blank" rel="noopener">✨ 30P · 60P · 100P 정밀분석 보러가기</a>' +
+      '<a href="https://22jutimes.com/order.html" target="_blank" rel="noopener">✨ 30P · 60P · 100P 정밀분석 보러가기</a>' +
       '<button type="button" class="fp-cta__more" data-fp-pricing>요금제 3종 나란히 보기 →</button>' +
       '<div class="p">30P 19,900원 · 60P 29,900원 · 100P 49,900원</div></div>';
   }

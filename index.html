@@ -207,5 +207,27 @@
 <script src="assets/js/articles-daily.js"></script>
 <script src="assets/js/magazine.js"></script>
 <script src="assets/js/app.js"></script>
+<script>
+/* 업무자(홍보 파트너) 유입 기록 — ?ref=아이디 를 30일 기억하고 22jutimes.com 쪽 링크에 자동으로 붙입니다. (2026-11-27) */
+(function(){
+  var KEY='aura_ref', KEEP=30*24*60*60*1000;
+  function readRef(){
+    try{
+      var q=new URLSearchParams(location.search).get('ref');
+      if(q){ q=q.trim(); if(q){ localStorage.setItem(KEY, JSON.stringify({id:q, at:Date.now()})); return q; } }
+      var s=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(s&&s.id&&Date.now()-s.at<KEEP) return s.id;
+    }catch(e){}
+    return '';
+  }
+  var id=readRef(); if(!id) return;
+  document.addEventListener('click', function(ev){
+    var a=ev.target && ev.target.closest ? ev.target.closest('a[href]') : null; if(!a) return;
+    var href=a.getAttribute('href')||''; if(!/^https?:\/\//.test(href)) return;
+    if(!/22jutimes\.com|aura-saju\.pages\.dev|jungwoon-saju-app\.pages\.dev/.test(href)) return;
+    try{ var u=new URL(href); u.searchParams.set('ref', id); a.setAttribute('href', u.toString()); }catch(e){}
+  }, true);
+})();
+</script>
 </body>
 </html>
