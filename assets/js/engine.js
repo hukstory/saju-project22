@@ -543,7 +543,7 @@ function drawShareCard(opt){
   ctx.fillStyle = '#7B1E2B'; ctx.font = cardFont(19, 700);
   ctx.fillText(opt.footer || '운명사주, 정운이 풀다', pad, by);
   ctx.fillStyle = '#837A6F'; ctx.font = cardFont(13, 500, false);
-  ctx.fillText('hukstory.github.io/saju-project22', pad, by+26);
+  ctx.fillText('news.22jutimes.com', pad, by+26);
   ctx.textAlign = 'right'; ctx.fillStyle = '#A9873F'; ctx.font = cardFont(11, 600, false);
   ctx.fillText('참고용 콘텐츠', CARD_W-pad, by+26);
   ctx.textAlign = 'left';

@@ -884,7 +884,7 @@
    *   ① 타고난 본성·속마음 ② 돈이 들어오고 새는 습관
    *   ③ 인간관계·연애 스타일 ④ 2027년 가장 큰 변화 → 끊고 정밀 분석지로 직행
    * ================================================================== */
-  var ORDER_URL = 'https://aura-saju.pages.dev/order.html';
+  var ORDER_URL = 'https://22jutimes.com/order.html';
   var ORDER_QS = '';
 
   /* 정밀분석 주문 페이지(aura-saju/order.html)가 읽는 형식 —

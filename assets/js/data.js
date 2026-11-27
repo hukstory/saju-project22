@@ -3,9 +3,9 @@
    ========================================================================== */
 'use strict';
 
-const SITE  = 'https://hukstory.github.io/saju-project22/';
+const SITE  = 'https://news.22jutimes.com/';
 const KAKAO = 'https://pf.kakao.com/_TguvX/chat';
-const LANDING = 'https://aura-saju.pages.dev/';
+const LANDING = 'https://22jutimes.com/';
 const EMAIL = '22jutimes@gmail.com';
 
 const BRAND = {

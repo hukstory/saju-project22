@@ -50,7 +50,7 @@ DAILY_JS_DAYS = 45          # 지면에 바로 싣는 최근 구간 (그 이전�
 SIZE_WARN_MB = 800
 SIZE_CRIT_MB = 1000
 
-ORDER = "https://aura-saju.pages.dev/order.html"
+ORDER = "https://22jutimes.com/order.html"
 CTA_FREE = "#/4p"
 
 OH = {

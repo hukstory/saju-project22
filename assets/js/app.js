@@ -27,7 +27,7 @@ const IMG = (name)=>{
   if (n.indexOf('g/')===0) return `assets/img/${n}.svg`;           /* 생성 일러스트는 SVG */
   return `assets/img/${n}.webp`;                                   /* 기존 사진·일러스트 */
 };
-const ORDER = 'https://aura-saju.pages.dev/order.html';
+const ORDER = 'https://22jutimes.com/order.html';
 
 /* ---------- 유틸 ---------- */
 const $  = (s,r)=> (r||document).querySelector(s);

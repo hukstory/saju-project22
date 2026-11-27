@@ -71,7 +71,7 @@ assets/icons/*            PWA 아이콘 (192/512/maskable/apple-touch)
 - **하얀 배경 요약 3장판(`4p/04.html`) 단일 버전**입니다(2026-11-23 통일). 버전 선택 탭은 없습니다.
 - 예전 4종 링크(`#/4p/v1`~`#/4p/v3`)로 들어와도 같은 하얀 지면으로 정리됩니다.
 - 휴대폰 프레임 안에서 스크롤되며, `새 창에서 크게 보기`·`인쇄용으로 열기`를 제공합니다.
-- 각 4P의 마지막에 **찐 정밀 전문분석지 30P·60P·100P → https://aura-saju.pages.dev/** 링크가 들어 있습니다.
+- 각 4P의 마지막에 **찐 정밀 전문분석지 30P·60P·100P → https://22jutimes.com/** 링크가 들어 있습니다.
 - 100P 가격은 확정 요금(49,900원)으로 통일했습니다.
 
 ## 앱 설치(PWA)
@@ -98,6 +98,6 @@ assets/icons/*            PWA 아이콘 (192/512/maskable/apple-touch)
 
 ## 배포
 
-`hukstory/saju-project22` `main` → GitHub Pages (`https://hukstory.github.io/saju-project22/`)
+`hukstory/saju-project22` `main` → GitHub Pages (`https://news.22jutimes.com/`)
 
 사업자: 제이투포커스 · 대표 이혁 · 159-47-00699 · 2022-고양일산서-1589 · 경기도 고양시 일산서구 가좌동 1088
